@@ -126,21 +126,39 @@ export default function Index() {
         )}
       </nav>
 
-      <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-        <div className="px-4 py-6 sm:px-0">
-          <div className="border-4 border-dashed border-white border-opacity-20 rounded-lg h-96 flex items-center justify-center">
-            {/* <h1 className="text-4xl font-bold text-white text-center">Welcome to Kanari Sell ICO</h1> */}
-            {wallet.status === "connected" && (
-              <div className="text-center">
-                <img
-                  src="https://xc6fbqjny4wfkgukliockypoutzhcqwjmlw2gigombpp2ynufaxa.arweave.net/uLxQwS3HLFUailocJWHupPJxQsli7aMgzmBe_WG0KC4"
-                  alt="Your Image Description"
-                  className="mb-4"
-                />
-                <button onClick={mintNft} className="bg-blue-500 text-white px-4 py-2 rounded">
-                  Mint Your NFT!
-                </button>
-              </div>
+
+
+      <main className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+        <div className="flex flex-col md:flex-row justify-center items-center space-y-8 md:space-y-0 md:space-x-16">
+          {/* Left Side: Image and Title */}
+          <div className="md:w-1/2">
+            <img
+              src="https://xc6fbqjny4wfkgukliockypoutzhcqwjmlw2gigombpp2ynufaxa.arweave.net/uLxQwS3HLFUailocJWHupPJxQsli7aMgzmBe_WG0KC4"
+              alt="Your Image Description"
+              className="rounded-lg shadow-lg transform transition duration-500 hover:scale-105"
+            />
+          </div>
+
+          {/* Right Side: Content and Button */}
+          <div className="md:w-1/2 text-center md:text-left">
+            <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">
+              Mint Your Exclusive NFT
+            </h1>
+            <p className="text-lg text-gray-200 mb-8">
+              Connect your wallet and mint your unique NFT to join the Kanari Sell community. 
+            </p>
+
+            {wallet.status === "connected" ? (
+              <button 
+                onClick={mintNft} 
+                className="bg-white text-purple-600 hover:bg-purple-100 transition duration-300 px-8 py-3 rounded-full text-lg font-semibold shadow-md"
+              >
+                Mint Now
+              </button>
+            ) : (
+              <ConnectButton 
+                className="bg-white text-purple-600 hover:bg-purple-100 transition duration-300 px-8 py-3 rounded-full text-lg font-semibold shadow-md" 
+              />
             )}
           </div>
         </div>
