@@ -40,7 +40,7 @@ const Navbar: React.FC<NavbarProps> = ({ isMenuOpen, toggleMenu }) => {
           </div>
           <div className="flex items-center">
             <div className="hidden md:block">
-              <ConnectButton className="bg-white text-purple-600 hover:bg-purple-100 transition duration-300 px-4 py-2 rounded-full text-sm font-medium shadow-md" />
+              <ConnectButton className="bg-white text-purple-600 hover:bg-purple-100 transition duration-300 py-2 rounded-full text-sm font-medium shadow-md" />
             </div>
             <div className="md:hidden">
               <button
@@ -61,19 +61,25 @@ const Navbar: React.FC<NavbarProps> = ({ isMenuOpen, toggleMenu }) => {
       {isMenuOpen && (
         <div className="md:hidden">
           <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-            {["Home", "About", "Contact"].map((item) => (
-              <a
+            {["Mint NFT", "Bun IDO", "Swap"].map((item) => (
+              <Link
                 key={item}
-                href={`#${item.toLowerCase()}`}
+                to={
+                  item === "Mint NFT"
+                    ? "/"
+                    : item === "Bun IDO"
+                      ? "/bun-ido"
+                      : "/swap"
+                }
                 className="text-white hover:bg-white hover:bg-opacity-20 block px-3 py-2 rounded-md text-base font-medium transition duration-300"
               >
                 {item}
-              </a>
+              </Link>
             ))}
           </div>
           <div className="pt-4 pb-3 border-t border-white border-opacity-20">
             <div className="px-2">
-              <ConnectButton className="w-full bg-white text-purple-600 hover:bg-purple-100 transition duration-300 px-4 py-2 rounded-full text-sm font-medium shadow-md" />
+              <ConnectButton className="w-full bg-white text-purple-600 hover:bg-purple-100 transition duration-300  py-2 rounded-full text-sm font-medium shadow-md" />
             </div>
           </div>
         </div>
