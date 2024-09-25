@@ -111,6 +111,12 @@ interface TokenInputProps {
   onAmountChange: (amount: string) => void;
 }
 
+const availableTokens = [
+  { name: 'Sui', symbol: 'SUI', image: 'https://s2.coinmarketcap.com/static/img/coins/64x64/20947.png' },
+  { name: 'Bitcoin', symbol: 'BTC', image: 'https://s2.coinmarketcap.com/static/img/coins/64x64/1.png' },
+  { name: 'USDCircle', symbol: 'USDC', image: 'https://s2.coinmarketcap.com/static/img/coins/64x64/3408.png' },
+];
+
 const TokenInput: React.FC<TokenInputProps> = ({
   label,
   selectedToken,
@@ -120,13 +126,6 @@ const TokenInput: React.FC<TokenInputProps> = ({
 }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
-
-  const availableTokens = [
-    { name: 'Ethereum', symbol: 'ETH' },
-    { name: 'Bitcoin', symbol: 'BTC' },
-    { name: 'Cardano', symbol: 'ADA' },
-    { name: 'Solana', symbol: 'SOL' },
-  ];
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -139,33 +138,43 @@ const TokenInput: React.FC<TokenInputProps> = ({
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
+  const selectedTokenData = availableTokens.find(token => token.symbol === selectedToken);
+
   return (
     <div className="space-y-2">
       <label className="block text-sm font-medium text-gray-200">{label}</label>
-      <div className="flex space-x-2">
+      <div className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2">
         <div className="relative flex-1">
           <button
             className="w-full flex justify-between items-center px-4 py-2 bg-white bg-opacity-10 border border-gray-300 rounded-md text-white"
             onClick={() => setIsDropdownOpen(!isDropdownOpen)}
           >
-            <span>{selectedToken || 'Select Token'}</span>
+            {selectedTokenData ? (
+              <div className="flex items-center">
+                <img src={selectedTokenData.image} alt={selectedTokenData.name} className="h-6 w-6 mr-2" />
+                <span>{selectedTokenData.symbol}</span>
+              </div>
+            ) : (
+              <span>Select Token</span>
+            )}
             <ChevronDown className="h-4 w-4 ml-2" />
           </button>
           {isDropdownOpen && (
             <div
               ref={dropdownRef}
-              className="absolute z-10 w-full mt-1 bg-white rounded-md shadow-lg"
+              className="absolute z-10 w-full mt-1 bg-white rounded-md shadow-lg max-h-60 overflow-y-auto"
             >
               <ul className="py-1">
                 {availableTokens.map((token) => (
                   <li
                     key={token.symbol}
-                    className="px-4 py-2 hover:bg-gray-100 cursor-pointer text-gray-700"
+                    className="px-4 py-2 hover:bg-gray-100 cursor-pointer text-gray-700 flex items-center"
                     onClick={() => {
                       onSelectToken(token.symbol);
                       setIsDropdownOpen(false);
                     }}
                   >
+                    <img src={token.image} alt={token.name} className="h-6 w-6 mr-2" />
                     {token.symbol} - {token.name}
                   </li>
                 ))}
