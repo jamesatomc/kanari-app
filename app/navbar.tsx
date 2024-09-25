@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from 'react-router-dom';
 import { Home, Info, Mail, Menu, X } from "lucide-react";
 import { ConnectButton } from "@suiet/wallet-kit";
 
@@ -18,14 +19,14 @@ const Navbar: React.FC<NavbarProps> = ({ isMenuOpen, toggleMenu }) => {
             </a>
             <div className="hidden md:flex ml-10 items-baseline space-x-4">
               {["Mint NFT", "Bun IDO", "Swap"].map((item) => (
-                <a
+                <Link
                   key={item}
-                  href={
+                  to={
                     item === "Mint NFT"
                       ? "/"
                       : item === "Bun IDO"
-                      ? "/bun-ido"
-                      : "/swap"
+                        ? "/bun-ido"
+                        : "/swap"
                   }
                   className="text-white hover:bg-white hover:bg-opacity-20 px-3 py-2 rounded-md text-sm font-medium transition duration-300 flex items-center"
                 >
@@ -33,7 +34,7 @@ const Navbar: React.FC<NavbarProps> = ({ isMenuOpen, toggleMenu }) => {
                   {item === "Bun IDO" && <Info className="w-4 h-4 mr-2" />}
                   {item === "Swap" && <Mail className="w-4 h-4 mr-2" />}
                   {item}
-                </a>
+                </Link>
               ))}
             </div>
           </div>
