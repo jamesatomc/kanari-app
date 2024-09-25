@@ -2,9 +2,7 @@ import React, { useState } from "react";
 import type { MetaFunction } from "@remix-run/node";
 import { ConnectButton, useWallet } from "@suiet/wallet-kit";
 import { Menu, X, Home, Info, Mail } from "lucide-react";
-import { Transaction } from "@mysten/sui/transactions";
-
-
+import { SuiTransactionBlock } from "@mysten/sui.js"; // Updated import statement
 
 export const meta: MetaFunction = () => {
   return [
@@ -13,10 +11,9 @@ export const meta: MetaFunction = () => {
   ];
 };
 
-
 function createMintNftTxnBlock() {
   // define a programmable transaction block
-  const txb = new Transaction();
+  const txb = new SuiTransactionBlock(); // Updated usage
 
   // note that this is a devnet contract address
   const contractAddress =
@@ -32,9 +29,9 @@ function createMintNftTxnBlock() {
   txb.moveCall({
     target: `${contractAddress}::${contractModule}::${contractMethod}`,
     arguments: [
-      tx.pure(nftName),
-      tx.pure(nftDescription),
-      tx.pure(nftImgUrl),
+      txb.pure(nftName),
+      txb.pure(nftDescription),
+      txb.pure(nftImgUrl),
     ],
   });
 
@@ -134,7 +131,16 @@ export default function Index() {
           <div className="border-4 border-dashed border-white border-opacity-20 rounded-lg h-96 flex items-center justify-center">
             {/* <h1 className="text-4xl font-bold text-white text-center">Welcome to Kanari Sell ICO</h1> */}
             {wallet.status === "connected" && (
-              <button onClick={mintNft}>Mint Your NFT !</button>
+              <div className="text-center">
+                <img
+                  src="https://xc6fbqjny4wfkgukliockypoutzhcqwjmlw2gigombpp2ynufaxa.arweave.net/uLxQwS3HLFUailocJWHupPJxQsli7aMgzmBe_WG0KC4"
+                  alt="Your Image Description"
+                  className="mb-4"
+                />
+                <button onClick={mintNft} className="bg-blue-500 text-white px-4 py-2 rounded">
+                  Mint Your NFT!
+                </button>
+              </div>
             )}
           </div>
         </div>

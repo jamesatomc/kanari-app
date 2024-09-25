@@ -11,6 +11,9 @@
     "typecheck": "tsc"
   },
   "dependencies": {
+    "@mysten/sui.js": "^0.36.0",
+    "@mysten/wallet-kit": "^0.4.12",
+    "@mysten/wallet-standard": "^0.5.12",
     "@mysten/sui": "^1.9.0",
     "@remix-run/node": "^2.12.1",
     "@remix-run/react": "^2.12.1",
