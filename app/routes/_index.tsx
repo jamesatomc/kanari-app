@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 import type { MetaFunction } from "@remix-run/node";
-import { ConnectButton } from "@suiet/wallet-kit";
+import { ConnectButton, useWallet } from "@suiet/wallet-kit";
 import { Menu, X, Home, Info, Mail } from "lucide-react";
+import { Transaction } from "@mysten/sui/transactions";
+
+
 
 export const meta: MetaFunction = () => {
   return [
@@ -10,12 +13,59 @@ export const meta: MetaFunction = () => {
   ];
 };
 
+
+function createMintNftTxnBlock() {
+  // define a programmable transaction block
+  const txb = new Transaction();
+
+  // note that this is a devnet contract address
+  const contractAddress =
+    "0xe146dbd6d33d7227700328a9421c58ed34546f998acdc42a1d05b4818b49faa2";
+  const contractModule = "nft";
+  const contractMethod = "mint";
+
+  const nftName = "Suiet NFT";
+  const nftDescription = "Hello, Suiet NFT";
+  const nftImgUrl =
+    "https://xc6fbqjny4wfkgukliockypoutzhcqwjmlw2gigombpp2ynufaxa.arweave.net/uLxQwS3HLFUailocJWHupPJxQsli7aMgzmBe_WG0KC4";
+
+  txb.moveCall({
+    target: `${contractAddress}::${contractModule}::${contractMethod}`,
+    arguments: [
+      tx.pure(nftName),
+      tx.pure(nftDescription),
+      tx.pure(nftImgUrl),
+    ],
+  });
+
+  return txb;
+}
+
 export default function Index() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
+
+  const wallet = useWallet();
+
+  async function mintNft() {
+    if (!wallet.connected) return;
+
+    const txb = createMintNftTxnBlock();
+    try {
+      // call the wallet to sign and execute the transaction
+      const res = await wallet.signAndExecuteTransactionBlock({
+        transactionBlock: txb,
+      });
+      console.log("nft minted successfully!", res);
+      alert("Congrats! your nft is minted!");
+    } catch (e) {
+      alert("Oops, nft minting failed");
+      console.error("nft mint failed", e);
+    }
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-600 to-blue-500">
@@ -82,7 +132,10 @@ export default function Index() {
       <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
         <div className="px-4 py-6 sm:px-0">
           <div className="border-4 border-dashed border-white border-opacity-20 rounded-lg h-96 flex items-center justify-center">
-            <h1 className="text-4xl font-bold text-white text-center">Welcome to Kanari Sell ICO</h1>
+            {/* <h1 className="text-4xl font-bold text-white text-center">Welcome to Kanari Sell ICO</h1> */}
+            {wallet.status === "connected" && (
+              <button onClick={mintNft}>Mint Your NFT !</button>
+            )}
           </div>
         </div>
       </main>
