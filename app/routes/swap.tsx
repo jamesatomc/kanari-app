@@ -115,6 +115,19 @@ const availableTokens = [
   { name: 'Sui', symbol: 'SUI', image: 'https://s2.coinmarketcap.com/static/img/coins/64x64/20947.png' },
   { name: 'Bitcoin', symbol: 'BTC', image: 'https://s2.coinmarketcap.com/static/img/coins/64x64/1.png' },
   { name: 'USDCircle', symbol: 'USDC', image: 'https://s2.coinmarketcap.com/static/img/coins/64x64/3408.png' },
+  { name: 'Ethereum', symbol: 'ETH', image: 'https://s2.coinmarketcap.com/static/img/coins/64x64/1027.png' },
+  { name: 'Tether', symbol: 'USDT', image: 'https://s2.coinmarketcap.com/static/img/coins/64x64/825.png' },
+  { name: 'Cardano', symbol: 'ADA', image: 'https://s2.coinmarketcap.com/static/img/coins/64x64/2010.png' },
+  { name: 'Solana', symbol: 'SOL', image: 'https://s2.coinmarketcap.com/static/img/coins/64x64/5426.png' },
+  { name: 'XRP', symbol: 'XRP', image: 'https://s2.coinmarketcap.com/static/img/coins/64x64/52.png' },
+  { name: 'Polkadot', symbol: 'DOT', image: 'https://s2.coinmarketcap.com/static/img/coins/64x64/6636.png' },
+  { name: 'Dogecoin', symbol: 'DOGE', image: 'https://s2.coinmarketcap.com/static/img/coins/64x64/74.png' },
+  { name: 'Avalanche', symbol: 'AVAX', image: 'https://s2.coinmarketcap.com/static/img/coins/64x64/5805.png' },
+  { name: 'Uniswap', symbol: 'UNI', image: 'https://s2.coinmarketcap.com/static/img/coins/64x64/7083.png' },
+  { name: 'Litecoin', symbol: 'LTC', image: 'https://s2.coinmarketcap.com/static/img/coins/64x64/2.png' },
+  { name: 'Chainlink', symbol: 'LINK', image: 'https://s2.coinmarketcap.com/static/img/coins/64x64/1975.png' },
+  { name: 'Bitcoin Cash', symbol: 'BCH', image: 'https://s2.coinmarketcap.com/static/img/coins/64x64/1831.png' },
+  { name: 'Algorand', symbol: 'ALGO', image: 'https://s2.coinmarketcap.com/static/img/coins/64x64/4030.png' },
 ];
 
 const TokenInput: React.FC<TokenInputProps> = ({
