@@ -64,15 +64,15 @@ export default function Index() {
                 <img className="h-10 w-auto" src="/api/placeholder/40/40" alt="Kanari Sell Logo" />
               </a>
               <div className="hidden md:flex ml-10 items-baseline space-x-4">
-                {["Home", "About", "Contact"].map((item) => (
+                {["Mint NFT", "Bun IDO", "Swap"].map((item) => (
                   <a
                     key={item}
                     href={`#${item.toLowerCase()}`}
                     className="text-white hover:bg-white hover:bg-opacity-20 px-3 py-2 rounded-md text-sm font-medium transition duration-300 flex items-center"
                   >
-                    {item === "Home" && <Home className="w-4 h-4 mr-2" />}
-                    {item === "About" && <Info className="w-4 h-4 mr-2" />}
-                    {item === "Contact" && <Mail className="w-4 h-4 mr-2" />}
+                    {item === "Mint NFT" && <Home className="w-4 h-4 mr-2" />}
+                    {item === "Bun IDO" && <Info className="w-4 h-4 mr-2" />}
+                    {item === "Swap" && <Mail className="w-4 h-4 mr-2" />}
                     {item}
                   </a>
                 ))}
@@ -129,7 +129,7 @@ export default function Index() {
               className="rounded-lg shadow-2xl transform transition duration-500 hover:scale-105"
             />
           </div>
-  
+      
           <div className="md:w-1/2 text-center md:text-left">
             <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
               Mint Your <span className="text-yellow-300">Exclusive</span> NFT
@@ -137,7 +137,7 @@ export default function Index() {
             <p className="text-xl text-gray-200 mb-8 leading-relaxed">
               Join the Kanari Sell community by minting your unique NFT. Connect your wallet and become part of something extraordinary.
             </p>
-  
+      
             {wallet.status === "connected" ? (
               <button
                 onClick={mintNft}
