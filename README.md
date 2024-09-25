@@ -1,5 +1,3 @@
-Here's a Markdown file explaining how to use the provided React component with Tailwind CSS for a responsive navigation bar:
-
 ```markdown
 # How to Use the Responsive Navigation Bar Component
 
