@@ -2,8 +2,9 @@ import React, { useState } from "react";
 import type { MetaFunction } from "@remix-run/node";
 import { ConnectButton, useWallet } from "@suiet/wallet-kit";
 import { Menu, X, Home, Info, Mail, Loader } from "lucide-react";
-import { SuiTransactionBlock } from "@mysten/sui.js";
+
 import Navbar from "~/navbar";
+import { Transaction } from "@mysten/sui/transactions";
 
 export const meta: MetaFunction = () => {
   return [
@@ -13,7 +14,7 @@ export const meta: MetaFunction = () => {
 };
 
 function createMintNftTxnBlock() {
-  const txb = new SuiTransactionBlock();
+  const txb = new Transaction();
   const contractAddress = "0xb0f0b8020f0f645dd673fbc2f99b224ba76aa40861b9ecaac959115b63e8c3e0";
   const contractModule = "nft";
   const contractMethod = "mint";
