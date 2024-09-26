@@ -1,9 +1,12 @@
 import React, { useState } from "react";
 import type { MetaFunction } from "@remix-run/node";
-import {useWallet } from "@suiet/wallet-kit";
+import { useWallet } from "@suiet/wallet-kit";
 import { Loader } from "lucide-react";
 import Navbar from "~/navbar";
+import { ConnectButton } from "@suiet/wallet-kit";
 import { TransactionBlock } from "@mysten/sui.js/transactions";
+
+
 
 
 export const meta: MetaFunction = () => {
@@ -29,7 +32,7 @@ export default function Index() {
     const packageObjectId = "0xb5ee8b1322685c136e331e1f2cabf48689f82dddb35d5edce3e85a9c3ece1ab3";
     tx.moveCall({
       target: `${packageObjectId}::nft::mint`,
-      arguments: [tx.pure("Example NFT"), tx.pure("daad"), tx.pure("ffasf")],
+      arguments: [tx.pure("Example NFT"), tx.pure("daad"), tx.pure("https://magenta-able-pheasant-388.mypinata.cloud/ipfs/QmQhKs9WeVy5MxbChEQJrX37Unb6dktZXrYZuy6uVofQwC/Logo.png")],
     });
 
     try {
@@ -53,7 +56,7 @@ export default function Index() {
         <div className="flex flex-col md:flex-row justify-center items-center space-y-8 md:space-y-0 md:space-x-16">
           <div className="md:w-1/2">
             <img
-              src="https://xc6fbqjny4wfkgukliockypoutzhcqwjmlw2gigombpp2ynufaxa.arweave.net/uLxQwS3HLFUailocJWHupPJxQsli7aMgzmBe_WG0KC4"
+              src="https://magenta-able-pheasant-388.mypinata.cloud/ipfs/QmQhKs9WeVy5MxbChEQJrX37Unb6dktZXrYZuy6uVofQwC/Logo.png"
               alt="Kanari Sell Exclusive NFT"
               className="rounded-lg shadow-2xl transform transition duration-500 hover:scale-105"
             />
@@ -83,7 +86,7 @@ export default function Index() {
                 )}
               </button>
             ) : (
-              <button
+              <ConnectButton
                 className="bg-white text-purple-600 hover:bg-purple-100 transition duration-300 px-8 py-4 rounded-full text-lg font-semibold shadow-lg w-full md:w-auto"
               />
             )}
