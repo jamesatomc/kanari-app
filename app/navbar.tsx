@@ -15,7 +15,7 @@ const Navbar: React.FC<NavbarProps> = ({ isMenuOpen, toggleMenu }) => {
         <div className="flex justify-between h-20">
           <div className="flex items-center">
             <a href="#" className="flex-shrink-0">
-              <img className="h-10 w-auto" src="/api/placeholder/40/40" alt="Kanari Sell Logo" />
+              <img className="h-10 w-10" src="https://magenta-able-pheasant-388.mypinata.cloud/ipfs/QmQhKs9WeVy5MxbChEQJrX37Unb6dktZXrYZuy6uVofQwC/Logo.png" alt="Kanari Sell Logo" />
             </a>
             <div className="hidden md:flex ml-10 items-baseline space-x-4">
               {["Mint NFT", "Bun IDO", "Swap"].map((item) => (
