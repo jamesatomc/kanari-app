@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import type { MetaFunction } from "@remix-run/node";
 import { ConnectButton, useWallet } from "@suiet/wallet-kit";
 import { Menu, X, Home, Info, Mail, Loader } from "lucide-react";
-
 import Navbar from "~/navbar";
 import { Transaction } from "@mysten/sui/transactions";
 
@@ -15,7 +14,7 @@ export const meta: MetaFunction = () => {
 
 function createMintNftTxnBlock() {
   const txb = new Transaction();
-  const contractAddress = "0xb0f0b8020f0f645dd673fbc2f99b224ba76aa40861b9ecaac959115b63e8c3e0";
+  const contractAddress = "0xb5ee8b1322685c136e331e1f2cabf48689f82dddb35d5edce3e85a9c3ece1ab3";
   const contractModule = "nft";
   const contractMethod = "mint";
 
@@ -39,24 +38,20 @@ export default function Index() {
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
   async function mintNft() {
-    if (!wallet.connected) {
-      console.log("Wallet not connected");
-      return;
-    }
-    setIsMinting(true);
+    if (!wallet.connected) return;
+
     const txb = createMintNftTxnBlock();
-    try {
-      const res = await wallet.signAndExecuteTransactionBlock({
-        transactionBlock: txb,
-      });
-      console.log("NFT minted successfully!", res);
-      alert("Congratulations! Your NFT has been minted!");
-    } catch (e) {
-      alert("Oops, NFT minting failed. Please try again.");
-      console.error("NFT mint failed", e);
-    } finally {
-      setIsMinting(false);
-    }
+  try {
+    setIsMinting(true);
+    const res = await wallet.signAndExecuteTransactionBlock({
+      transactionBlock: txb,
+    });
+    console.log('Transaction successful:', res);
+  } catch (error) {
+    console.error('Transaction failed:', error);
+  } finally {
+    setIsMinting(false);
+  }
   }
 
   return (
