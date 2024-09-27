@@ -24,14 +24,14 @@ const Navbar: React.FC<NavbarProps> = ({ isMenuOpen, toggleMenu }) => {
                   to={
                     item === "Mint NFT"
                       ? "/"
-                      : item === "Bun IDO"
-                        ? "/bun-ido"
+                      : item === "IDO"
+                        ? "/ido"
                         : "/swap"
                   }
                   className="text-white hover:bg-white hover:bg-opacity-20 px-3 py-2 rounded-md text-sm font-medium transition duration-300 flex items-center"
                 >
                   {item === "Mint NFT" && <Home className="w-4 h-4 mr-2" />}
-                  {item === "Bun IDO" && <Info className="w-4 h-4 mr-2" />}
+                  {item === "IDO" && <Info className="w-4 h-4 mr-2" />}
                   {item === "Swap" && <Mail className="w-4 h-4 mr-2" />}
                   {item}
                 </Link>
