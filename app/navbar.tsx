@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from 'react-router-dom';
-import { Home, BadgeDollarSign, CircleDot, Menu, X } from "lucide-react";
+import { Gem, BadgeDollarSign, CircleDot, Menu, X } from "lucide-react";
 import { ConnectButton } from "@suiet/wallet-kit";
 
 interface NavbarProps {
@@ -30,7 +30,7 @@ const Navbar: React.FC<NavbarProps> = ({ isMenuOpen, toggleMenu }) => {
                   }
                   className="text-white hover:bg-white hover:bg-opacity-20 px-3 py-2 rounded-md text-sm font-medium transition duration-300 flex items-center"
                 >
-                  {item === "Mint NFT" && <Home className="w-4 h-4 mr-2" />}
+                  {item === "Mint NFT" && <Gem className="w-4 h-4 mr-2" />}
                   {item === "IDO" && <BadgeDollarSign className="w-4 h-4 mr-2" />}
                   {item === "Swap" && <CircleDot className="w-4 h-4 mr-2" />}
                   {item}
