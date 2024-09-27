@@ -3,19 +3,66 @@ import { ArrowDownUp, ChevronDown, Loader } from 'lucide-react';
 import Navbar from '~/navbar';
 import { ConnectButton, useWallet } from "@suiet/wallet-kit";
 import { TransactionBlock } from "@mysten/sui.js/transactions";
+import axios from 'axios';
+
+const availableTokens = [
+  { name: 'Sui', symbol: 'SUI', image: 'https://s2.coinmarketcap.com/static/img/coins/64x64/20947.png', contract: '0x2::sui::SUI' },
+  { name: 'USDCoin', symbol: 'USDC', image: 'https://s2.coinmarketcap.com/static/img/coins/64x64/3408.png', contract: '0xdba34672e30cb065b1f93e3ab55318768fd6fef66c15942c9f7cb846e2f900e7::usdc::USDC' },
+];
 
 export default function Swap() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [tokenFrom, setTokenFrom] = useState('');
-  const [tokenTo, setTokenTo] = useState('');
+  const [tokenFrom, setTokenFrom] = useState('SUI');
+  const [tokenTo, setTokenTo] = useState('USDC');
   const [amountFrom, setAmountFrom] = useState('');
   const [amountTo, setAmountTo] = useState('');
   const [isSwapping, setIsSwapping] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [tokenPrices, setTokenPrices] = useState<{[key: string]: number}>({});
 
   const wallet = useWallet();
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
+
+  useEffect(() => {
+    fetchTokenPrices();
+    const interval = setInterval(fetchTokenPrices, 60000); // Update prices every minute
+    return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    if (tokenFrom && tokenTo && amountFrom && tokenPrices[tokenFrom] && tokenPrices[tokenTo]) {
+      calculateAmountTo(tokenFrom, tokenTo, amountFrom);
+    }
+  }, [tokenFrom, tokenTo, amountFrom, tokenPrices]);
+
+  const fetchTokenPrices = async () => {
+    try {
+      const response = await axios.get(`https://api.coingecko.com/api/v3/simple/price?ids=sui,usd-coin&vs_currencies=usd`);
+      setTokenPrices({
+        SUI: response.data.sui.usd,
+        USDC: response.data['usd-coin'].usd
+      });
+    } catch (error) {
+      console.error('Error fetching token prices:', error);
+    }
+  };
+
+  const calculateAmountTo = (from: string, to: string, amount: string) => {
+    const fromPrice = tokenPrices[from];
+    const toPrice = tokenPrices[to];
+    if (fromPrice && toPrice) {
+      const calculatedAmountTo = (parseFloat(amount) * fromPrice) / toPrice;
+      setAmountTo(calculatedAmountTo.toFixed(6));
+    }
+  };
+
+  const handleAmountFromChange = (value: string) => {
+    setAmountFrom(value);
+    if (tokenFrom && tokenTo && tokenPrices[tokenFrom] && tokenPrices[tokenTo]) {
+      calculateAmountTo(tokenFrom, tokenTo, value);
+    }
+  };
 
   async function swap() {
     if (!wallet.connected) return;
@@ -39,7 +86,7 @@ export default function Swap() {
         transactionBlock: tx
       });
       console.log('successfully!', resData);
-      alert('Congrats');
+      alert('Swap successful');
     } catch (e) {
       console.error('failed', e);
       setError('Transaction failed. Please try again.');
@@ -62,7 +109,8 @@ export default function Swap() {
               selectedToken={tokenFrom}
               onSelectToken={setTokenFrom}
               amount={amountFrom}
-              onAmountChange={setAmountFrom}
+              onAmountChange={handleAmountFromChange}
+              tokenPrice={tokenPrices[tokenFrom]}
             />
             <div className="flex justify-center">
               <button
@@ -83,6 +131,7 @@ export default function Swap() {
               onSelectToken={setTokenTo}
               amount={amountTo}
               onAmountChange={setAmountTo}
+              tokenPrice={tokenPrices[tokenTo]}
             />
           </div>
 
@@ -124,12 +173,8 @@ interface TokenInputProps {
   onSelectToken: (token: string) => void;
   amount: string;
   onAmountChange: (amount: string) => void;
+  tokenPrice: number | undefined;
 }
-
-const availableTokens = [
-  { name: 'Sui', symbol: 'SUI', image: 'https://s2.coinmarketcap.com/static/img/coins/64x64/20947.png', contract: '0x2::sui::SUI' },
-  { name: 'USDCircle', symbol: 'USDC', image: 'https://s2.coinmarketcap.com/static/img/coins/64x64/3408.png', contract: '0xdba34672e30cb065b1f93e3ab55318768fd6fef66c15942c9f7cb846e2f900e7::usdc::USDC' },
-];
 
 const TokenInput: React.FC<TokenInputProps> = ({
   label,
@@ -137,6 +182,7 @@ const TokenInput: React.FC<TokenInputProps> = ({
   onSelectToken,
   amount,
   onAmountChange,
+  tokenPrice,
 }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -204,6 +250,11 @@ const TokenInput: React.FC<TokenInputProps> = ({
           className="flex-1 px-4 py-2 bg-white bg-opacity-10 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500"
         />
       </div>
+      {tokenPrice && (
+        <div className="text-sm text-gray-300">
+          1 {selectedToken} = ${tokenPrice.toFixed(2)} USD
+        </div>
+      )}
     </div>
   );
 };
