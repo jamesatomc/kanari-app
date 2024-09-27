@@ -18,7 +18,7 @@ const Navbar: React.FC<NavbarProps> = ({ isMenuOpen, toggleMenu }) => {
               <img className="h-10 w-10" src="https://magenta-able-pheasant-388.mypinata.cloud/ipfs/QmQhKs9WeVy5MxbChEQJrX37Unb6dktZXrYZuy6uVofQwC/Logo.png" alt="Kanari Sell Logo" />
             </a>
             <div className="hidden md:flex ml-10 items-baseline space-x-4">
-              {["Mint NFT", "Bun IDO", "Swap"].map((item) => (
+              {["Mint NFT", "IDO", "Swap"].map((item) => (
                 <Link
                   key={item}
                   to={
@@ -61,14 +61,14 @@ const Navbar: React.FC<NavbarProps> = ({ isMenuOpen, toggleMenu }) => {
       {isMenuOpen && (
         <div className="md:hidden">
           <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-            {["Mint NFT", "Bun IDO", "Swap"].map((item) => (
+            {["Mint NFT", "IDO", "Swap"].map((item) => (
               <Link
                 key={item}
                 to={
                   item === "Mint NFT"
                     ? "/"
-                    : item === "Bun IDO"
-                      ? "/bun-ido"
+                    : item === "IDO"
+                      ? "/ido"
                       : "/swap"
                 }
                 className="text-white hover:bg-white hover:bg-opacity-20 block px-3 py-2 rounded-md text-base font-medium transition duration-300"
