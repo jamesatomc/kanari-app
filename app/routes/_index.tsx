@@ -27,7 +27,7 @@ export default function Index() {
     setIsMinting(true);
 
     const tx = new TransactionBlock();
-    const packageObjectId = "0xb5ee8b1322685c136e331e1f2cabf48689f82dddb35d5edce3e85a9c3ece1ab3";
+    const packageObjectId = "0x609c115685a74836cf97ab74fddec5892162d0c5599a80beece772a1ab6ce65a";
     tx.moveCall({
       target: `${packageObjectId}::nft::mint`,
       arguments: [tx.pure("Example NFT"), tx.pure("daad"), tx.pure("https://magenta-able-pheasant-388.mypinata.cloud/ipfs/QmQhKs9WeVy5MxbChEQJrX37Unb6dktZXrYZuy6uVofQwC/Logo.png")],

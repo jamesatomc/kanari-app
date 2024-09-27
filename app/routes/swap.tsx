@@ -23,16 +23,14 @@ export default function Swap() {
     setIsSwapping(true);
 
     const tx = new TransactionBlock();
-    const packageObjectId = "0xb7ee8b1322685c136e331e1f2cabf48689f82dddb35d5edce3e85a9c3ece1ab3";
+    const packageObjectId = "0x609c115685a74836cf97ab74fddec5892162d0c5599a80beece772a1ab6ce65a";
     tx.moveCall({
       target: `${packageObjectId}::swap::swap_tokens`,
       arguments: [
         tx.pure(tokenFrom),
         tx.pure(tokenTo),
         tx.pure(amountFrom),
-        // Ensure these variables are defined or passed correctly
-        // tx.pure(treasuryCapFrom),
-        // tx.pure(treasuryCapTo),
+        tx.pure(amountTo),
       ],
     });
 
