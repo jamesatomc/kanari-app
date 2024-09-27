@@ -7,8 +7,6 @@ import { ConnectButton } from "@suiet/wallet-kit";
 import { TransactionBlock } from "@mysten/sui.js/transactions";
 
 
-
-
 export const meta: MetaFunction = () => {
   return [
     { title: "Kanari Sell - Exclusive NFT Minting" },
@@ -21,7 +19,7 @@ export default function Index() {
   const [isMinting, setIsMinting] = useState(false);
   const wallet = useWallet();
 
-  const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
+  const toggleMenu = () => setIsMenuOpen(!isMenuOpen);``
 
   async function handleSignAndExecuteTx() {
     if (!wallet.connected) return;
@@ -92,6 +90,7 @@ export default function Index() {
             )}
           </div>
         </div>
+
       </main>
     </div>
   );

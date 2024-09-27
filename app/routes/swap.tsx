@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { ArrowDownUp, ChevronDown, Loader } from 'lucide-react';
 import Navbar from '~/navbar';
 import { ConnectButton, useWallet } from "@suiet/wallet-kit";
+import { TransactionBlock } from "@mysten/sui.js/transactions";
 
 export default function Swap() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -16,22 +17,38 @@ export default function Swap() {
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
-  const handleSwap = async () => {
-    setError(null);
+  async function swap() {
+    if (!wallet.connected) return;
+
     setIsSwapping(true);
+
+    const tx = new TransactionBlock();
+    const packageObjectId = "0xb7ee8b1322685c136e331e1f2cabf48689f82dddb35d5edce3e85a9c3ece1ab3";
+    tx.moveCall({
+      target: `${packageObjectId}::swap::swap_tokens`,
+      arguments: [
+        tx.pure(tokenFrom),
+        tx.pure(tokenTo),
+        tx.pure(amountFrom),
+        // Ensure these variables are defined or passed correctly
+        // tx.pure(treasuryCapFrom),
+        // tx.pure(treasuryCapTo),
+      ],
+    });
+
     try {
-      // Your swap logic here
-      // For example:
-      // await performSwap(tokenFrom, tokenTo, amountFrom, amountTo);
-      console.log('Swapping', amountFrom, tokenFrom, 'for', amountTo, tokenTo);
-      // Simulating a delay
-      await new Promise(resolve => setTimeout(resolve, 2000));
-    } catch (err) {
-      setError("An error occurred during the swap.");
+      const resData = await wallet.signAndExecuteTransactionBlock({
+        transactionBlock: tx
+      });
+      console.log('successfully!', resData);
+      alert('Congrats');
+    } catch (e) {
+      console.error('failed', e);
+      setError('Transaction failed. Please try again.');
     } finally {
       setIsSwapping(false);
     }
-  };
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-600 to-blue-500 text-white">
@@ -74,7 +91,7 @@ export default function Swap() {
           {wallet.connected ? (
             <button
               className="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 rounded-xl transition duration-300 flex items-center justify-center"
-              onClick={handleSwap}
+              onClick={swap}
               disabled={isSwapping}
             >
               {isSwapping ? (
@@ -112,22 +129,8 @@ interface TokenInputProps {
 }
 
 const availableTokens = [
-  { name: 'Sui', symbol: 'SUI', image: 'https://s2.coinmarketcap.com/static/img/coins/64x64/20947.png' },
-  { name: 'Bitcoin', symbol: 'BTC', image: 'https://s2.coinmarketcap.com/static/img/coins/64x64/1.png' },
-  { name: 'USDCircle', symbol: 'USDC', image: 'https://s2.coinmarketcap.com/static/img/coins/64x64/3408.png' },
-  { name: 'Ethereum', symbol: 'ETH', image: 'https://s2.coinmarketcap.com/static/img/coins/64x64/1027.png' },
-  { name: 'Tether', symbol: 'USDT', image: 'https://s2.coinmarketcap.com/static/img/coins/64x64/825.png' },
-  { name: 'Cardano', symbol: 'ADA', image: 'https://s2.coinmarketcap.com/static/img/coins/64x64/2010.png' },
-  { name: 'Solana', symbol: 'SOL', image: 'https://s2.coinmarketcap.com/static/img/coins/64x64/5426.png' },
-  { name: 'XRP', symbol: 'XRP', image: 'https://s2.coinmarketcap.com/static/img/coins/64x64/52.png' },
-  { name: 'Polkadot', symbol: 'DOT', image: 'https://s2.coinmarketcap.com/static/img/coins/64x64/6636.png' },
-  { name: 'Dogecoin', symbol: 'DOGE', image: 'https://s2.coinmarketcap.com/static/img/coins/64x64/74.png' },
-  { name: 'Avalanche', symbol: 'AVAX', image: 'https://s2.coinmarketcap.com/static/img/coins/64x64/5805.png' },
-  { name: 'Uniswap', symbol: 'UNI', image: 'https://s2.coinmarketcap.com/static/img/coins/64x64/7083.png' },
-  { name: 'Litecoin', symbol: 'LTC', image: 'https://s2.coinmarketcap.com/static/img/coins/64x64/2.png' },
-  { name: 'Chainlink', symbol: 'LINK', image: 'https://s2.coinmarketcap.com/static/img/coins/64x64/1975.png' },
-  { name: 'Bitcoin Cash', symbol: 'BCH', image: 'https://s2.coinmarketcap.com/static/img/coins/64x64/1831.png' },
-  { name: 'Algorand', symbol: 'ALGO', image: 'https://s2.coinmarketcap.com/static/img/coins/64x64/4030.png' },
+  { name: 'Sui', symbol: 'SUI', image: 'https://s2.coinmarketcap.com/static/img/coins/64x64/20947.png', contract: '0x2::sui::SUI' },
+  { name: 'USDCircle', symbol: 'USDC', image: 'https://s2.coinmarketcap.com/static/img/coins/64x64/3408.png', contract: '0xdba34672e30cb065b1f93e3ab55318768fd6fef66c15942c9f7cb846e2f900e7::usdc::USDC' },
 ];
 
 const TokenInput: React.FC<TokenInputProps> = ({
