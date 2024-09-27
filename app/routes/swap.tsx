@@ -68,9 +68,11 @@ export default function Swap() {
     if (!wallet.connected) return;
 
     setIsSwapping(true);
-
+    // Create a new transaction block
     const tx = new TransactionBlock();
+    // Set the sender of the transaction
     const packageObjectId = "0x609c115685a74836cf97ab74fddec5892162d0c5599a80beece772a1ab6ce65a";
+    // Call the swap_tokens function on the swap package
     tx.moveCall({
       target: `${packageObjectId}::swap::swap_tokens`,
       arguments: [
@@ -177,6 +179,7 @@ export default function Swap() {
   );
 }
 
+// TokenInput.tsx
 interface TokenInputProps {
   label: string;
   selectedToken: string;
@@ -186,6 +189,7 @@ interface TokenInputProps {
   tokenPrice: number | undefined;
 }
 
+// TokenInput.tsx
 const TokenInput: React.FC<TokenInputProps> = ({
   label,
   selectedToken,
@@ -209,12 +213,13 @@ const TokenInput: React.FC<TokenInputProps> = ({
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
+  // Handle amount change and validate input
   const handleAmountChange = (value: string) => {
     if (value === '' || parseFloat(value) >= 0) {
       setError(null);
       onAmountChange(value);
     } else {
-      setError('จำนวนต้องไม่ติดลบ');
+      setError('Amount must be a positive number');
     }
   };
 
@@ -270,9 +275,9 @@ const TokenInput: React.FC<TokenInputProps> = ({
           className="flex-1 px-4 py-2 bg-white bg-opacity-10 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
         />
       </div>
-      {error && (
+      {/* {error && (
         <div className="text-red-500 text-sm mt-1">{error}</div>
-      )}
+      )} */}
       {tokenPrice && (
         <div className="text-sm text-gray-300">
           1 {selectedToken} = ${tokenPrice.toFixed(2)} USD
