@@ -95,6 +95,16 @@ export default function Swap() {
     }
   }
 
+  useEffect(() => {
+    if (error) {
+      const timer = setTimeout(() => {
+        setError(null);
+      }, 1000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [error]);
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-600 to-blue-500 text-white">
       <Navbar isMenuOpen={isMenuOpen} toggleMenu={toggleMenu} />
@@ -185,6 +195,7 @@ const TokenInput: React.FC<TokenInputProps> = ({
   tokenPrice,
 }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -197,6 +208,15 @@ const TokenInput: React.FC<TokenInputProps> = ({
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
+
+  const handleAmountChange = (value: string) => {
+    if (value === '' || parseFloat(value) >= 0) {
+      setError(null);
+      onAmountChange(value);
+    } else {
+      setError('จำนวนต้องไม่ติดลบ');
+    }
+  };
 
   const selectedTokenData = availableTokens.find(token => token.symbol === selectedToken);
 
@@ -246,10 +266,13 @@ const TokenInput: React.FC<TokenInputProps> = ({
           type="number"
           placeholder="0.00"
           value={amount}
-          onChange={(e) => onAmountChange(e.target.value)}
-          className="flex-1 px-4 py-2 bg-white bg-opacity-10 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500"
+          onChange={(e) => handleAmountChange(e.target.value)}
+          className="flex-1 px-4 py-2 bg-white bg-opacity-10 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
         />
       </div>
+      {error && (
+        <div className="text-red-500 text-sm mt-1">{error}</div>
+      )}
       {tokenPrice && (
         <div className="text-sm text-gray-300">
           1 {selectedToken} = ${tokenPrice.toFixed(2)} USD
