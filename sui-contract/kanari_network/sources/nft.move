@@ -1,24 +1,15 @@
 //Kanari Laps NFT Module
 module kanari_network::nft {
-    /// Import the necessary modules
     use std::string;
-    /// Import the necessary modules
     use sui::url::{Self, Url};
-    /// Import the necessary modules
-
-    /// Import the necessary modules
     use sui::tx_context::{sender};
-    /// Import the necessary modules
     use std::string::{String, utf8};
-    /// Import the necessary modules
-
-    /// Import the necessary modules
     use sui::package;
-    /// Import the necessary modules
     use sui::display;
-    /// Import the necessary modules
     use sui::event;
-    /// Import the necessary modules
+    use sui::coin::{Self, Coin};
+    use sui::sui::SUI;
+
 
     /// The AdminCap struct represents the admin capabilities of the contract.
     public struct AdminCap has key, store {
@@ -159,6 +150,7 @@ module kanari_network::nft {
     public entry fun mint(
         cap: &mut NftCap,
         _: &mut AdminCap,
+        payment: Coin<SUI>,
         name: vector<u8>,
         description: vector<u8>,
         number: vector<u8>,
@@ -167,63 +159,51 @@ module kanari_network::nft {
         rarity: vector<String>,
         attack: vector<String>,
         defense: vector<String>,
-        cp : vector<String>,
+        cp: vector<String>,
         ctx: &mut TxContext
     ) {
-        // The number of NFTs issued
+        // Verify payment amount first
+        assert!(coin::value(&payment) >= 25000000000, 0); // 25 SUI = 25000000000 MIST
+    
+        // Process payment
+        let fee_address: address = @0x18e0f16e9f10903d2ae2935f15fef2b6ab34ba9f6f0feec4fe67f0290faf8757;
+        transfer::public_transfer(payment, fee_address);
+    
+        // Update NFT counters
         let n = cap.issued_counter;
-
         cap.issued_counter = n + 1;
-
         cap.supply = cap.supply + 1;
-
         assert!(cap.supply <= MAX_SUPPLY, ETooManyNums);
-
-
-        // The sender of the transaction
+    
         let sender = tx_context::sender(ctx);
-
-        // The attributes of the NFT
-        let attributes = Attributes {
-            level,
-            rarity,
-            attack,
-            defense,
-            cp
-        };
-
-        // Create a new KariKid NFT
+        
+        // Create NFT
         let nft = KariKid {
-            // The ID of the NFT
             id: object::new(ctx),
-            // The name of the NFT
             name: utf8(name),
-            // The description of the NFT
             description: utf8(description),
-            // The number of the NFT
             number: utf8(number),
-            // The URL of the image of the NFT
             image_url: url::new_unsafe_from_bytes(url),
-            // The address of the creator of the NFT
-            crestor: sender(ctx),
-            // The attributes of the NFT
-            attributes,
-        };
-
-        // Emit a MintEvent
-        event::emit(MintEven{
-            // The ID of the NFT
-            object_id: object::id(&nft),
-            // The name of the NFT
             crestor: sender,
-            // The number of the NFT
+            attributes: Attributes {
+                level,
+                rarity,
+                attack,
+                defense,
+                cp
+            },
+        };
+    
+        // Emit mint event
+        event::emit(MintEven{
+            object_id: object::id(&nft),
+            crestor: sender,
             name: nft.name,
-            // The address of the creator of the NFT
             number: nft.number,
         });
-
-        // Transfer the NFT to the sender
-        transfer::public_transfer(nft ,sender);
+    
+        // Transfer NFT to sender
+        transfer::public_transfer(nft, sender);
     }
 
     /// Burn NFT
