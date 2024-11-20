@@ -5,13 +5,10 @@ import { ConnectButton, useWallet } from "@suiet/wallet-kit";
 import { TransactionBlock } from "@mysten/sui.js/transactions";
 import axios from 'axios';
 
-const availableTokens = [
-  { name: 'Sui', symbol: 'SUI', image: 'https://s2.coinmarketcap.com/static/img/coins/64x64/20947.png', contract: '0x2::sui::SUI' },
-  { name: 'USDCoin', symbol: 'USDC', image: 'https://s2.coinmarketcap.com/static/img/coins/64x64/3408.png', contract: '0xdba34672e30cb065b1f93e3ab55318768fd6fef66c15942c9f7cb846e2f900e7::usdc::USDC' },
-];
-
 export default function Swap() {
+  const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  
   const [tokenFrom, setTokenFrom] = useState('SUI');
   const [tokenTo, setTokenTo] = useState('USDC');
   const [amountFrom, setAmountFrom] = useState('');
@@ -19,16 +16,21 @@ export default function Swap() {
   const [isSwapping, setIsSwapping] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [tokenPrices, setTokenPrices] = useState<{[key: string]: number}>({});
+  const [walletTokens, setWalletTokens] = useState([]);
 
   const wallet = useWallet();
-
-  const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
   useEffect(() => {
     fetchTokenPrices();
     const interval = setInterval(fetchTokenPrices, 60000); // Update prices every minute
     return () => clearInterval(interval);
   }, []);
+
+  useEffect(() => {
+    if (wallet.connected) {
+      fetchWalletTokens();
+    }
+  }, [wallet.connected]);
 
   useEffect(() => {
     if (tokenFrom && tokenTo && amountFrom && tokenPrices[tokenFrom] && tokenPrices[tokenTo]) {
@@ -45,6 +47,16 @@ export default function Swap() {
       });
     } catch (error) {
       console.error('Error fetching token prices:', error);
+    }
+  };
+
+  const fetchWalletTokens = async () => {
+    try {
+      // Assuming wallet.getTokens() is a method to fetch tokens from the connected wallet
+      const tokens = await wallet.getTokens();
+      setWalletTokens(tokens);
+    } catch (error) {
+      console.error('Error fetching wallet tokens:', error);
     }
   };
 
@@ -66,15 +78,16 @@ export default function Swap() {
 
   async function swap() {
     if (!wallet.connected) return;
-
+  
     setIsSwapping(true);
-    // Create a new transaction block
     const tx = new TransactionBlock();
-    // Set the sender of the transaction
-    const packageObjectId = "0x609c115685a74836cf97ab74fddec5892162d0c5599a80beece772a1ab6ce65a";
-    // Call the swap_tokens function on the swap package
+    const packageObjectId = "0x0068cf62444d032fcbcef8c0f1e493d3fd3b05f1e18954adc8606b6fa95cd431";
+  
+    // Determine the direction of the swap and call the appropriate function
+    const swapFunction = tokenFrom === 'X' ? 'swap_x_to_y' : 'swap_y_to_x';
+  
     tx.moveCall({
-      target: `${packageObjectId}::swap::swap_tokens`,
+      target: `${packageObjectId}::swap::${swapFunction}`,
       arguments: [
         tx.pure(tokenFrom),
         tx.pure(tokenTo),
@@ -82,7 +95,7 @@ export default function Swap() {
         tx.pure(amountTo),
       ],
     });
-
+  
     try {
       const resData = await wallet.signAndExecuteTransactionBlock({
         transactionBlock: tx
@@ -123,15 +136,19 @@ export default function Swap() {
               amount={amountFrom}
               onAmountChange={handleAmountFromChange}
               tokenPrice={tokenPrices[tokenFrom]}
+              availableTokens={walletTokens}
             />
             <div className="flex justify-center">
               <button
                 className="bg-purple-500 hover:bg-purple-600 text-white rounded-full p-2 transition duration-300"
                 onClick={() => {
+                  console.log('Swapping tokens');
+                  console.log('Before swap:', { tokenFrom, tokenTo, amountFrom, amountTo });
                   setTokenFrom(tokenTo);
                   setTokenTo(tokenFrom);
                   setAmountFrom(amountTo);
                   setAmountTo(amountFrom);
+                  console.log('After swap:', { tokenFrom, tokenTo, amountFrom, amountTo });
                 }}
               >
                 <ArrowDownUp className="h-6 w-6" />
@@ -144,6 +161,7 @@ export default function Swap() {
               amount={amountTo}
               onAmountChange={setAmountTo}
               tokenPrice={tokenPrices[tokenTo]}
+              availableTokens={walletTokens}
             />
           </div>
 
@@ -187,6 +205,7 @@ interface TokenInputProps {
   amount: string;
   onAmountChange: (amount: string) => void;
   tokenPrice: number | undefined;
+  availableTokens: Array<{ symbol: string, name: string, image: string }>;
 }
 
 // TokenInput.tsx
@@ -197,6 +216,7 @@ const TokenInput: React.FC<TokenInputProps> = ({
   amount,
   onAmountChange,
   tokenPrice,
+  availableTokens,
 }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -275,9 +295,6 @@ const TokenInput: React.FC<TokenInputProps> = ({
           className="flex-1 px-4 py-2 bg-white bg-opacity-10 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
         />
       </div>
-      {/* {error && (
-        <div className="text-red-500 text-sm mt-1">{error}</div>
-      )} */}
       {tokenPrice && (
         <div className="text-sm text-gray-300">
           1 {selectedToken} = ${tokenPrice.toFixed(2)} USD

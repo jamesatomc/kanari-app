@@ -1,9 +1,9 @@
 module kanari_network::dex {
-    // use sui::object::{Self, ID, UID};
-    // use sui::transfer;
-    // use sui::tx_context::{Self, TxContext};
-    use sui::coin::{Self, Coin};
-    use sui::balance::{Self, Balance};
+    use 0x2::sui::coin::{Self, Coin};
+    use 0x2::sui::balance::{Self, Balance};
+    use 0x2::sui::object::{Self, UID};
+    use 0x2::sui::transfer;
+    use 0x2::sui::tx_context::{Self, TxContext};
 
     // Error codes
     const E_INSUFFICIENT_LIQUIDITY: u64 = 1;
