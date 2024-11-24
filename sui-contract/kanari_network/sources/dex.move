@@ -1,15 +1,18 @@
 module kanari_network::dex {
-    use 0x2::sui::coin::{Self, Coin};
-    use 0x2::sui::balance::{Self, Balance};
-    use 0x2::sui::object::{Self, UID};
-    use 0x2::sui::transfer;
-    use 0x2::sui::tx_context::{Self, TxContext};
+    use sui::coin::{Self, Coin};
+    use sui::balance::{Self, Balance};
+    use sui::object::{Self, UID};
+    use sui::transfer;
+    use sui::tx_context::{Self, TxContext};
+    use sui::clock::{Self, Clock};
 
     // Error codes
     const E_INSUFFICIENT_LIQUIDITY: u64 = 1;
     const E_INVALID_FEE: u64 = 2;
     const E_ZERO_AMOUNT: u64 = 3;
     const E_INSUFFICIENT_LP_TOKENS: u64 = 4;
+    const E_DEADLINE_PASSED: u64 = 5;
+    const E_INVALID_AMOUNTS: u64 = 6;
 
     // Fee constants (basis points)
     const FEE_LOW: u64 = 10;    // 0.1%
@@ -17,162 +20,114 @@ module kanari_network::dex {
     const FEE_HIGH: u64 = 100;  // 1.0%
     const BASIS_POINTS: u64 = 10000;
 
-    /// Liquidity pool holding two tokens
-    public struct LiquidityPool<phantom X, phantom Y> has key {
+    /// Represents liquidity addition parameters and state
+    public struct AddLiquidity<phantom A: key, phantom B: key> has key {
         id: UID,
-        balance_x: Balance<X>,
-        balance_y: Balance<Y>,
-        fee_bps: u64,
-        lp_supply: u64
+        balance_a: Balance<A>,
+        balance_b: Balance<B>,
+        amount_a: Balance<A>,
+        amount_b: Balance<B>,
+        min_liquidity: Balance<A>,
+        deadline: u64,
+        sender: address,
     }
 
-    /// LP token representing pool share
-    public struct LPToken<phantom X, phantom Y> has key {
-        id: UID,
-        amount: u64
+    /// Internal function to process liquidity addition
+    public fun add_liquidity_internal<A: key, B: key>(
+        token_a: Coin<A>,
+        token_b: Coin<B>,
+        amount_a: Balance<A>,
+        amount_b: Balance<B>,
+        min_liquidity: Balance<A>,
+        deadline: u64,
+        sender: address,
+        clock: &Clock,
+        ctx: &mut TxContext
+    ): (Coin<A>, Coin<B>, Balance<A>, Balance<B>, Balance<A>) {
+        // Validate inputs
+        assert!(balance::value(&amount_a) > 0 && balance::value(&amount_b) > 0, E_ZERO_AMOUNT);
+        assert!(clock::timestamp_ms(clock) <= deadline, E_DEADLINE_PASSED);
+        
+        let sender = tx_context::sender(ctx);
+        let balance_a = coin::into_balance(token_a);
+        let balance_b = coin::into_balance(token_b);
+
+        // Validate liquidity amounts
+        assert!(balance::value(&balance_a) >= balance::value(&amount_a), E_INSUFFICIENT_LIQUIDITY);
+        assert!(balance::value(&balance_b) >= balance::value(&amount_b), E_INSUFFICIENT_LIQUIDITY);
+
+        let liquidity = AddLiquidity {
+            id: object::new(ctx),
+            balance_a,
+            balance_b,
+            amount_a,
+            amount_b,
+            min_liquidity,
+            deadline,
+            sender,
+        };
+
+        let AddLiquidity { 
+            id,
+            balance_a,
+            balance_b,
+            amount_a,
+            amount_b,
+            min_liquidity,
+            deadline: _deadline,
+            sender: _sender
+        } = liquidity;
+
+        object::delete(id);
+
+        let token_a = coin::from_balance(balance_a, ctx);
+        let token_b = coin::from_balance(balance_b, ctx);
+
+        (token_a, token_b, amount_a, amount_b, min_liquidity)
     }
 
-    // Create a new liquidity pool
-    public fun create_pool<X, Y>(
-        fee_bps: u64,
+    /// Entry function for users to add liquidity
+    entry public fun add_liquidity<A: key, B: key>(
+        mut token_a: Coin<A>,
+        mut token_b: Coin<B>,
+        amount_a: u64,
+        amount_b: u64,
+        min_liquidity: u64,
+        deadline: u64,
+        clock: &Clock,
+        sender: address,
         ctx: &mut TxContext
     ) {
-        assert!(
-            fee_bps == FEE_LOW || fee_bps == FEE_MED || fee_bps == FEE_HIGH,
-            E_INVALID_FEE
-        );
+        // Validate inputs
+        assert!(amount_a > 0 && amount_b > 0, E_ZERO_AMOUNT);
+        assert!(clock::timestamp_ms(clock) <= deadline, E_DEADLINE_PASSED);
 
-        let pool = LiquidityPool<X, Y> {
-            id: object::new(ctx),
-            balance_x: balance::zero(),
-            balance_y: balance::zero(),
-            fee_bps,
-            lp_supply: 0
-        };
+        let balance_a = coin::into_balance(coin::split(&mut token_a, amount_a, ctx));
+        let balance_b = coin::into_balance(coin::split(&mut token_b, amount_b, ctx));
+        let min_liq_balance = coin::into_balance(coin::split(&mut token_a, min_liquidity, ctx));
 
-        transfer::share_object(pool);
-    }
+        let (token_a_out, token_b_out, amount_a_out, amount_b_out, min_liq_out) = 
+            add_liquidity_internal(
+                token_a,
+                token_b,
+                balance_a,
+                balance_b,
+                min_liq_balance,
+                deadline,
+                sender,
+                clock,
+                ctx
+            );
 
-    // Add liquidity to pool
-    public fun add_liquidity<X, Y>(
-        pool: &mut LiquidityPool<X, Y>,
-        coin_x: Coin<X>,
-        coin_y: Coin<Y>,
-        ctx: &mut TxContext
-    ): LPToken<X, Y> {
-        let amount_x = coin::value(&coin_x);
-        let amount_y = coin::value(&coin_y);
-        
-        assert!(amount_x > 0 && amount_y > 0, E_ZERO_AMOUNT);
+        transfer::public_transfer(token_a_out, sender);
+        transfer::public_transfer(token_b_out, sender);
 
-        // Add tokens to pool
-        balance::join(&mut pool.balance_x, coin::into_balance(coin_x));
-        balance::join(&mut pool.balance_y, coin::into_balance(coin_y));
+        let remaining_a = coin::from_balance(amount_a_out, ctx);
+        let remaining_b = coin::from_balance(amount_b_out, ctx);
+        let lp_tokens = coin::from_balance(min_liq_out, ctx);
 
-        // Mint LP tokens
-        let lp_amount = if (pool.lp_supply == 0) {
-            amount_x // Initial liquidity
-        } else {
-            // Proportional to contribution
-            (amount_x * pool.lp_supply) / balance::value(&pool.balance_x)
-        };
-
-        pool.lp_supply = pool.lp_supply + lp_amount;
-
-        // Create and return LP token
-        LPToken<X, Y> {
-            id: object::new(ctx),
-            amount: lp_amount
-        }
-    }
-
-    public fun remove_liquidity<X, Y>(
-        pool: &mut LiquidityPool<X, Y>,
-        lp_token: LPToken<X, Y>,
-        ctx: &mut TxContext
-    ): (Coin<X>, Coin<Y>) {
-        let LPToken { id, amount: lp_amount } = lp_token;
-        object::delete(id);
-        
-        // Calculate token amounts based on LP share
-        let total_x = balance::value(&pool.balance_x);
-        let total_y = balance::value(&pool.balance_y);
-        
-        let amount_x = (total_x * lp_amount) / pool.lp_supply;
-        let amount_y = (total_y * lp_amount) / pool.lp_supply;
-        
-        assert!(amount_x > 0 && amount_y > 0, E_INSUFFICIENT_LP_TOKENS);
-
-        // Update pool state
-        pool.lp_supply = pool.lp_supply - lp_amount;
-
-        // Withdraw tokens
-        let coin_x = coin::from_balance(
-            balance::split(&mut pool.balance_x, amount_x),
-            ctx
-        );
-        let coin_y = coin::from_balance(
-            balance::split(&mut pool.balance_y, amount_y),
-            ctx
-        );
-
-        (coin_x, coin_y)
-    }
-
-    // Helper function for swap calculations
-    fun calculate_swap_output(
-        amount_in: u64,
-        balance_in: u64,
-        balance_out: u64,
-        fee_bps: u64
-    ): u64 {
-        let amount_in_with_fee = amount_in * (BASIS_POINTS - fee_bps);
-        let numerator = amount_in_with_fee * balance_out;
-        let denominator = (balance_in * BASIS_POINTS) + amount_in_with_fee;
-        numerator / denominator
-    }
-
-    // Swap X for Y
-    public fun swap_x_to_y<X, Y>(
-        pool: &mut LiquidityPool<X, Y>, 
-        coin_in: Coin<X>,
-        ctx: &mut TxContext
-    ): Coin<Y> {
-        let amount_in = coin::value(&coin_in);
-        assert!(amount_in > 0, E_ZERO_AMOUNT);
-
-        let amount_out = calculate_swap_output(
-            amount_in,
-            balance::value(&pool.balance_x),
-            balance::value(&pool.balance_y),
-            pool.fee_bps
-        );
-
-        assert!(amount_out > 0, E_INSUFFICIENT_LIQUIDITY);
-
-        balance::join(&mut pool.balance_x, coin::into_balance(coin_in));
-        coin::from_balance(balance::split(&mut pool.balance_y, amount_out), ctx)
-    }
-
-    // Swap Y for X  
-    public fun swap_y_to_x<X, Y>(
-        pool: &mut LiquidityPool<X, Y>,
-        coin_in: Coin<Y>, 
-        ctx: &mut TxContext
-    ): Coin<X> {
-        let amount_in = coin::value(&coin_in);
-        assert!(amount_in > 0, E_ZERO_AMOUNT);
-
-        let amount_out = calculate_swap_output(
-            amount_in,
-            balance::value(&pool.balance_y),
-            balance::value(&pool.balance_x),
-            pool.fee_bps
-        );
-
-        assert!(amount_out > 0, E_INSUFFICIENT_LIQUIDITY);
-
-        balance::join(&mut pool.balance_y, coin::into_balance(coin_in));
-        coin::from_balance(balance::split(&mut pool.balance_x, amount_out), ctx)
+        transfer::public_transfer(remaining_a, sender);
+        transfer::public_transfer(remaining_b, sender);
+        transfer::public_transfer(lp_tokens, sender);
     }
 }
