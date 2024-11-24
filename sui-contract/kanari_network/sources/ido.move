@@ -1,15 +1,15 @@
 module kanari_network::ido {
-    use sui::object::{Self, UID};
-    use sui::transfer;
-    use sui::tx_context::{Self, TxContext};
+    // use sui::object::{Self, UID};
+    // use sui::transfer;
+    // use sui::tx_context::{Self, TxContext};
     use sui::coin::{Self, Coin};
     use sui::sui::SUI;
     use sui::balance::{Self, Balance};
     use kanari_network::coin::COIN;  // Add KARI token import
 
     // Constants
-    const KARI_DECIMALS: u64 = 9;
-    const SUI_DECIMALS: u64 = 9;
+    // const KARI_DECIMALS: u64 = 9;
+    // const SUI_DECIMALS: u64 = 9;
     const PRICE_PER_KARI: u64 = 30_000_000; // $0.03 with 9 decimals
 
     // Error codes
