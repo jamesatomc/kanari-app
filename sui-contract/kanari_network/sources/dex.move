@@ -29,19 +29,19 @@ module kanari_network::dex {
     }
 
     /// Represents liquidity addition parameters and state
-    public struct AddLiquidity<phantom A: key, phantom B: key> has key {
+    public struct AddLiquidity<phantom A: key, phantom B: key> has key, store{
         id: UID,
         coin_A: Balance<A>,
         coin_B: Balance<B>,
         amount_A: u64,
         amount_B: u64,
-        deadline: u64,
+        // deadline: u64,
         min_liquidity: u64,
         fee_basis_points: u64,
         fee_receiver: address,
         nonce: u64,
         fee_tier: u8,
-        whitelist: vector<address>, // Example type for whitelist
+        // whitelist: vector<address>, // Example type for whitelist
     }
 
     /// Updates the pool with the new liquidity
@@ -64,13 +64,13 @@ module kanari_network::dex {
         mut coin_B: Balance<B>, // Declare as mutable
         amount_A: u64,
         amount_B: u64,
-        deadline: u64,
+        // deadline: u64,
         min_liquidity: u64,
         fee_basis_points: u64,
         fee_receiver: address,
         nonce: u64,
         fee_tier: u8,
-        whitelist: vector<address>,
+        // whitelist: vector<address>,
         clock: &Clock,
         tx: &mut TxContext,
         pool: &mut Pool<A, B> // Pool state
@@ -79,13 +79,13 @@ module kanari_network::dex {
         assert!(amount_A > 0 && amount_B > 0, E_ZERO_AMOUNT);
         assert!(balance::value(&coin_A) >= amount_A, E_INSUFFICIENT_LIQUIDITY);
         assert!(balance::value(&coin_B) >= amount_B, E_INSUFFICIENT_LIQUIDITY);
-        assert!(deadline > clock::timestamp_ms(clock), E_DEADLINE_PASSED);
+        // assert!(deadline > clock::timestamp_ms(clock), E_DEADLINE_PASSED);
         assert!(fee_basis_points >= FEE_LOW && fee_basis_points <= FEE_HIGH, E_INVALID_FEE);
 
         // Check if the transaction sender is in the whitelist
         let sender = tx_context::sender(tx);
-        let is_whitelisted = vector::contains(&whitelist, &sender);
-        assert!(is_whitelisted, E_INVALID_AMOUNTS);
+        // let is_whitelisted = vector::contains(&whitelist, &sender);
+        // assert!(is_whitelisted, E_INVALID_AMOUNTS);
 
         // Calculate liquidity and check against min_liquidity
         let liquidity = amount_A + amount_B;
@@ -106,40 +106,85 @@ module kanari_network::dex {
             coin_B,
             amount_A,
             amount_B,
-            deadline,
+            // deadline,
             min_liquidity,
             fee_basis_points,
             fee_receiver,
             nonce,
             fee_tier,
-            whitelist
+            // whitelist
         }
     }
 
+    /// Adds liquidity to the pool
+    entry public fun add_liquidity_entry<A: key, B: key>(
+        coin_a: Coin<A>,
+        coin_b: Coin<B>,
+        amount_a: u64,
+        amount_b: u64,
+        // deadline: u64,
+        min_liquidity: u64,
+        fee_basis_points: u64,
+        fee_receiver: address,
+        nonce: u64,
+        fee_tier: u8,
+        // whitelist: vector<address>,
+        clock: &Clock,
+        pool: &mut Pool<A, B>,
+        ctx: &mut TxContext
+    ) {
+        // Convert coins to balances
+        let balance_a = coin::into_balance(coin_a);
+        let balance_b = coin::into_balance(coin_b);
+
+        // Call main add_liquidity function
+        let liquidity = add_liquidity(
+            balance_a,
+            balance_b,
+            amount_a,
+            amount_b,
+            // deadline,
+            min_liquidity,
+            fee_basis_points,
+            fee_receiver,
+            nonce,
+            fee_tier,
+            // whitelist,
+            clock,
+            ctx,
+            pool
+        );
+
+        // Transfer liquidity token to sender
+        let sender = tx_context::sender(ctx);
+        transfer::public_transfer(liquidity, sender);
+    }
+
+    /// Removes liquidity from the pool
     entry public fun remove_liquidity<A: key, B: key>(
         pool: &mut Pool<A, B>,
         liquidity: u64,
         min_A: u64,
         min_B: u64,
-        deadline: u64,
+        // deadline: u64,
         fee_basis_points: u64,
         fee_receiver: address,
         nonce: u64,
         fee_tier: u8,
-        whitelist: vector<address>,
+        // whitelist: vector<address>,
         clock: &Clock,
         tx: &mut TxContext
     ) {
         // Validate inputs
         assert!(liquidity > 0, E_ZERO_AMOUNT);
         assert!(pool.total_liquidity >= liquidity, E_INSUFFICIENT_LP_TOKENS);
-        assert!(deadline > clock::timestamp_ms(clock), E_DEADLINE_PASSED);
+        // assert!(deadline > clock::timestamp_ms(clock), E_DEADLINE_PASSED);
         assert!(fee_basis_points >= FEE_LOW && fee_basis_points <= FEE_HIGH, E_INVALID_FEE);
 
         // Check if the transaction sender is in the whitelist
         let sender = tx_context::sender(tx);
-        let is_whitelisted = vector::contains(&whitelist, &sender);
-        assert!(is_whitelisted, E_INVALID_AMOUNTS);
+        // let is_whitelisted = vector::contains(&whitelist, &sender);
+        // assert!(is_whitelisted, E_INVALID_AMOUNTS);
 
         // Calculate amounts to withdraw
         let amount_A = liquidity * balance::value(&pool.coin_A) / pool.total_liquidity;
