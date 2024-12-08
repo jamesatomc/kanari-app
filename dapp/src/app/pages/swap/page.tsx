@@ -3,7 +3,7 @@ import Navbar from "@/app/components/Navbar";
 import { useEffect, useRef, useState } from 'react';
 import { ArrowDownUp, ChevronDown, Loader } from 'lucide-react';
 import { ConnectButton, useWallet } from "@suiet/wallet-kit";
-import { TransactionBlock } from "@mysten/sui.js/transactions";
+import {Transaction} from "@mysten/sui/transactions";
 import axios from 'axios';
 
 const availableTokens = [
@@ -12,7 +12,6 @@ const availableTokens = [
 ];
 
 export default function Swap() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [tokenFrom, setTokenFrom] = useState('SUI');
   const [tokenTo, setTokenTo] = useState('USDC');
   const [amountFrom, setAmountFrom] = useState('');
@@ -23,7 +22,6 @@ export default function Swap() {
 
   const wallet = useWallet();
 
-  const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
   useEffect(() => {
     fetchTokenPrices();
@@ -70,23 +68,23 @@ export default function Swap() {
 
     setIsSwapping(true);
     // Create a new transaction block
-    const tx = new TransactionBlock();
+    const tx = new Transaction();
     // Set the sender of the transaction
     const packageObjectId = "0x609c115685a74836cf97ab74fddec5892162d0c5599a80beece772a1ab6ce65a";
     // Call the swap_tokens function on the swap package
     tx.moveCall({
       target: `${packageObjectId}::swap::swap_tokens`,
       arguments: [
-        tx.pure(tokenFrom),
-        tx.pure(tokenTo),
-        tx.pure(amountFrom),
-        tx.pure(amountTo),
+        tx.pure.string(tokenFrom),
+        tx.pure.string(tokenTo),
+        tx.pure.string(amountFrom),
+        tx.pure.string(amountTo),
       ],
     });
 
     try {
-      const resData = await wallet.signAndExecuteTransactionBlock({
-        transactionBlock: tx
+      const resData = await wallet.signAndExecuteTransaction({
+        transaction: tx,
       });
       console.log('successfully!', resData);
       alert('Swap successful');

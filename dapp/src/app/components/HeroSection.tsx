@@ -8,7 +8,7 @@ import { useState } from "react";
 import { useWallet } from "@suiet/wallet-kit";
 import { Loader } from "lucide-react";
 
-import { TransactionBlock } from "@mysten/sui.js/transactions";
+import {Transaction} from "@mysten/sui/transactions";
 import Navbar from "./Navbar";
 
 
@@ -25,16 +25,16 @@ export default function HeroSection() {
     
         setIsMinting(true);
     
-        const tx = new TransactionBlock();
+        const tx = new Transaction();
         const packageObjectId = "0x609c115685a74836cf97ab74fddec5892162d0c5599a80beece772a1ab6ce65a";
         tx.moveCall({
           target: `${packageObjectId}::nft::mint`,
-          arguments: [tx.pure("Example NFT"), tx.pure("daad"), tx.pure("https://magenta-able-pheasant-388.mypinata.cloud/ipfs/QmQhKs9WeVy5MxbChEQJrX37Unb6dktZXrYZuy6uVofQwC/Logo.png")],
+          arguments: [tx.pure.string("Example NFT"), tx.pure.string("daad"), tx.pure.string("https://magenta-able-pheasant-388.mypinata.cloud/ipfs/QmQhKs9WeVy5MxbChEQJrX37Unb6dktZXrYZuy6uVofQwC/Logo.png")],
         });
     
         try {
-          const resData = await wallet.signAndExecuteTransactionBlock({
-            transactionBlock: tx
+          const resData = await wallet.signAndExecuteTransaction({
+            transaction: tx,
           });
           console.log('nft minted successfully!', resData);
           alert('Congrats! your nft is minted!');
