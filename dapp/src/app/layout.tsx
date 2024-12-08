@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
-
+import "@suiet/wallet-kit/style.css"; // don't forget to import default stylesheet
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
