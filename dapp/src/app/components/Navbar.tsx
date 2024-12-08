@@ -28,7 +28,7 @@ export default function Navbar() {
                             <Link
                                 key={item}
                                 // In Navbar.tsx, update the href paths:
-                                href={item === "Mint NFT" ? "/" : item === "Swap" ? "/pages/swap" : item === "Liquidity" ? "/pages/liquidity" : item === "IDO" ? "/pages/ido" : `/${item.toLowerCase()}`}
+                                href={item === "Mint NFT" ? "/" : item === "Swap" ? "/swap" : item === "Liquidity" ? "/liquidity" : item === "IDO" ? "/ido" : `/${item.toLowerCase()}`}
                                 className="text-orange-50 hover:bg-orange-500/20 hover:scale-105 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 flex items-center backdrop-blur-sm border border-transparent hover:border-orange-500/30 shadow-sm hover:shadow-orange-500/20"
                                 >
                                 <span className="transform group-hover:scale-110 transition-transform duration-300 ease-out">
@@ -81,7 +81,7 @@ export default function Navbar() {
                         {["Mint NFT", "Swap", "Liquidity", "IDO"].map((item) => (
                         <Link
                             key={item}
-                            href={item === "Mint NFT" ? "/" : item === "Swap" ? "/pages/swap" : item === "Liquidity" ? "/pages/liquidity" : item === "IDO" ? "/pages/ido" : `/${item.toLowerCase()}`}
+                            href={item === "Mint NFT" ? "/" : item === "Swap" ? "/swap" : item === "Liquidity" ? "/liquidity" : item === "IDO" ? "/ido" : `/${item.toLowerCase()}`}
                             className="text-orange-50 hover:bg-orange-500/20 block px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 border border-transparent hover:border-orange-500/30"
                         >
                             {item}
