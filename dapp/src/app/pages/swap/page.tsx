@@ -1,6 +1,7 @@
+'use client'; 
+import Navbar from "@/app/components/Navbar";
 import { useEffect, useRef, useState } from 'react';
 import { ArrowDownUp, ChevronDown, Loader } from 'lucide-react';
-import Navbar from '~/navbar';
 import { ConnectButton, useWallet } from "@suiet/wallet-kit";
 import { TransactionBlock } from "@mysten/sui.js/transactions";
 import axios from 'axios';
@@ -108,7 +109,7 @@ export default function Swap() {
   }, [error]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-600 to-blue-500 text-white">
+    <div className="px-4 pt-4">
       <Navbar isMenuOpen={isMenuOpen} toggleMenu={toggleMenu} />
 
       <div className="max-w-lg mx-auto py-12 px-4 sm:px-6 lg:px-8 mt-16">
@@ -178,6 +179,7 @@ export default function Swap() {
     </div>
   );
 }
+
 
 // TokenInput.tsx
 interface TokenInputProps {
