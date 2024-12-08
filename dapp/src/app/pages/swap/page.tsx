@@ -122,6 +122,8 @@ export default function Swap() {
               amount={amountFrom}
               onAmountChange={handleAmountFromChange}
               tokenPrice={tokenPrices[tokenFrom]}
+              error={error}
+              setError={setError}
             />
             <div className="flex justify-center">
               <button
@@ -143,6 +145,8 @@ export default function Swap() {
               amount={amountTo}
               onAmountChange={setAmountTo}
               tokenPrice={tokenPrices[tokenTo]}
+              error={error}
+              setError={setError}
             />
           </div>
 
@@ -186,7 +190,9 @@ interface TokenInputProps {
   onSelectToken: (token: string) => void;
   amount: string;
   onAmountChange: (amount: string) => void;
-  tokenPrice: number | undefined;
+  tokenPrice?: number;
+  error?: string | null;
+  setError: (error: string | null) => void;
 }
 
 // TokenInput.tsx
@@ -197,9 +203,9 @@ const TokenInput: React.FC<TokenInputProps> = ({
   amount,
   onAmountChange,
   tokenPrice,
+  setError,
 }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [error, setError] = useState<string | null>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
