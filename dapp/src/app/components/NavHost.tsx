@@ -1,7 +1,7 @@
 "use client";
 
 import { Gem, BadgeDollarSign, CircleDot, X, Menu, BadgePlus, Moon, Sun } from "lucide-react";
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route} from 'react-router-dom';
 import { ConnectButton, WalletProvider } from "@suiet/wallet-kit";
 
 import Swap from '../pages/swap/page';
@@ -9,6 +9,7 @@ import Liquidity from '../pages/liquidity/page';
 import IDO from '../pages/ido/page';
 import { useState } from "react";
 import HeroSection from "../pages/้home/page";
+import Link from "next/link";
 
 export default function NavHost() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -35,18 +36,18 @@ export default function NavHost() {
                 <div className="max-w-6xl mx-auto px-3 sm:px-4 lg:px-6">
                     <div className="flex justify-between h-16">
                         <div className="flex items-center">
-                            {/* <Links href="/" className="flex-shrink-0 transform hover:scale-110 transition-all duration-300 hover:rotate-3">
+                            <Link href="/" className="flex-shrink-0 transform hover:scale-110 transition-all duration-300 hover:rotate-3">
                                 <img 
                                     className="h-10 w-10 rounded-xl shadow-[0_0_15px_rgba(255,87,34,0.3)] ring-2 ring-orange-500/30" 
                                     src="https://magenta-able-pheasant-388.mypinata.cloud/ipfs/QmQhKs9WeVy5MxbChEQJrX37Unb6dktZXrYZuy6uVofQwC/Logo.png" 
                                     alt="Kanari Sell Logo" 
                                 />
-                            </Links> */}
+                            </Link>
                             <div className="hidden md:flex ml-8 items-center space-x-4">
                               {navItems.map((item) => (
                                 <Link
                                   key={item.name}
-                                  to={item.path}
+                                  href={item.path}
                                   className="relative group px-4 py-2.5 rounded-xl text-orange-50 font-medium 
                                     bg-gradient-to-r from-orange-900/40 to-orange-800/40
                                     hover:from-orange-500/20 hover:to-orange-600/20 
@@ -107,7 +108,7 @@ export default function NavHost() {
                       {navItems.map((item) => (
                         <Link
                           key={item.name}
-                          to={item.path}
+                          href={item.path}
                           className="text-orange-50 hover:bg-orange-500/20 block px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 border border-transparent hover:border-orange-500/30"
                         >
                           <span className="flex items-center">
