@@ -1,20 +1,27 @@
 "use client";
 
 import { X, Menu, Moon, Sun } from "lucide-react";
-import { BrowserRouter as Router, Routes, Route} from 'react-router-dom';
+import { BrowserRouter, Route, Link, Routes} from 'react-router-dom';
 import { ConnectButton} from "@suiet/wallet-kit";
 
 
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import HeroSection from "../pages/้home/page";
 import Liquidity from "../pages/liquidity/page";
 import IDO from "../pages/ido/page";
 import Swap from "../pages/swap/page";
-import Link from "next/link";
 
 export default function NavHost() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+
+    useEffect(() => {
+        // This code will only run on the client side
+        const element = document.getElementById('my-element');
+        // Your code that interacts with the document object
+    }, []);
+    
 
     const toggleMenu = () => {
         setIsMenuOpen(!isMenuOpen);
@@ -26,29 +33,29 @@ export default function NavHost() {
 
 
   return (
-      <Router>
-        <div  className="px-4 pt-4 min-h-screen bg-gradient-to-b from-orange-950 via-gray-900 to-black">
+      <BrowserRouter>
+        <div id="my-element" className="px-4 pt-4 min-h-screen bg-gradient-to-b from-orange-950 via-gray-900 to-black">
             <nav className="bg-gradient-to-r from-orange-900/40 to-orange-800/40 backdrop-blur-lg shadow-xl sticky top-0 z-50 border-b border-orange-500/20 rounded-2xl">
                 <div className="max-w-6xl mx-auto px-3 sm:px-4 lg:px-6">
                     <div className="flex justify-between h-16">
                         <div className="flex items-center">
-                            <Link href="/" className="flex-shrink-0 transform hover:scale-110 transition-all duration-300 hover:rotate-3">
+                            <Link to="/" className="flex-shrink-0 transform hover:scale-110 transition-all duration-300 hover:rotate-3">
                                 <img 
                                     className="h-10 w-10 rounded-xl shadow-[0_0_15px_rgba(255,87,34,0.3)] ring-2 ring-orange-500/30" 
                                     src="https://magenta-able-pheasant-388.mypinata.cloud/ipfs/QmQhKs9WeVy5MxbChEQJrX37Unb6dktZXrYZuy6uVofQwC/Logo.png" 
                                     alt="Kanari Sell Logo" 
                                 />
                             </Link>
-                            <Link href="/" className="text-gray-700 hover:text-gray-900">
+                            <Link to="/" className="text-gray-700 hover:text-gray-900">
                                 Mint NFT
                             </Link>
-                            <Link href="/swap" className="text-gray-700 hover:text-gray-900">
+                            <Link to="/swap" className="text-gray-700 hover:text-gray-900">
                                 Swap
                             </Link>
-                            <Link href="/liquidity" className="text-gray-700 hover:text-gray-900">
+                            <Link to="/liquidity" className="text-gray-700 hover:text-gray-900">
                                 Products
                             </Link>
-                            <Link href="/ido" className="text-gray-700 hover:text-gray-900">
+                            <Link to="/ido" className="text-gray-700 hover:text-gray-900">
                                 IDO
                             </Link>
                         </div>
@@ -89,25 +96,25 @@ export default function NavHost() {
                 <div className="md:hidden">
                     <div className="px-3 pt-2 pb-3 space-y-2">
                         <Link 
-                            href="/" 
+                            to="/" 
                             className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50"
                         >
                             Mint NFT
                         </Link>
                         <Link 
-                            href="/swap"
+                            to="/swap"
                             className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50"
                         >
                             Swap
                         </Link>
                         <Link 
-                            href="/liquidity"
+                            to="/liquidity"
                             className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50"
                         >
                             Liquidity
                         </Link>
                         <Link 
-                            href="/ido"
+                            to="/ido"
                             className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50"
                         >
                             IDO
@@ -158,6 +165,6 @@ export default function NavHost() {
         </div>
         
 
-      </Router>
+      </BrowserRouter>
   );
 }
