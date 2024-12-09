@@ -29,7 +29,6 @@ export default function NavHost() {
       ];
 
   return (
-    <WalletProvider>
       <Router>
         <div  className="px-4 pt-4 min-h-screen bg-gradient-to-b from-orange-950 via-gray-900 to-black">
             <nav className="bg-gradient-to-r from-orange-900/40 to-orange-800/40 backdrop-blur-lg shadow-xl sticky top-0 z-50 border-b border-orange-500/20 rounded-2xl">
@@ -164,6 +163,5 @@ export default function NavHost() {
         
 
       </Router>
-    </WalletProvider>
   );
 }
