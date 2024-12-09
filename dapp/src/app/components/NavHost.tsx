@@ -34,7 +34,7 @@ export default function NavHost() {
     ];
 
     if (!mounted) return null;
-    
+
   return (
       <Router>
         <div  className="px-4 pt-4 min-h-screen bg-gradient-to-b from-orange-950 via-gray-900 to-black">
@@ -168,7 +168,7 @@ export default function NavHost() {
             </Routes>
         </div>
         
-
+s
       </Router>
   );
 }
