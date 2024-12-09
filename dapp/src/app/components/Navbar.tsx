@@ -21,7 +21,7 @@ export default function Navbar() {
                 <div className="flex justify-between h-16">
                     <div className="flex items-center">
                         <a href="#" className="flex-shrink-0 transform hover:scale-110 transition-all duration-300 hover:rotate-3">
-                            <img className="h-10 w-10 rounded-xl shadow-[0_0_15px_rgba(255,87,34,0.3)] ring-2 ring-orange-500/30" src="https://magenta-able-pheasant-388.mypinata.cloud/ipfs/QmQhKs9WeVy5MxbChEQJrX37Unb6dktZXrYZuy6uVofQwC/Logo.png" alt="Kanari Sell Logo" />
+                            <img className="h-10 w-10 rounded-xl shadow-[0_0_15px_rgba(255,87,34,0.3)] ring-2 ring-orange-500/30" src="https://avatars.githubusercontent.com/u/127471673?s=400&u=28db99d5575a4824ce011a32a8dacf729b64ba57&v=4" alt="Kanari Sell Logo" />
                         </a>
                         <div className="hidden md:flex ml-8 items-baseline space-x-3">
                         {["Mint NFT", "Swap", "Liquidity", "IDO"].map((item) => (

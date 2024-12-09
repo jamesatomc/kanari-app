@@ -119,73 +119,74 @@ export default function Swap() {
             Token <span className="bg-gradient-to-r from-orange-500 to-orange-600 bg-clip-text text-transparent">Swap</span>
           </h1>
       
-          <div className="bg-white/10 backdrop-blur-lg rounded-3xl p-6 md:p-8 shadow-2xl border border-orange-200/20 dark:border-white/10">
-            <div className="space-y-8">
-              <TokenInput
-                label="From"
-                selectedToken={tokenFrom}
-                onSelectToken={setTokenFrom}
-                amount={amountFrom}
-                onAmountChange={handleAmountFromChange}
-                tokenPrice={tokenPrices[tokenFrom]}
-                error={error}
-                setError={setError}
-              />
-              
-              <div className="flex justify-center -my-4 relative z-10">
-                <button
-                  className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white rounded-full p-3 transition duration-300 shadow-lg hover:shadow-orange-500/30 transform hover:scale-105"
-                  onClick={() => {
-                    setTokenFrom(tokenTo);
-                    setTokenTo(tokenFrom);
-                    setAmountFrom(amountTo);
-                    setAmountTo(amountFrom);
-                  }}
-                >
-                  <ArrowDownUp className="h-6 w-6" />
-                </button>
-              </div>
-      
-              <TokenInput
-                label="To"
-                selectedToken={tokenTo}
-                onSelectToken={setTokenTo}
-                amount={amountTo}
-                onAmountChange={setAmountTo}
-                tokenPrice={tokenPrices[tokenTo]}
-                error={error}
-                setError={setError}
-              />
-      
-              <div className="pt-4 ">
-                {wallet.connected ? (
+          <div className="flex justify-center items-center">
+            <div className="w-full max-w-md bg-white/10 backdrop-blur-lg rounded-3xl p-6 md:p-8 shadow-2xl border border-orange-200/20 dark:border-white/10">
+              <div className="space-y-8 flex flex-col items-center">
+                <TokenInput
+                  label="From"
+                  selectedToken={tokenFrom}
+                  onSelectToken={setTokenFrom}
+                  amount={amountFrom}
+                  onAmountChange={handleAmountFromChange}
+                  tokenPrice={tokenPrices[tokenFrom]}
+                  error={error}
+                  setError={setError}
+                />
+                
+                <div className="flex justify-center -my-4 relative z-10">
                   <button
-                  className={`bg-gradient-to-r from-orange-500 to-orange-600 text-white hover:from-orange-600 hover:to-orange-700 transition duration-300 px-8 py-4 rounded-full text-lg font-semibold shadow-lg flex items-center justify-center w-full md:w-auto ${isSwapping ? "opacity-50 cursor-not-allowed" : ""} hover:shadow-orange-500/30`}
-                    onClick={swap}
-                    disabled={isSwapping}
+                    className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white rounded-full p-3 transition duration-300 shadow-lg hover:shadow-orange-500/30 transform hover:scale-105"
+                    onClick={() => {
+                      setTokenFrom(tokenTo);
+                      setTokenTo(tokenFrom);
+                      setAmountFrom(amountTo);
+                      setAmountTo(amountFrom);
+                    }}
                   >
-                    {isSwapping ? (
-                      <>
-                        <Loader className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" />
-                        Swapping...
-                      </>
-                    ) : (
-                      "Swap Tokens"
-                    )}
+                    <ArrowDownUp className="h-6 w-6" />
                   </button>
-                ) : (
-                  <ConnectButton
-                    className="bg-gradient-to-r from-orange-500 to-orange-600 text-white hover:from-orange-600 hover:to-orange-700 transition duration-300 px-8 py-4 rounded-full text-lg font-semibold shadow-lg w-full  md:w-auto hover:shadow-orange-500/30"
-                  />
+                </div>
+          
+                <TokenInput
+                  label="To"
+                  selectedToken={tokenTo}
+                  onSelectToken={setTokenTo}
+                  amount={amountTo}
+                  onAmountChange={setAmountTo}
+                  tokenPrice={tokenPrices[tokenTo]}
+                  error={error}
+                  setError={setError}
+                />
+          
+                <div className="w-full flex justify-center pt-4">
+                  {wallet.connected ? (
+                    <button
+                      className={`bg-gradient-to-r from-orange-500 to-orange-600 text-white hover:from-orange-600 hover:to-orange-700 transition duration-300 px-8 py-4 rounded-full text-lg font-semibold shadow-lg flex items-center justify-center w-full md:w-auto ${isSwapping ? "opacity-50 cursor-not-allowed" : ""} hover:shadow-orange-500/30`}
+                      onClick={swap}
+                      disabled={isSwapping}
+                    >
+                      {isSwapping ? (
+                        <>
+                          <Loader className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" />
+                          Swapping...
+                        </>
+                      ) : (
+                        "Swap Tokens"
+                      )}
+                    </button>
+                  ) : (
+                    <ConnectButton
+                      className="bg-gradient-to-r from-orange-500 to-orange-600 text-white hover:from-orange-600 hover:to-orange-700 transition duration-300 px-8 py-4 rounded-full text-lg font-semibold shadow-lg w-full md:w-auto hover:shadow-orange-500/30"
+                    />
+                  )}
+                </div>
+          
+                {error && (
+                  <div className="w-full bg-red-500/10 border border-red-500/20 text-red-500 p-4 rounded-xl mt-4 text-center">
+                    {error}
+                  </div>
                 )}
               </div>
-      
-              {error && (
-                <div className="bg-red-500/10 border border-red-500/20 text-red-500 p-4 rounded-xl mt-4">
-                  {error}
-                </div>
-              )}
-              
             </div>
           </div>
         </div>
