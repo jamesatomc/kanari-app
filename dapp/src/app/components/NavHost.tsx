@@ -1,9 +1,16 @@
 "use client";
 
 import { Gem, BadgeDollarSign, CircleDot, X, Menu, BadgePlus, Moon, Sun } from "lucide-react";
-import { ConnectButton } from "@suiet/wallet-kit";
+import { BrowserRouter as Router, Routes, Route, Link} from 'react-router-dom';
+import { ConnectButton} from "@suiet/wallet-kit";
+
+
+
 import { useState } from "react";
-import Link from "next/link";
+import HeroSection from "../pages/้home/page";
+import Liquidity from "../pages/liquidity/page";
+import IDO from "../pages/ido/page";
+import Swap from "../pages/swap/page";
 
 export default function NavHost() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -15,52 +22,34 @@ export default function NavHost() {
     // Add this state in your component
     const [isDarkMode, setIsDarkMode] = useState(false);
 
-    const navItems = [
-        { name: "Mint NFT", path: "/", icon: <Gem className="w-4.5 h-4.5 mr-2.5 text-orange-400" /> },
-        { name: "Swap", path: "/swap", icon: <CircleDot className="w-4.5 h-4.5 mr-2.5 text-orange-400" /> },
-        { name: "Liquidity", path: "/liquidity", icon: <BadgePlus className="w-4.5 h-4.5 mr-2.5 text-orange-400" /> },
-        { name: "IDO", path: "/ido", icon: <BadgeDollarSign className="w-4.5 h-4.5 mr-2.5 text-orange-400" /> }
-      ];
+
 
   return (
-
+      <Router>
         <div  className="px-4 pt-4 min-h-screen bg-gradient-to-b from-orange-950 via-gray-900 to-black">
             <nav className="bg-gradient-to-r from-orange-900/40 to-orange-800/40 backdrop-blur-lg shadow-xl sticky top-0 z-50 border-b border-orange-500/20 rounded-2xl">
                 <div className="max-w-6xl mx-auto px-3 sm:px-4 lg:px-6">
                     <div className="flex justify-between h-16">
                         <div className="flex items-center">
-                            <Link href="/" className="flex-shrink-0 transform hover:scale-110 transition-all duration-300 hover:rotate-3">
+                            <Link to="/" className="flex-shrink-0 transform hover:scale-110 transition-all duration-300 hover:rotate-3">
                                 <img 
                                     className="h-10 w-10 rounded-xl shadow-[0_0_15px_rgba(255,87,34,0.3)] ring-2 ring-orange-500/30" 
                                     src="https://magenta-able-pheasant-388.mypinata.cloud/ipfs/QmQhKs9WeVy5MxbChEQJrX37Unb6dktZXrYZuy6uVofQwC/Logo.png" 
                                     alt="Kanari Sell Logo" 
                                 />
                             </Link>
-                            <div className="hidden md:flex ml-8 items-center space-x-4">
-                              {navItems.map((item) => (
-                                <Link
-                                  key={item.name}
-                                  href={item.path}
-                                  className="relative group px-4 py-2.5 rounded-xl text-orange-50 font-medium 
-                                    bg-gradient-to-r from-orange-900/40 to-orange-800/40
-                                    hover:from-orange-500/20 hover:to-orange-600/20 
-                                    transition-all duration-300 ease-in-out
-                                    flex items-center gap-2
-                                    border border-orange-500/20 hover:border-orange-500/40
-                                    shadow-lg shadow-orange-900/5 hover:shadow-orange-500/20
-                                    transform hover:scale-105"
-                                >
-                                  <span className="flex items-center gap-2.5 transform group-hover:translate-x-1 transition-transform duration-300">
-                                    <span className="text-orange-400">
-                                      {item.icon}
-                                    </span>
-                                    <span className="text-sm tracking-wide">
-                                      {item.name}
-                                    </span>
-                                  </span>
-                                </Link>
-                              ))}
-                            </div>
+                            <Link to="/" className="text-gray-700 hover:text-gray-900">
+                                Home
+                            </Link>
+                            <Link to="/about" className="text-gray-700 hover:text-gray-900">
+                                About
+                            </Link>
+                            <Link to="/products" className="text-gray-700 hover:text-gray-900">
+                                Products
+                            </Link>
+                            <Link to="/contact" className="text-gray-700 hover:text-gray-900">
+                                Contact
+                            </Link>
                         </div>
                         
                         <div className="flex items-center space-x-4">
@@ -98,18 +87,30 @@ export default function NavHost() {
                 {isMenuOpen && (
                 <div className="md:hidden">
                     <div className="px-3 pt-2 pb-3 space-y-2">
-                      {navItems.map((item) => (
-                        <Link
-                          key={item.name}
-                          href={item.path}
-                          className="text-orange-50 hover:bg-orange-500/20 block px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 border border-transparent hover:border-orange-500/30"
+                        <Link 
+                            to="/" 
+                            className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50"
                         >
-                          <span className="flex items-center">
-                            {item.icon}
-                            <span className="ml-2">{item.name}</span>
-                          </span>
+                            Home
                         </Link>
-                      ))}
+                        <Link 
+                            to="/about"
+                            className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50"
+                        >
+                            About
+                        </Link>
+                        <Link 
+                            to="/products"
+                            className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50"
+                        >
+                            Products
+                        </Link>
+                        <Link 
+                            to="/contact"
+                            className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50"
+                        >
+                            Contact
+                        </Link>
                     </div>
 
                     <div className="pt-2 pb-3 border-t border-orange-500/20">
@@ -147,9 +148,15 @@ export default function NavHost() {
             </nav>
 
 
-
+            <Routes>
+                <Route path="/" element={<HeroSection />} />
+                <Route path="/swap" element={<Swap />} />
+                <Route path="/liquidity" element={<Liquidity />} />
+                <Route path="/ido" element={<IDO />} />
+            </Routes>
         </div>
-    
+        
 
+      </Router>
   );
 }
