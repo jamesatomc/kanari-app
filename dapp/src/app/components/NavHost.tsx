@@ -1,7 +1,7 @@
 "use client";
 
 import { X, Menu, Moon, Sun } from "lucide-react";
-import { BrowserRouter as Router, Routes, Route, Link} from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route} from 'react-router-dom';
 import { ConnectButton} from "@suiet/wallet-kit";
 
 
@@ -11,6 +11,7 @@ import HeroSection from "../pages/้home/page";
 import Liquidity from "../pages/liquidity/page";
 import IDO from "../pages/ido/page";
 import Swap from "../pages/swap/page";
+import Link from "next/link";
 
 export default function NavHost() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -31,23 +32,23 @@ export default function NavHost() {
                 <div className="max-w-6xl mx-auto px-3 sm:px-4 lg:px-6">
                     <div className="flex justify-between h-16">
                         <div className="flex items-center">
-                            <Link to="/" className="flex-shrink-0 transform hover:scale-110 transition-all duration-300 hover:rotate-3">
+                            <Link href="/" className="flex-shrink-0 transform hover:scale-110 transition-all duration-300 hover:rotate-3">
                                 <img 
                                     className="h-10 w-10 rounded-xl shadow-[0_0_15px_rgba(255,87,34,0.3)] ring-2 ring-orange-500/30" 
                                     src="https://magenta-able-pheasant-388.mypinata.cloud/ipfs/QmQhKs9WeVy5MxbChEQJrX37Unb6dktZXrYZuy6uVofQwC/Logo.png" 
                                     alt="Kanari Sell Logo" 
                                 />
                             </Link>
-                            <Link to="/" className="text-gray-700 hover:text-gray-900">
+                            <Link href="/" className="text-gray-700 hover:text-gray-900">
                                 Mint NFT
                             </Link>
-                            <Link to="/swap" className="text-gray-700 hover:text-gray-900">
+                            <Link href="/swap" className="text-gray-700 hover:text-gray-900">
                                 Swap
                             </Link>
-                            <Link to="/liquidity" className="text-gray-700 hover:text-gray-900">
+                            <Link href="/liquidity" className="text-gray-700 hover:text-gray-900">
                                 Products
                             </Link>
-                            <Link to="/ido" className="text-gray-700 hover:text-gray-900">
+                            <Link href="/ido" className="text-gray-700 hover:text-gray-900">
                                 IDO
                             </Link>
                         </div>
@@ -88,25 +89,25 @@ export default function NavHost() {
                 <div className="md:hidden">
                     <div className="px-3 pt-2 pb-3 space-y-2">
                         <Link 
-                            to="/" 
+                            href="/" 
                             className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50"
                         >
                             Mint NFT
                         </Link>
                         <Link 
-                            to="/swap"
+                            href="/swap"
                             className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50"
                         >
                             Swap
                         </Link>
                         <Link 
-                            to="/liquidity"
+                            href="/liquidity"
                             className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50"
                         >
                             Liquidity
                         </Link>
                         <Link 
-                            to="/ido"
+                            href="/ido"
                             className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50"
                         >
                             IDO
