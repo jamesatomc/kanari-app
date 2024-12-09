@@ -1,6 +1,6 @@
 "use client";
 
-import { Gem, BadgeDollarSign, CircleDot, X, Menu, BadgePlus, Moon, Sun } from "lucide-react";
+import { X, Menu, Moon, Sun } from "lucide-react";
 import { BrowserRouter as Router, Routes, Route, Link} from 'react-router-dom';
 import { ConnectButton} from "@suiet/wallet-kit";
 
@@ -39,16 +39,16 @@ export default function NavHost() {
                                 />
                             </Link>
                             <Link to="/" className="text-gray-700 hover:text-gray-900">
-                                Home
+                                Mint NFT
                             </Link>
-                            <Link to="/about" className="text-gray-700 hover:text-gray-900">
-                                About
+                            <Link to="/swap" className="text-gray-700 hover:text-gray-900">
+                                Swap
                             </Link>
-                            <Link to="/products" className="text-gray-700 hover:text-gray-900">
+                            <Link to="/liquidity" className="text-gray-700 hover:text-gray-900">
                                 Products
                             </Link>
-                            <Link to="/contact" className="text-gray-700 hover:text-gray-900">
-                                Contact
+                            <Link to="/ido" className="text-gray-700 hover:text-gray-900">
+                                IDO
                             </Link>
                         </div>
                         
@@ -91,25 +91,25 @@ export default function NavHost() {
                             to="/" 
                             className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50"
                         >
-                            Home
+                            Mint NFT
                         </Link>
                         <Link 
-                            to="/about"
+                            to="/swap"
                             className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50"
                         >
-                            About
+                            Swap
                         </Link>
                         <Link 
-                            to="/products"
+                            to="/liquidity"
                             className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50"
                         >
-                            Products
+                            Liquidity
                         </Link>
                         <Link 
-                            to="/contact"
+                            to="/ido"
                             className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50"
                         >
-                            Contact
+                            IDO
                         </Link>
                     </div>
 
