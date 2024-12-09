@@ -90,17 +90,17 @@ export default function Navbar() {
                     </div>
 
                     <div className="pt-2 pb-3 border-t border-orange-500/20">
-                        <div className="px-3 flex flex-col sm:flex-row items-center gap-3">
+                        <div className="px-3 flex items-center justify-between gap-3">
                             <button
-                                onClick={() => setIsDarkMode(!isDarkMode)}
-                                className="h-10 w-10 bg-gradient-to-r from-orange-900/40 to-orange-800/40 text-orange-50 hover:from-orange-500/20 hover:to-orange-600/20 transition-all duration-300 rounded-full text-sm font-medium shadow-lg hover:shadow-orange-500/20 border border-orange-500/20 hover:border-orange-500/40 flex items-center justify-center"
-                                aria-label="Toggle dark mode"
+                            onClick={() => setIsDarkMode(!isDarkMode)}
+                            className="h-10 w-10 bg-gradient-to-r from-orange-900/40 to-orange-800/40 text-orange-50 hover:from-orange-500/20 hover:to-orange-600/20 transition-all duration-300 rounded-full text-sm font-medium shadow-lg hover:shadow-orange-500/20 border border-orange-500/20 hover:border-orange-500/40 flex items-center justify-center"
+                            aria-label="Toggle dark mode"
                             >
-                                {isDarkMode ? (
-                                    <Sun className="h-5 w-5 text-orange-400" />
-                                ) : (
-                                    <Moon className="h-5 w-5 text-orange-400" />
-                                )}
+                            {isDarkMode ? (
+                                <Sun className="h-5 w-5 text-orange-400" />
+                            ) : (
+                                <Moon className="h-5 w-5 text-orange-400" />
+                            )}
                             </button>
                             <ConnectButton className="w-full sm:w-auto flex-1 bg-gradient-to-r from-orange-500 to-orange-600 text-white hover:from-orange-600 hover:to-orange-700 transition-all duration-300 rounded-full text-sm font-medium shadow-lg hover:shadow-orange-500/30" />
                         </div>
