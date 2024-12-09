@@ -110,11 +110,13 @@ export default function Swap() {
     <div className="px-4 pt-4">
       <Navbar />
 
-      <div className="max-w-lg mx-auto py-12 px-4 sm:px-6 lg:px-8 mt-16">
-        <h1 className="text-4xl md:text-5xl font-bold text-center mb-8">Token Swap</h1>
-
-        <div className="bg-white bg-opacity-10 backdrop-blur-lg rounded-xl shadow-xl p-6 space-y-6">
-          <div className="space-y-4">
+      <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8 mt-16">
+        <h1 className="text-4xl md:text-6xl font-bold mb-6 text-center">
+          Token <span className="bg-gradient-to-r from-orange-500 to-orange-600 bg-clip-text text-transparent">Swap</span>
+        </h1>
+      
+        <div className="bg-white/20 dark:bg-white/10 backdrop-blur-lg rounded-2xl p-8 shadow-xl border border-orange-200/30 dark:border-white/20">
+          <div className="space-y-6">
             <TokenInput
               label="From"
               selectedToken={tokenFrom}
@@ -125,9 +127,10 @@ export default function Swap() {
               error={error}
               setError={setError}
             />
+            
             <div className="flex justify-center">
               <button
-                className="bg-purple-500 hover:bg-purple-600 text-white rounded-full p-2 transition duration-300"
+                className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white rounded-full p-2 transition duration-300 shadow-lg hover:shadow-orange-500/30"
                 onClick={() => {
                   setTokenFrom(tokenTo);
                   setTokenTo(tokenFrom);
@@ -138,6 +141,7 @@ export default function Swap() {
                 <ArrowDownUp className="h-6 w-6" />
               </button>
             </div>
+      
             <TokenInput
               label="To"
               selectedToken={tokenTo}
@@ -148,36 +152,37 @@ export default function Swap() {
               error={error}
               setError={setError}
             />
+      
+            {wallet.connected ? (
+              <button
+                className="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold py-4 rounded-full transition duration-300 shadow-lg hover:shadow-orange-500/30 flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
+                onClick={swap}
+                disabled={isSwapping}
+              >
+                {isSwapping ? (
+                  <>
+                    <Loader className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" />
+                    Swapping...
+                  </>
+                ) : (
+                  "Swap"
+                )}
+              </button>
+            ) : (
+              <ConnectButton
+                className="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold py-4 rounded-full transition duration-300 shadow-lg hover:shadow-orange-500/30"
+              />
+            )}
+      
+            {error && (
+              <div className="bg-red-500/10 border border-red-500/20 text-red-500 p-4 rounded-xl">
+                {error}
+              </div>
+            )}
           </div>
-
-          {wallet.connected ? (
-            <button
-              className="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 rounded-xl transition duration-300 flex items-center justify-center"
-              onClick={swap}
-              disabled={isSwapping}
-            >
-              {isSwapping ? (
-                <>
-                  <Loader className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" />
-                  Swapping...
-                </>
-              ) : (
-                "Swap"
-              )}
-            </button>
-          ) : (
-            <ConnectButton
-              className="w-full bg-white text-purple-600 hover:bg-purple-100 transition duration-300 px-8 py-3 rounded-xl text-lg font-semibold shadow-lg"
-            />
-          )}
-
-          {error && (
-            <div className="bg-red-500 text-white p-3 rounded-md mt-4">
-              {error}
-            </div>
-          )}
         </div>
       </div>
+
     </div>
   );
 }
