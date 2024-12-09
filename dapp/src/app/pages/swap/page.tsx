@@ -157,10 +157,10 @@ export default function Swap() {
                 setError={setError}
               />
       
-              <div className="pt-4">
+              <div className="pt-4 ">
                 {wallet.connected ? (
                   <button
-                    className="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold py-5 rounded-2xl transition duration-300 shadow-lg hover:shadow-orange-500/30 flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed text-lg"
+                  className={`bg-gradient-to-r from-orange-500 to-orange-600 text-white hover:from-orange-600 hover:to-orange-700 transition duration-300 px-8 py-4 rounded-full text-lg font-semibold shadow-lg flex items-center justify-center w-full md:w-auto ${isSwapping ? "opacity-50 cursor-not-allowed" : ""} hover:shadow-orange-500/30`}
                     onClick={swap}
                     disabled={isSwapping}
                   >
@@ -175,7 +175,7 @@ export default function Swap() {
                   </button>
                 ) : (
                   <ConnectButton
-                    className="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold py-5 rounded-2xl transition duration-300 shadow-lg hover:shadow-orange-500/30 text-lg"
+                    className="bg-gradient-to-r from-orange-500 to-orange-600 text-white hover:from-orange-600 hover:to-orange-700 transition duration-300 px-8 py-4 rounded-full text-lg font-semibold shadow-lg w-full  md:w-auto hover:shadow-orange-500/30"
                   />
                 )}
               </div>
@@ -185,6 +185,7 @@ export default function Swap() {
                   {error}
                 </div>
               )}
+              
             </div>
           </div>
         </div>
