@@ -101,7 +101,7 @@ export default function Navbar() {
                             <Moon className="h-5 w-5 text-orange-400" />
                         )}
                         </button>
-                        <ConnectButton className="flex-1 bg-gradient-to-r from-orange-500 to-orange-600 text-white hover:from-orange-600 hover:to-orange-700 transition-all duration-300 py-2 rounded-full text-sm font-medium shadow-lg hover:shadow-orange-500/30" />
+                        <ConnectButton className="flex-1 bg-gradient-to-r from-orange-500 to-orange-600 text-white hover:from-orange-600 hover:to-orange-700 transition-all duration-300  rounded-full text-sm font-medium shadow-lg hover:shadow-orange-500/30" />
                     </div>
                     </div>
                 </div>
