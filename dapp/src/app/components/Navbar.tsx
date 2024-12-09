@@ -30,16 +30,13 @@ export default function Navbar() {
             <div className="max-w-6xl mx-auto px-3 sm:px-4 lg:px-6">
                 <div className="flex justify-between h-16">
                     <div className="flex items-center">
-<Link 
-  href="/" 
-  className="flex-shrink-0 transform hover:scale-110 transition-all duration-300 hover:rotate-3"
->
-  <img 
-    className="h-10 w-10 rounded-full shadow-[0_0_15px_rgba(255,87,34,0.3)] ring-2 ring-orange-500/30" 
-    src="https://avatars.githubusercontent.com/u/127471673?s=400&u=28db99d5575a4824ce011a32a8dacf729b64ba57&v=4" 
-    alt="Kanari Sell Logo" 
-  />
-</Link>
+                        <a href="#" className="flex-shrink-0 transform hover:scale-110 transition-all duration-300 hover:rotate-3">
+                            <img 
+                                className="h-10 w-10 rounded-full shadow-[0_0_15px_rgba(255,87,34,0.3)] ring-2 ring-orange-500/30" 
+                                src="https://avatars.githubusercontent.com/u/127471673?s=400&u=28db99d5575a4824ce011a32a8dacf729b64ba57&v=4" 
+                                alt="Kanari Sell Logo" 
+                            />
+                        </a>
                         <div className="hidden md:flex ml-8 items-baseline space-x-3">
                             {routes.map((route) => {
                                 const isActive = router.pathname === route.path;
