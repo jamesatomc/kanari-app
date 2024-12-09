@@ -1,4 +1,5 @@
-// components/NavHost.tsx
+"use client";
+
 import { Gem, BadgeDollarSign, CircleDot, X, Menu, BadgePlus, Moon, Sun } from "lucide-react";
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import { ConnectButton, WalletProvider } from "@suiet/wallet-kit";
@@ -34,7 +35,7 @@ export default function NavHost() {
                 <div className="max-w-6xl mx-auto px-3 sm:px-4 lg:px-6">
                     <div className="flex justify-between h-16">
                         <div className="flex items-center">
-                            <a href="#" className="flex-shrink-0 transform hover:scale-110 transition-all duration-300 hover:rotate-3">
+                            <a href="/" className="flex-shrink-0 transform hover:scale-110 transition-all duration-300 hover:rotate-3">
                                 <img className="h-10 w-10 rounded-xl shadow-[0_0_15px_rgba(255,87,34,0.3)] ring-2 ring-orange-500/30" src="https://magenta-able-pheasant-388.mypinata.cloud/ipfs/QmQhKs9WeVy5MxbChEQJrX37Unb6dktZXrYZuy6uVofQwC/Logo.png" alt="Kanari Sell Logo" />
                             </a>
                             <div className="hidden md:flex ml-8 items-center space-x-4">
