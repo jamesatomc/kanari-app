@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { Sun, Moon } from "lucide-react"; // Add these imports
 import { useState } from "react";
 import { ConnectButton } from "@suiet/wallet-kit";
+import { useRouter } from 'next/router'
 
 export default function Navbar() {
 
@@ -15,6 +16,7 @@ export default function Navbar() {
     // Add this state in your component
     const [isDarkMode, setIsDarkMode] = useState(false);
 
+    const router = useRouter();
     const routes = [
         { name: "Mint NFT", path: "/", icon: <Gem className="w-4.5 h-4.5 mr-2.5 text-orange-400" /> },
         { name: "Swap", path: "/pages/swap", icon: <CircleDot className="w-4.5 h-4.5 mr-2.5 text-orange-400" /> },
@@ -28,26 +30,36 @@ export default function Navbar() {
             <div className="max-w-6xl mx-auto px-3 sm:px-4 lg:px-6">
                 <div className="flex justify-between h-16">
                     <div className="flex items-center">
-                        <a href="/" className="flex-shrink-0 transform hover:scale-110 transition-all duration-300 hover:rotate-3">
-                            <img 
-                                className="h-10 w-10 rounded-full shadow-[0_0_15px_rgba(255,87,34,0.3)] ring-2 ring-orange-500/30" 
-                                src="https://avatars.githubusercontent.com/u/127471673?s=400&u=28db99d5575a4824ce011a32a8dacf729b64ba57&v=4" 
-                                alt="Kanari Sell Logo" 
-                            />
-                        </a>
+<Link 
+  href="/" 
+  className="flex-shrink-0 transform hover:scale-110 transition-all duration-300 hover:rotate-3"
+>
+  <img 
+    className="h-10 w-10 rounded-full shadow-[0_0_15px_rgba(255,87,34,0.3)] ring-2 ring-orange-500/30" 
+    src="https://avatars.githubusercontent.com/u/127471673?s=400&u=28db99d5575a4824ce011a32a8dacf729b64ba57&v=4" 
+    alt="Kanari Sell Logo" 
+  />
+</Link>
                         <div className="hidden md:flex ml-8 items-baseline space-x-3">
-                        {routes.map((route) => (
-                            <Link
-                                key={route.name}
-                                href={route.path}
-                                className="text-orange-50 hover:bg-orange-500/20 hover:scale-105 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 flex items-center backdrop-blur-sm border border-transparent hover:border-orange-500/30 shadow-sm hover:shadow-orange-500/20"
-                            >
-                                <span className="transform group-hover:scale-110 transition-transform duration-300 ease-out">
-                                {route.icon}
-                                </span>
-                                {route.name}
-                            </Link>
-                        ))}
+                            {routes.map((route) => {
+                                const isActive = router.pathname === route.path;
+                                return (
+                                <Link
+                                    key={route.name}
+                                    href={route.path}
+                                    className={`text-orange-50 hover:bg-orange-500/20 hover:scale-105 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 flex items-center backdrop-blur-sm border ${
+                                    isActive 
+                                        ? 'border-orange-500/50 bg-orange-500/20' 
+                                        : 'border-transparent hover:border-orange-500/30'
+                                    } shadow-sm hover:shadow-orange-500/20`}
+                                >
+                                    <span className="transform group-hover:scale-110 transition-transform duration-300 ease-out">
+                                    {route.icon}
+                                    </span>
+                                    {route.name}
+                                </Link>
+                                );
+                            })}
                         </div>
                     </div>
                     
@@ -85,15 +97,25 @@ export default function Navbar() {
             {isMenuOpen && (
                 <div className="md:hidden">
                     <div className="px-3 pt-2 pb-3 space-y-2">
-                      {routes.map((route) => (
+                    {routes.map((route) => {
+                      const isActive = router.pathname === route.path;
+                      return (
                         <Link
                           key={route.name}
                           href={route.path}
-                          className="text-orange-50 hover:bg-orange-500/20 block px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 border border-transparent hover:border-orange-500/30"
+                          className={`text-orange-50 hover:bg-orange-500/20 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 flex items-center border ${
+                            isActive 
+                              ? 'border-orange-500/50 bg-orange-500/20' 
+                              : 'border-transparent hover:border-orange-500/30'
+                          } shadow-sm hover:shadow-orange-500/20`}
                         >
+                          <span className="transform group-hover:scale-110 transition-transform duration-300 ease-out">
+                            {route.icon}
+                          </span>
                           {route.name}
                         </Link>
-                      ))}
+                      );
+                    })}
                     </div>
 
                     <div className="pt-2 pb-3 border-t border-orange-500/20">
