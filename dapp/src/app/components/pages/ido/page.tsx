@@ -1,5 +1,5 @@
-'use client'; 
-import Navbar from "@/app/components/Navbar";
+'use client';
+import Navbar from "../../Navbar";
 
 export default function IDO() {
     return (

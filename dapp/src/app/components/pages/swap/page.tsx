@@ -1,5 +1,6 @@
 'use client'; 
-import Navbar from "@/app/components/Navbar";
+
+
 import { useEffect, useRef, useState } from 'react';
 import { ArrowDownUp, ChevronDown, Loader } from 'lucide-react';
 import { ConnectButton, useWallet } from "@suiet/wallet-kit";
@@ -8,6 +9,7 @@ import axios from 'axios';
 
 
 import "@suiet/wallet-kit/style.css"; // don't forget to import default stylesheet
+import Navbar from '../../Navbar';
 
 const availableTokens = [
   { name: 'Sui', symbol: 'SUI', image: 'https://s2.coinmarketcap.com/static/img/coins/64x64/20947.png', contract: '0x2::sui::SUI' },
