@@ -7,9 +7,6 @@ import {Transaction} from "@mysten/sui/transactions";
 import axios from 'axios';
 
 
-import "@suiet/wallet-kit/style.css"; // don't forget to import default stylesheet
-import Navbar from '../../Navbar';
-
 const availableTokens = [
   { name: 'Sui', symbol: 'SUI', image: 'https://s2.coinmarketcap.com/static/img/coins/64x64/20947.png', contract: '0x2::sui::SUI' },
   { name: 'USDCoin', symbol: 'USDC', image: 'https://s2.coinmarketcap.com/static/img/coins/64x64/3408.png', contract: '0xdba34672e30cb065b1f93e3ab55318768fd6fef66c15942c9f7cb846e2f900e7::usdc::USDC' },
@@ -111,8 +108,8 @@ export default function Swap() {
   }, [error]);
 
   return (
-    <div className="px-4 pt-4 min-h-screen bg-gradient-to-b from-orange-950 via-gray-900 to-black">
-      <Navbar />
+    <div>
+  
       {/* min-h-screen bg-gradient-to-b from-orange-950 to-gray-900 */}
       <main className="">
         <div className="max-w-2xl mx-auto py-16 px-4 sm:px-6 lg:px-8">
