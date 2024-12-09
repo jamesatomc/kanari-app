@@ -37,19 +37,30 @@ export default function NavHost() {
                             <a href="#" className="flex-shrink-0 transform hover:scale-110 transition-all duration-300 hover:rotate-3">
                                 <img className="h-10 w-10 rounded-xl shadow-[0_0_15px_rgba(255,87,34,0.3)] ring-2 ring-orange-500/30" src="https://magenta-able-pheasant-388.mypinata.cloud/ipfs/QmQhKs9WeVy5MxbChEQJrX37Unb6dktZXrYZuy6uVofQwC/Logo.png" alt="Kanari Sell Logo" />
                             </a>
-                            <div className="hidden md:flex ml-8 items-baseline space-x-3">
-                                {navItems.map((item) => (
-                                    <Link
-                                        key={item.name}
-                                        to={item.path}
-                                        className="text-orange-50 hover:bg-orange-500/20 hover:scale-105 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 flex items-center backdrop-blur-sm border border-transparent hover:border-orange-500/30 shadow-sm hover:shadow-orange-500/20"
-                                    >
-                                        <span className="transform group-hover:scale-110 transition-transform duration-300 ease-out">
-                                        {item.icon}
-                                        {item.name}
-                                        </span>
-                                    </Link>
-                                ))}
+                            <div className="hidden md:flex ml-8 items-center space-x-4">
+                              {navItems.map((item) => (
+                                <Link
+                                  key={item.name}
+                                  to={item.path}
+                                  className="relative group px-4 py-2.5 rounded-xl text-orange-50 font-medium 
+                                    bg-gradient-to-r from-orange-900/40 to-orange-800/40
+                                    hover:from-orange-500/20 hover:to-orange-600/20 
+                                    transition-all duration-300 ease-in-out
+                                    flex items-center gap-2
+                                    border border-orange-500/20 hover:border-orange-500/40
+                                    shadow-lg shadow-orange-900/5 hover:shadow-orange-500/20
+                                    transform hover:scale-105"
+                                >
+                                  <span className="flex items-center gap-2.5 transform group-hover:translate-x-1 transition-transform duration-300">
+                                    <span className="text-orange-400">
+                                      {item.icon}
+                                    </span>
+                                    <span className="text-sm tracking-wide">
+                                      {item.name}
+                                    </span>
+                                  </span>
+                                </Link>
+                              ))}
                             </div>
                         </div>
                         
