@@ -6,6 +6,9 @@ import { ConnectButton, useWallet } from "@suiet/wallet-kit";
 import {Transaction} from "@mysten/sui/transactions";
 import axios from 'axios';
 
+
+import "@suiet/wallet-kit/style.css"; // don't forget to import default stylesheet
+
 const availableTokens = [
   { name: 'Sui', symbol: 'SUI', image: 'https://s2.coinmarketcap.com/static/img/coins/64x64/20947.png', contract: '0x2::sui::SUI' },
   { name: 'USDCoin', symbol: 'USDC', image: 'https://s2.coinmarketcap.com/static/img/coins/64x64/3408.png', contract: '0xdba34672e30cb065b1f93e3ab55318768fd6fef66c15942c9f7cb846e2f900e7::usdc::USDC' },
@@ -107,81 +110,85 @@ export default function Swap() {
   }, [error]);
 
   return (
-    <div className="px-4 pt-4">
+    <div className="px-4 pt-4 min-h-screen bg-gradient-to-b from-orange-950 via-gray-900 to-black">
       <Navbar />
-
-      <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8 mt-16">
-        <h1 className="text-4xl md:text-6xl font-bold mb-6 text-center">
-          Token <span className="bg-gradient-to-r from-orange-500 to-orange-600 bg-clip-text text-transparent">Swap</span>
-        </h1>
+      {/* min-h-screen bg-gradient-to-b from-orange-950 to-gray-900 */}
+      <main className="">
+        <div className="max-w-2xl mx-auto py-16 px-4 sm:px-6 lg:px-8">
+          <h1 className="text-4xl md:text-6xl font-bold mb-12 text-center">
+            Token <span className="bg-gradient-to-r from-orange-500 to-orange-600 bg-clip-text text-transparent">Swap</span>
+          </h1>
       
-        <div className="bg-white/20 dark:bg-white/10 backdrop-blur-lg rounded-2xl p-8 shadow-xl border border-orange-200/30 dark:border-white/20">
-          <div className="space-y-6">
-            <TokenInput
-              label="From"
-              selectedToken={tokenFrom}
-              onSelectToken={setTokenFrom}
-              amount={amountFrom}
-              onAmountChange={handleAmountFromChange}
-              tokenPrice={tokenPrices[tokenFrom]}
-              error={error}
-              setError={setError}
-            />
-            
-            <div className="flex justify-center">
-              <button
-                className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white rounded-full p-2 transition duration-300 shadow-lg hover:shadow-orange-500/30"
-                onClick={() => {
-                  setTokenFrom(tokenTo);
-                  setTokenTo(tokenFrom);
-                  setAmountFrom(amountTo);
-                  setAmountTo(amountFrom);
-                }}
-              >
-                <ArrowDownUp className="h-6 w-6" />
-              </button>
-            </div>
-      
-            <TokenInput
-              label="To"
-              selectedToken={tokenTo}
-              onSelectToken={setTokenTo}
-              amount={amountTo}
-              onAmountChange={setAmountTo}
-              tokenPrice={tokenPrices[tokenTo]}
-              error={error}
-              setError={setError}
-            />
-      
-            {wallet.connected ? (
-              <button
-                className="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold py-4 rounded-full transition duration-300 shadow-lg hover:shadow-orange-500/30 flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
-                onClick={swap}
-                disabled={isSwapping}
-              >
-                {isSwapping ? (
-                  <>
-                    <Loader className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" />
-                    Swapping...
-                  </>
-                ) : (
-                  "Swap"
-                )}
-              </button>
-            ) : (
-              <ConnectButton
-                className="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold py-4 rounded-full transition duration-300 shadow-lg hover:shadow-orange-500/30"
+          <div className="bg-white/10 backdrop-blur-lg rounded-3xl p-6 md:p-8 shadow-2xl border border-orange-200/20 dark:border-white/10">
+            <div className="space-y-8">
+              <TokenInput
+                label="From"
+                selectedToken={tokenFrom}
+                onSelectToken={setTokenFrom}
+                amount={amountFrom}
+                onAmountChange={handleAmountFromChange}
+                tokenPrice={tokenPrices[tokenFrom]}
+                error={error}
+                setError={setError}
               />
-            )}
-      
-            {error && (
-              <div className="bg-red-500/10 border border-red-500/20 text-red-500 p-4 rounded-xl">
-                {error}
+              
+              <div className="flex justify-center -my-4 relative z-10">
+                <button
+                  className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white rounded-full p-3 transition duration-300 shadow-lg hover:shadow-orange-500/30 transform hover:scale-105"
+                  onClick={() => {
+                    setTokenFrom(tokenTo);
+                    setTokenTo(tokenFrom);
+                    setAmountFrom(amountTo);
+                    setAmountTo(amountFrom);
+                  }}
+                >
+                  <ArrowDownUp className="h-6 w-6" />
+                </button>
               </div>
-            )}
+      
+              <TokenInput
+                label="To"
+                selectedToken={tokenTo}
+                onSelectToken={setTokenTo}
+                amount={amountTo}
+                onAmountChange={setAmountTo}
+                tokenPrice={tokenPrices[tokenTo]}
+                error={error}
+                setError={setError}
+              />
+      
+              <div className="pt-4">
+                {wallet.connected ? (
+                  <button
+                    className="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold py-5 rounded-2xl transition duration-300 shadow-lg hover:shadow-orange-500/30 flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed text-lg"
+                    onClick={swap}
+                    disabled={isSwapping}
+                  >
+                    {isSwapping ? (
+                      <>
+                        <Loader className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" />
+                        Swapping...
+                      </>
+                    ) : (
+                      "Swap Tokens"
+                    )}
+                  </button>
+                ) : (
+                  <ConnectButton
+                    className="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold py-5 rounded-2xl transition duration-300 shadow-lg hover:shadow-orange-500/30 text-lg"
+                  />
+                )}
+              </div>
+      
+              {error && (
+                <div className="bg-red-500/10 border border-red-500/20 text-red-500 p-4 rounded-xl mt-4">
+                  {error}
+                </div>
+              )}
+            </div>
           </div>
         </div>
-      </div>
+      </main>
 
     </div>
   );
