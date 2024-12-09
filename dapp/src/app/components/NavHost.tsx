@@ -17,9 +17,11 @@ export default function NavHost() {
 
 
     useEffect(() => {
-        // This code will only run on the client side
-        const element = document.getElementById('my-element');
-        // Your code that interacts with the document object
+        if (typeof document !== 'undefined') {
+            // This code will only run on the client side
+            const element = document.getElementById('my-element');
+            // Your code that interacts with the document object
+        }
     }, []);
     
 
