@@ -10,10 +10,14 @@ import IDO from '../pages/ido/page';
 import { useEffect, useState } from "react";
 import HeroSection from "../pages/้home/page";
 import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
 
 export default function NavHost() {
+    const router = useRouter();
+    const pathname = usePathname();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [mounted, setMounted] = useState(false);
+    const [isDarkMode, setIsDarkMode] = useState(false);
 
     useEffect(() => {
         setMounted(true);
@@ -21,10 +25,7 @@ export default function NavHost() {
 
     const toggleMenu = () => {
         setIsMenuOpen(!isMenuOpen);
-      };
-  
-    // Add this state in your component
-    const [isDarkMode, setIsDarkMode] = useState(false);
+    };
 
     const navItems = [
         { name: "Mint NFT", path: "/", icon: <Gem className="w-4.5 h-4.5 mr-2.5 text-orange-400" /> },
@@ -54,14 +55,18 @@ export default function NavHost() {
                                 <Link
                                   key={item.name}
                                   href={item.path}
-                                  className="relative group px-4 py-2.5 rounded-xl text-orange-50 font-medium 
-                                    bg-gradient-to-r from-orange-900/40 to-orange-800/40
-                                    hover:from-orange-500/20 hover:to-orange-600/20 
-                                    transition-all duration-300 ease-in-out
+                                  className={`
+                                    relative group px-4 py-2.5 rounded-xl font-medium 
                                     flex items-center gap-2
-                                    border border-orange-500/20 hover:border-orange-500/40
-                                    shadow-lg shadow-orange-900/5 hover:shadow-orange-500/20
-                                    transform hover:scale-105"
+                                    transition-all duration-300 ease-in-out
+                                    border border-orange-500/20
+                                    shadow-lg 
+                                    transform hover:scale-105
+                                    ${pathname === item.path 
+                                      ? 'bg-gradient-to-r from-orange-500/20 to-orange-600/20 text-orange-400 border-orange-500/40'
+                                      : 'bg-gradient-to-r from-orange-900/40 to-orange-800/40 text-orange-50 hover:from-orange-500/20 hover:to-orange-600/20 hover:border-orange-500/40'
+                                    }
+                                  `}
                                 >
                                   <span className="flex items-center gap-2.5 transform group-hover:translate-x-1 transition-transform duration-300">
                                     <span className="text-orange-400">
