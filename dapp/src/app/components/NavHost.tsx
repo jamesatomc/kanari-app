@@ -2,7 +2,7 @@
 
 import { Gem, BadgeDollarSign, CircleDot, X, Menu, BadgePlus, Moon, Sun } from "lucide-react";
 import { BrowserRouter as Router, Routes, Route} from 'react-router-dom';
-import { ConnectButton, WalletProvider } from "@suiet/wallet-kit";
+import { ConnectButton} from "@suiet/wallet-kit";
 
 import Swap from '../pages/swap/page';
 import Liquidity from '../pages/liquidity/page';
