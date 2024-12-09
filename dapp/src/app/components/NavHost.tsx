@@ -7,12 +7,17 @@ import { ConnectButton} from "@suiet/wallet-kit";
 import Swap from '../pages/swap/page';
 import Liquidity from '../pages/liquidity/page';
 import IDO from '../pages/ido/page';
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import HeroSection from "../pages/้home/page";
 import Link from "next/link";
 
 export default function NavHost() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [mounted, setMounted] = useState(false);
+
+    useEffect(() => {
+        setMounted(true);
+    }, []); 
 
     const toggleMenu = () => {
         setIsMenuOpen(!isMenuOpen);
@@ -26,8 +31,10 @@ export default function NavHost() {
         { name: "Swap", path: "/swap", icon: <CircleDot className="w-4.5 h-4.5 mr-2.5 text-orange-400" /> },
         { name: "Liquidity", path: "/liquidity", icon: <BadgePlus className="w-4.5 h-4.5 mr-2.5 text-orange-400" /> },
         { name: "IDO", path: "/ido", icon: <BadgeDollarSign className="w-4.5 h-4.5 mr-2.5 text-orange-400" /> }
-      ];
+    ];
 
+    if (!mounted) return null;
+    
   return (
       <Router>
         <div  className="px-4 pt-4 min-h-screen bg-gradient-to-b from-orange-950 via-gray-900 to-black">
