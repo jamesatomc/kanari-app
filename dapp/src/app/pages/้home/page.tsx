@@ -46,8 +46,7 @@ export default function HeroSection() {
 
     return (
         <div className="">
-
-            <main className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8 mt-16">
+            <main className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
                 <div className="bg-white/20 dark:bg-white/10 backdrop-blur-lg rounded-2xl p-8 shadow-xl border border-orange-200/30 dark:border-white/20">
                 <div className="flex flex-col md:flex-row justify-center items-center space-y-8 md:space-y-0 md:space-x-16">
                     <div className="md:w-1/2">

@@ -110,9 +110,9 @@ export default function Swap() {
   return (
     <div>
   
-      {/* min-h-screen bg-gradient-to-b from-orange-950 to-gray-900 */}
+      
       <main className="">
-        <div className="max-w-2xl mx-auto py-16 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-2xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
           <h1 className="text-4xl md:text-6xl font-bold mb-12 text-center">
             Token <span className="bg-gradient-to-r from-orange-500 to-orange-600 bg-clip-text text-transparent">Swap</span>
           </h1>
