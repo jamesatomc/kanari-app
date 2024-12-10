@@ -123,18 +123,18 @@ export default function IDO() {
           </div>
 
           {/* Purchase Form */}
-          <div className="space-y-4">
+          <div className="space-y-4 w-full max-w-sm mx-auto px-4 sm:px-0">
             <input
               type="number"
               placeholder={`Amount (${idoInfo.minBuy}-${idoInfo.maxBuy})`}
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
-              className="w-full px-4 py-2 bg-white/10 border border-white/20 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500"
+              className="w-full px-3 sm:px-4 py-2 sm:py-3 bg-white/10 border border-white/20 rounded-lg sm:rounded-xl text-sm sm:text-base text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500"
             />
 
             {wallet.connected ? (
               <button
-                className={`w-full bg-gradient-to-r from-orange-500 to-orange-600 text-white hover:from-orange-600 hover:to-orange-700 transition duration-300 px-8 py-4 rounded-full text-lg font-semibold shadow-lg ${
+                className={`w-full bg-gradient-to-r from-orange-500 to-orange-600 text-white hover:from-orange-600 hover:to-orange-700 transition duration-300 px-4 sm:px-8 py-3 sm:py-4 rounded-full text-base sm:text-lg font-semibold shadow-lg ${
                   isProcessing ? "opacity-50 cursor-not-allowed" : ""
                 } hover:shadow-orange-500/30`}
                 onClick={handleBuy}
@@ -142,21 +142,23 @@ export default function IDO() {
               >
                 {isProcessing ? (
                   <>
-                    <Loader className="animate-spin -ml-1 mr-3 h-5 w-5 text-white inline" />
-                    Processing...
+                    <Loader className="animate-spin -ml-1 mr-2 sm:mr-3 h-4 w-4 sm:h-5 sm:w-5 text-white inline" />
+                    <span className="align-middle">Processing...</span>
                   </>
                 ) : (
                   `Buy Tokens`
                 )}
               </button>
             ) : (
-              <ConnectButton className="w-full bg-gradient-to-r from-orange-500 to-orange-600 text-white hover:from-orange-600 hover:to-orange-700 transition duration-300 px-8 py-4 rounded-full text-lg font-semibold shadow-lg hover:shadow-orange-500/30" />
+              <ConnectButton className="w-full bg-gradient-to-r from-orange-500 to-orange-600 text-white hover:from-orange-600 hover:to-orange-700 transition duration-300 px-4 sm:px-8 py-3 sm:py-4 rounded-full text-base sm:text-lg font-semibold shadow-lg hover:shadow-orange-500/30" />
             )}
           </div>
 
           {error && (
-            <div className="w-full bg-red-500/10 border border-red-500/20 text-red-500 p-4 rounded-xl text-center">
-              {error}
+            <div className="w-full max-w-sm mx-auto px-4 sm:px-0">
+              <div className="w-full bg-red-500/10 border border-red-500/20 text-red-500 p-3 sm:p-4 rounded-lg sm:rounded-xl text-sm sm:text-base text-center">
+                {error}
+              </div>
             </div>
           )}
         </div>
