@@ -14,9 +14,9 @@ export default function IDO() {
 
   // Mock IDO data - replace with actual data
   const idoInfo = {
-    tokenName: "YOUR TOKEN",
-    tokenSymbol: "TKN",
-    tokenImage: "https://placeholder.com/token.png",
+    tokenName: "KARI TOKEN",
+    tokenSymbol: "KARI",
+    tokenImage: "/Kari.svg",
     price: 0.1, // Price in SUI
     totalSupply: 1000000,
     soldAmount: 250000,
