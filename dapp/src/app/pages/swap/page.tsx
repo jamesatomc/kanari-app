@@ -1,9 +1,9 @@
-'use client'; 
+'use client';
 
 import { useEffect, useRef, useState } from 'react';
 import { ArrowDownUp, ChevronDown, Loader } from 'lucide-react';
 import { ConnectButton, useWallet } from "@suiet/wallet-kit";
-import {Transaction} from "@mysten/sui/transactions";
+import { Transaction } from "@mysten/sui/transactions";
 import axios from 'axios';
 
 
@@ -19,7 +19,7 @@ export default function Swap() {
   const [amountTo, setAmountTo] = useState('');
   const [isSwapping, setIsSwapping] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [tokenPrices, setTokenPrices] = useState<{[key: string]: number}>({});
+  const [tokenPrices, setTokenPrices] = useState<{ [key: string]: number }>({});
 
   const wallet = useWallet();
 
@@ -109,14 +109,14 @@ export default function Swap() {
 
   return (
     <div>
-  
-      
+
+
       <main className="">
         <div className="max-w-2xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
           <h1 className="text-4xl md:text-6xl font-bold mb-12 text-center">
             Token <span className="bg-gradient-to-r from-orange-500 to-orange-600 bg-clip-text text-transparent">Swap</span>
           </h1>
-      
+
           <div className="flex justify-center items-center">
             <div className="w-full max-w-md bg-white/10 backdrop-blur-lg rounded-3xl p-6 md:p-8 shadow-2xl border border-orange-200/20 dark:border-white/10">
               <div className="space-y-8 flex flex-col items-center">
@@ -130,7 +130,7 @@ export default function Swap() {
                   error={error}
                   setError={setError}
                 />
-                
+
                 <div className="flex justify-center -my-4 relative z-10">
                   <button
                     className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white rounded-full p-3 transition duration-300 shadow-lg hover:shadow-orange-500/30 transform hover:scale-105"
@@ -144,7 +144,7 @@ export default function Swap() {
                     <ArrowDownUp className="h-6 w-6" />
                   </button>
                 </div>
-          
+
                 <TokenInput
                   label="To"
                   selectedToken={tokenTo}
@@ -155,7 +155,7 @@ export default function Swap() {
                   error={error}
                   setError={setError}
                 />
-          
+
                 <div className="w-full flex justify-center pt-4">
                   {wallet.connected ? (
                     <button
@@ -178,7 +178,7 @@ export default function Swap() {
                     />
                   )}
                 </div>
-          
+
                 {error && (
                   <div className="w-full bg-red-500/10 border border-red-500/20 text-red-500 p-4 rounded-xl mt-4 text-center">
                     {error}

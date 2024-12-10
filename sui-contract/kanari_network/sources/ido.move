@@ -10,7 +10,7 @@ module kanari_network::ido {
     // Constants
     // const KARI_DECIMALS: u64 = 9;
     // const SUI_DECIMALS: u64 = 9;
-    const PRICE_PER_KARI: u64 = 30_000_000; // $0.03 with 9 decimals
+    const PRICE_PER_KARI: u64 = 3_000_000; // $0.1 with 9 decimals
 
     // Error codes
     const E_NOT_ADMIN: u64 = 0;
