@@ -24,8 +24,9 @@ export default function NavHost() {
 
   return (
       <BrowserRouter>
-        <div className="px-48 pt-4 min-h-screen bg-gradient-to-b from-orange-950 via-gray-900 to-black">
-            <nav className="bg-gradient-to-r from-orange-900/40 to-orange-800/40 backdrop-blur-lg shadow-xl sticky top-0 z-50 border-b border-orange-500/20 rounded-2xl">
+        <div className="px-4 pt-4 min-h-screen bg-gradient-to-b from-orange-950 via-gray-900 to-black">
+        <div className=" flex justify-center ">
+            <nav className="w-full max-w-7xl bg-gradient-to-r from-orange-900/40 to-orange-800/40 backdrop-blur-lg shadow-xl sticky top-4 z-50 border border-orange-500/20 rounded-2xl">
                 <div className="max-w-6xl mx-auto px-3 sm:px-4 lg:px-6">
                     <div className="flex justify-between h-16">
                         <div className="flex items-center justify-between w-full">
@@ -46,7 +47,7 @@ export default function NavHost() {
                                 {[
                                     { to: "/", icon: <Wallet />, text: "Mint NFT" },
                                     { to: "/swap", icon: <Coins />, text: "Swap" },
-                                    { to: "/liquidity", icon: <Store />, text: "Products" },
+                                    { to: "/liquidity", icon: <Store />, text: "Liquidity" },
                                     { to: "/ido", icon: <Rocket />, text: "IDO" }
                                 ].map((item) => (
                                     <Link 
@@ -71,14 +72,6 @@ export default function NavHost() {
                                 ))}
                             </div>
                         
-                            {/* Mobile Menu Toggle */}
-                            <button 
-                                onClick={toggleMenu}
-                                className="md:hidden p-2 rounded-lg text-orange-100 hover:text-orange-400 
-                                    transition-colors focus:outline-none focus:ring-2 focus:ring-orange-500/30"
-                            >
-                                {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-                            </button>
                         </div>
                         
                         <div className="flex items-center space-x-4">
@@ -179,6 +172,7 @@ export default function NavHost() {
                 </div>
             )}
             </nav>
+        </div>
 
 
             <Routes>
