@@ -1,5 +1,6 @@
 'use client';
 
+import TokenInput from "@/app/components/TokenInput";
 import { ConnectButton, useWallet } from "@suiet/wallet-kit";
 import { ArrowDownUp, Loader } from "lucide-react";
 import { useState } from "react";
@@ -56,7 +57,7 @@ export default function Liquidity() {
         <div className="flex justify-center items-center">
           <div className="w-full max-w-md bg-white/10 backdrop-blur-lg rounded-3xl p-6 md:p-8 shadow-2xl border border-orange-200/20 dark:border-white/10">
             <div className="space-y-8 flex flex-col items-center">
-              {/* <TokenInput
+              <TokenInput
                 label="Token A"
                 selectedToken={tokenA}
                 onSelectToken={setTokenA}
@@ -65,7 +66,7 @@ export default function Liquidity() {
                 tokenPrice={tokenPrices[tokenA]}
                 error={error}
                 setError={setError}
-              /> */}
+              />
 
               <div className="flex justify-center -my-4 relative z-10">
                 <button
@@ -81,7 +82,7 @@ export default function Liquidity() {
                 </button>
               </div>
 
-              {/* <TokenInput
+              <TokenInput
                 label="Token B"
                 selectedToken={tokenB}
                 onSelectToken={setTokenB}
@@ -90,7 +91,7 @@ export default function Liquidity() {
                 tokenPrice={tokenPrices[tokenB]}
                 error={error}
                 setError={setError}
-              /> */}
+              />
 
               {activeTab === 'add' && (
                 <div className="w-full bg-white/5 rounded-xl p-4 space-y-2">
