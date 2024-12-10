@@ -24,51 +24,61 @@ export default function NavHost() {
 
   return (
       <BrowserRouter>
-        <div className="px-4 pt-4 min-h-screen bg-gradient-to-b from-orange-950 via-gray-900 to-black">
+        <div className="px-48 pt-4 min-h-screen bg-gradient-to-b from-orange-950 via-gray-900 to-black">
             <nav className="bg-gradient-to-r from-orange-900/40 to-orange-800/40 backdrop-blur-lg shadow-xl sticky top-0 z-50 border-b border-orange-500/20 rounded-2xl">
                 <div className="max-w-6xl mx-auto px-3 sm:px-4 lg:px-6">
                     <div className="flex justify-between h-16">
-                        <div className="flex items-center">
-                            <Link to="/" className="flex-shrink-0 transform hover:scale-110 transition-all duration-300 hover:rotate-3">
+                        <div className="flex items-center justify-between w-full">
+                            {/* Logo */}
+                            <Link 
+                                to="/" 
+                                className="flex-shrink-0 transform hover:scale-110 transition-all duration-300 hover:rotate-3 mr-8"
+                            >
                                 <img 
-                                    className="h-10 w-10 rounded-xl shadow-[0_0_15px_rgba(255,87,34,0.3)] ring-2 ring-orange-500/30" 
+                                    className="h-12 w-12 rounded-xl shadow-[0_0_15px_rgba(255,87,34,0.3)] ring-2 ring-orange-500/30" 
                                     src="https://magenta-able-pheasant-388.mypinata.cloud/ipfs/QmQhKs9WeVy5MxbChEQJrX37Unb6dktZXrYZuy6uVofQwC/Logo.png" 
                                     alt="Kanari Sell Logo" 
                                 />
                             </Link>
-                            <div className="flex items-center space-x-6">
-    <Link 
-        to="/" 
-        className="flex items-center space-x-2 px-4 py-2 text-orange-100 hover:text-orange-400 rounded-xl transition-all duration-300 hover:bg-gradient-to-r from-orange-950/40 to-orange-900/40 border border-transparent hover:border-orange-500/20"
-    >
-        <Wallet className="w-5 h-5" />
-        <span>Mint NFT</span>
-    </Link>
-
-    <Link 
-        to="/swap" 
-        className="flex items-center space-x-2 px-4 py-2 text-orange-100 hover:text-orange-400 rounded-xl transition-all duration-300 hover:bg-gradient-to-r from-orange-950/40 to-orange-900/40 border border-transparent hover:border-orange-500/20"
-    >
-        <Coins className="w-5 h-5" />
-        <span>Swap</span>
-    </Link>
-
-    <Link 
-        to="/liquidity" 
-        className="flex items-center space-x-2 px-4 py-2 text-orange-100 hover:text-orange-400 rounded-xl transition-all duration-300 hover:bg-gradient-to-r from-orange-950/40 to-orange-900/40 border border-transparent hover:border-orange-500/20"
-    >
-        <Store className="w-5 h-5" />
-        <span>Products</span>
-    </Link>
-
-    <Link 
-        to="/ido" 
-        className="flex items-center space-x-2 px-4 py-2 text-orange-100 hover:text-orange-400 rounded-xl transition-all duration-300 hover:bg-gradient-to-r from-orange-950/40 to-orange-900/40 border border-transparent hover:border-orange-500/20"
-    >
-        <Rocket className="w-5 h-5" />
-        <span>IDO</span>
-    </Link>
-</div>
+                        
+                            {/* Desktop Navigation */}
+                            <div className="hidden md:flex items-center space-x-6 flex-grow justify-center">
+                                {[
+                                    { to: "/", icon: <Wallet />, text: "Mint NFT" },
+                                    { to: "/swap", icon: <Coins />, text: "Swap" },
+                                    { to: "/liquidity", icon: <Store />, text: "Products" },
+                                    { to: "/ido", icon: <Rocket />, text: "IDO" }
+                                ].map((item) => (
+                                    <Link 
+                                        key={item.to}
+                                        to={item.to} 
+                                        className="group relative flex items-center space-x-3 px-4 py-2.5 text-orange-100 font-medium 
+                                            rounded-xl transition-all duration-300 hover:scale-105
+                                            hover:bg-gradient-to-r from-orange-950/40 to-orange-800/40 
+                                            border border-transparent hover:border-orange-500/30
+                                            hover:shadow-lg hover:shadow-orange-500/10"
+                                    >
+                                        <span className="w-5 h-5 transition-transform group-hover:rotate-12">
+                                            {item.icon}
+                                        </span>
+                                        <span className="relative whitespace-nowrap">
+                                            {item.text}
+                                            <span className="absolute inset-x-0 -bottom-1 h-0.5 bg-orange-400 
+                                                transform scale-x-0 group-hover:scale-x-100 transition-transform">
+                                            </span>
+                                        </span>
+                                    </Link>
+                                ))}
+                            </div>
+                        
+                            {/* Mobile Menu Toggle */}
+                            <button 
+                                onClick={toggleMenu}
+                                className="md:hidden p-2 rounded-lg text-orange-100 hover:text-orange-400 
+                                    transition-colors focus:outline-none focus:ring-2 focus:ring-orange-500/30"
+                            >
+                                {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+                            </button>
                         </div>
                         
                         <div className="flex items-center space-x-4">
@@ -105,31 +115,35 @@ export default function NavHost() {
 
                 {isMenuOpen && (
                 <div className="md:hidden">
-                    <div className="px-3 pt-2 pb-3 space-y-2">
-                        <Link 
-                            to="/" 
-                            className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50"
-                        >
-                            Mint NFT
-                        </Link>
-                        <Link 
-                            to="/swap"
-                            className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50"
-                        >
-                            Swap
-                        </Link>
-                        <Link 
-                            to="/liquidity"
-                            className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50"
-                        >
-                            Liquidity
-                        </Link>
-                        <Link 
-                            to="/ido"
-                            className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50"
-                        >
-                            IDO
-                        </Link>
+                    <div className="px-4 py-3 space-y-2">
+                        {[
+                            { to: "/", icon: <Wallet className="w-5 h-5" />, text: "Mint NFT" },
+                            { to: "/swap", icon: <Coins className="w-5 h-5" />, text: "Swap" },
+                            { to: "/liquidity", icon: <Store className="w-5 h-5" />, text: "Liquidity" },
+                            { to: "/ido", icon: <Rocket className="w-5 h-5" />, text: "IDO" },
+                        ].map((item) => (
+                            <Link 
+                                key={item.to}
+                                to={item.to} 
+                                className="group flex items-center space-x-3 w-full px-4 py-3 rounded-xl
+                                    text-orange-100 font-medium 
+                                    transition-all duration-300
+                                    hover:bg-gradient-to-r from-orange-950/40 to-orange-800/40 
+                                    border border-transparent hover:border-orange-500/30
+                                    hover:shadow-lg hover:shadow-orange-500/10"
+                                onClick={() => setIsMenuOpen(false)}
+                            >
+                                <span className="transition-transform group-hover:scale-110">
+                                    {item.icon}
+                                </span>
+                                <span className="relative">
+                                    {item.text}
+                                    <span className="absolute inset-x-0 -bottom-1 h-0.5 bg-orange-400 
+                                        transform scale-x-0 group-hover:scale-x-100 transition-transform">
+                                    </span>
+                                </span>
+                            </Link>
+                        ))}
                     </div>
 
                     <div className="pt-2 pb-3 border-t border-orange-500/20">
