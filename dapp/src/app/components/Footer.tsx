@@ -1,5 +1,6 @@
 // Footer.tsx
 import { Github, X } from 'lucide-react';
+import { FaDiscord } from 'react-icons/fa';
 
 export default function Footer() {
   return (
@@ -8,12 +9,13 @@ export default function Footer() {
         <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
           
           {/* Logo & Copyright */}
-          <div className="flex flex-col items-center md:items-start space-y-2">
-            <img src="/logo.png" alt="Logo" className="h-8 w-auto" />
-            <p className="text-sm text-gray-400">
-              © {new Date().getFullYear()} Your Project. All rights reserved.
-            </p>
-          </div>
+          <span className="text-sm sm:text-center">
+              © 2024{' '}
+              <a href="https://kanari.network/" className="hover:underline">
+                Kanari Network™
+              </a>
+              . community.
+          </span>
 
           {/* Social Links */}
           <div className="flex items-center space-x-6">
@@ -39,7 +41,7 @@ export default function Footer() {
               rel="noopener noreferrer"
               className="text-gray-400 hover:text-orange-500 transition-colors"
             >
-              <X className="h-5 w-5" />
+              <FaDiscord className="h-5 w-5" />
             </a>
           </div>
 
