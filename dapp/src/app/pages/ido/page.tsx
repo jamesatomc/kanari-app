@@ -82,9 +82,7 @@ export default function IDO() {
   return (
     <div className="max-w-2xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
       <h1 className="text-4xl md:text-6xl font-bold mb-12 text-center">
-        <span className="bg-gradient-to-r from-orange-500 to-orange-600 bg-clip-text text-transparent">
-          Token Sale
-        </span>
+          Token <span className="bg-gradient-to-r from-orange-500 to-orange-600 bg-clip-text text-transparent">Sale</span>
       </h1>
 
       <div className="w-full max-w-md mx-auto bg-white/10 backdrop-blur-lg rounded-3xl p-6 md:p-8 shadow-2xl border border-orange-200/20">
