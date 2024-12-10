@@ -1,5 +1,5 @@
 "use client";
-
+import { Coins, Wallet, Store, Rocket } from "lucide-react";
 import { X, Menu, Moon, Sun } from "lucide-react";
 import dynamic from 'next/dynamic';
 import { Route, Link, Routes } from 'react-router-dom';
@@ -36,18 +36,39 @@ export default function NavHost() {
                                     alt="Kanari Sell Logo" 
                                 />
                             </Link>
-                            <Link to="/" className="text-gray-700 hover:text-gray-900">
-                                Mint NFT
-                            </Link>
-                            <Link to="/swap" className="text-gray-700 hover:text-gray-900">
-                                Swap
-                            </Link>
-                            <Link to="/liquidity" className="text-gray-700 hover:text-gray-900">
-                                Products
-                            </Link>
-                            <Link to="/ido" className="text-gray-700 hover:text-gray-900">
-                                IDO
-                            </Link>
+                            <div className="flex items-center space-x-6">
+    <Link 
+        to="/" 
+        className="flex items-center space-x-2 px-4 py-2 text-orange-100 hover:text-orange-400 rounded-xl transition-all duration-300 hover:bg-gradient-to-r from-orange-950/40 to-orange-900/40 border border-transparent hover:border-orange-500/20"
+    >
+        <Wallet className="w-5 h-5" />
+        <span>Mint NFT</span>
+    </Link>
+
+    <Link 
+        to="/swap" 
+        className="flex items-center space-x-2 px-4 py-2 text-orange-100 hover:text-orange-400 rounded-xl transition-all duration-300 hover:bg-gradient-to-r from-orange-950/40 to-orange-900/40 border border-transparent hover:border-orange-500/20"
+    >
+        <Coins className="w-5 h-5" />
+        <span>Swap</span>
+    </Link>
+
+    <Link 
+        to="/liquidity" 
+        className="flex items-center space-x-2 px-4 py-2 text-orange-100 hover:text-orange-400 rounded-xl transition-all duration-300 hover:bg-gradient-to-r from-orange-950/40 to-orange-900/40 border border-transparent hover:border-orange-500/20"
+    >
+        <Store className="w-5 h-5" />
+        <span>Products</span>
+    </Link>
+
+    <Link 
+        to="/ido" 
+        className="flex items-center space-x-2 px-4 py-2 text-orange-100 hover:text-orange-400 rounded-xl transition-all duration-300 hover:bg-gradient-to-r from-orange-950/40 to-orange-900/40 border border-transparent hover:border-orange-500/20"
+    >
+        <Rocket className="w-5 h-5" />
+        <span>IDO</span>
+    </Link>
+</div>
                         </div>
                         
                         <div className="flex items-center space-x-4">
