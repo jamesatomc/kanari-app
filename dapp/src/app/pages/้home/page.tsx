@@ -45,7 +45,7 @@ export default function HeroSection() {
       }
 
     return (
-        <div className="px-4 pt-4">
+        <div className="">
 
             <main className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8 mt-16">
                 <div className="bg-white/20 dark:bg-white/10 backdrop-blur-lg rounded-2xl p-8 shadow-xl border border-orange-200/30 dark:border-white/20">
