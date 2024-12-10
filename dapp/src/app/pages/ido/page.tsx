@@ -18,8 +18,8 @@ export default function IDO() {
     tokenSymbol: "KARI",
     tokenImage: "/Kari.svg",
     price: 0.1, // Price in SUI
-    totalSupply: 1000000,
-    soldAmount: 250000,
+    totalSupply: 31000000,
+    soldAmount: 25000000,
     startTime: new Date('2024-04-01').getTime(),
     endTime: new Date('2024-04-07').getTime(),
     minBuy: 100,
@@ -85,7 +85,8 @@ export default function IDO() {
         <h1 className="text-4xl md:text-6xl font-bold mb-12 text-center">
           Token <span className="bg-gradient-to-r from-orange-500 to-orange-600 bg-clip-text text-transparent">Sale</span>
         </h1>
-        <div className="min-h-screen flex items-center justify-center">
+        
+        
           <div className="w-full max-w-md mx-auto px-4 sm:px-6 py-8 sm:py-12">
             <div className="bg-white/10 backdrop-blur-lg rounded-3xl p-6 md:p-8 shadow-2xl border border-orange-200/20">
               <div className="space-y-6 sm:space-y-8">
@@ -166,7 +167,7 @@ export default function IDO() {
               </div>
             </div>
           </div>
-        </div>
+
       </div>
     </main>
   );
