@@ -37,7 +37,7 @@ export default function NavHost() {
                             >
                                 <img 
                                     className="h-12 w-12 rounded-xl shadow-[0_0_15px_rgba(255,87,34,0.3)] ring-2 ring-orange-500/30" 
-                                    src="https://magenta-able-pheasant-388.mypinata.cloud/ipfs/QmQhKs9WeVy5MxbChEQJrX37Unb6dktZXrYZuy6uVofQwC/Logo.png" 
+                                    src="kari.svg" 
                                     alt="Kanari Sell Logo" 
                                 />
                             </Link>
