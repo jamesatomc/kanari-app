@@ -24,7 +24,7 @@ export default function NavHost() {
 
   return (
       <BrowserRouter>
-        <div className="px-4 pt-4 min-h-screen bg-gradient-to-b from-orange-950 via-gray-900 to-black">
+        <div className=" pt-4 min-h-screen bg-gradient-to-b from-orange-950 via-gray-900 to-black">
         <div className=" flex justify-center ">
             <nav className="w-full max-w-7xl bg-gradient-to-r from-orange-900/40 to-orange-800/40 backdrop-blur-lg shadow-xl sticky top-4 z-50 border border-orange-500/20 rounded-2xl">
                 <div className="max-w-6xl mx-auto px-3 sm:px-4 lg:px-6">
