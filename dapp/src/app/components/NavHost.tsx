@@ -1,29 +1,25 @@
 "use client";
 
 import { X, Menu, Moon, Sun } from "lucide-react";
-import { BrowserRouter, Route, Link, Routes} from 'react-router-dom';
-import { ConnectButton} from "@suiet/wallet-kit";
-
-
-
+import dynamic from 'next/dynamic';
+import { Route, Link, Routes } from 'react-router-dom';
+import { ConnectButton } from "@suiet/wallet-kit";
 import { useState } from "react";
 import HeroSection from "../pages/้home/page";
 import Liquidity from "../pages/liquidity/page";
 import IDO from "../pages/ido/page";
 import Swap from "../pages/swap/page";
 
+// Dynamically import BrowserRouter to ensure it only runs on the client side
+const BrowserRouter = dynamic(() => import('react-router-dom').then(mod => mod.BrowserRouter), { ssr: false });
+
 export default function NavHost() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-
-
+    const [isDarkMode, setIsDarkMode] = useState(false);
 
     const toggleMenu = () => {
         setIsMenuOpen(!isMenuOpen);
-      };
-  
-    // Add this state in your component
-    const [isDarkMode, setIsDarkMode] = useState(false);
-
+    };
 
 
   return (
