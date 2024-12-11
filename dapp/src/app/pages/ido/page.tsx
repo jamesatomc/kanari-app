@@ -87,8 +87,8 @@ export default function IDO() {
         </h1>
         
         
-          <div className="w-full max-w-md mx-auto px-4 sm:px-6 py-8 sm:py-12">
-            <div className="bg-white/10 backdrop-blur-lg rounded-3xl p-6 md:p-8 shadow-2xl border border-orange-200/20">
+          <div className="flex justify-center items-center">
+            <div className="w-full max-w-md bg-white/10 backdrop-blur-lg rounded-3xl p-6 md:p-8 shadow-2xl border border-orange-200/20 dark:border-white/10">
               <div className="space-y-6 sm:space-y-8">
                 {/* Token Info */}
                 <div className="flex items-center justify-center space-x-4">
