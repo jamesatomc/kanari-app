@@ -1,10 +1,11 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { ArrowDownUp, ChevronDown, Loader } from 'lucide-react';
+import { ArrowDownUp, ChevronDown, Loader, Settings } from 'lucide-react';
 import { ConnectButton, useWallet } from "@suiet/wallet-kit";
 import { Transaction } from "@mysten/sui/transactions";
 import axios from 'axios';
+
 
 
 const availableTokens = [
@@ -97,6 +98,15 @@ export default function Swap() {
     }
   }
 
+  // Hooks must be called at the top level of the component
+  const [showSettings, setShowSettings] = useState(false);
+
+  // At the top of your Swap component, add balances state
+  const [balances, setBalances] = useState<{ [key: string]: string }>({
+    SUI: '1000.00',  // Mock balance
+    USDC: '500.00'   // Mock balance
+  });
+
   useEffect(() => {
     if (error) {
       const timer = setTimeout(() => {
@@ -119,7 +129,17 @@ export default function Swap() {
 
           <div className="flex justify-center items-center">
             <div className="w-full max-w-md bg-white/10 backdrop-blur-lg rounded-3xl p-6 md:p-8 shadow-2xl border border-orange-200/20 dark:border-white/10">
-              <div className="space-y-8 flex flex-col items-center">
+              <div className="space-y-6 flex flex-col items-center w-full">
+              {/* Settings button at top right */}
+              <div className="w-full flex justify-end">
+                <button
+                  onClick={() => setShowSettings(true)}
+                  className="text-gray-400 hover:text-orange-500 transition-colors p-2 rounded-lg hover:bg-white/5"
+                >
+                  <Settings className="h-5 w-5" />
+                </button>
+              </div>
+              
                 <TokenInput
                   label="From"
                   selectedToken={tokenFrom}
@@ -129,11 +149,18 @@ export default function Swap() {
                   tokenPrice={tokenPrices[tokenFrom]}
                   error={error}
                   setError={setError}
+                  balance={balances[tokenFrom]}
+                  showBalanceButtons={true}
                 />
-
-                <div className="flex justify-center -my-4 relative z-10">
+              
+                <div className="flex justify-center -my-3 relative z-10">
                   <button
-                    className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white rounded-full p-3 transition duration-300 shadow-lg hover:shadow-orange-500/30 transform hover:scale-105"
+                    className="bg-gradient-to-r from-orange-500 to-orange-600 
+                      hover:from-orange-600 hover:to-orange-700 text-white 
+                      rounded-full p-2.5 transition-all duration-300 
+                      shadow-lg hover:shadow-orange-500/30 
+                      hover:scale-110 active:scale-95
+                      border border-orange-500/20"
                     onClick={() => {
                       setTokenFrom(tokenTo);
                       setTokenTo(tokenFrom);
@@ -141,10 +168,10 @@ export default function Swap() {
                       setAmountTo(amountFrom);
                     }}
                   >
-                    <ArrowDownUp className="h-6 w-6" />
+                    <ArrowDownUp className="h-5 w-5 transition-transform hover:rotate-180" />
                   </button>
                 </div>
-
+              
                 <TokenInput
                   label="To"
                   selectedToken={tokenTo}
@@ -154,6 +181,8 @@ export default function Swap() {
                   tokenPrice={tokenPrices[tokenTo]}
                   error={error}
                   setError={setError}
+                  balance={balances[tokenTo]}
+                  showBalanceButtons={false}
                 />
 
                 <div className="w-full flex justify-center pt-4">
@@ -205,6 +234,8 @@ interface TokenInputProps {
   tokenPrice?: number;
   error?: string | null;
   setError: (error: string | null) => void;
+  balance?: string;
+  showBalanceButtons?: boolean;
 }
 
 // TokenInput.tsx
@@ -216,6 +247,8 @@ const TokenInput: React.FC<TokenInputProps> = ({
   onAmountChange,
   tokenPrice,
   setError,
+  balance,
+  showBalanceButtons = false,
 }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -241,15 +274,40 @@ const TokenInput: React.FC<TokenInputProps> = ({
     }
   };
 
+  const handleSetHalf = () => {
+    if (balance) {
+      const halfAmount = (parseFloat(balance) / 2).toString();
+      onAmountChange(halfAmount);
+    }
+  };
+
+  const handleSetMax = () => {
+    if (balance) {
+      onAmountChange(balance);
+    }
+  };
+
+
   const selectedTokenData = availableTokens.find(token => token.symbol === selectedToken);
 
   return (
     <div className="space-y-2">
-      <label className="block text-sm font-medium text-gray-200">{label}</label>
-      <div className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2">
-        <div className="relative flex-1">
+      <div className="flex justify-between items-center">
+        <label className="block text-sm font-medium text-gray-200">{label}</label>
+        {balance && (
+          <span className="text-xs text-gray-400">
+            Balance: {parseFloat(balance).toFixed(6)} {selectedToken}
+          </span>
+        )}
+      </div>
+      
+      <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2">
+        {/* Token Selector */}
+        <div className="relative sm:w-1/3">
           <button
-            className="w-full flex justify-between items-center px-4 py-2 bg-white bg-opacity-10 border border-gray-300 rounded-md text-white"
+            className="w-full flex justify-between items-center px-4 py-2.5 
+              bg-white/10 border border-orange-500/20 rounded-xl text-white
+              hover:bg-white/20 transition-all duration-200"
             onClick={() => setIsDropdownOpen(!isDropdownOpen)}
           >
             {selectedTokenData ? (
@@ -262,16 +320,15 @@ const TokenInput: React.FC<TokenInputProps> = ({
             )}
             <ChevronDown className="h-4 w-4 ml-2" />
           </button>
+          
+          {/* Dropdown remains the same */}
           {isDropdownOpen && (
-            <div
-              ref={dropdownRef}
-              className="absolute z-10 w-full mt-1 bg-white rounded-md shadow-lg max-h-60 overflow-y-auto"
-            >
+            <div ref={dropdownRef} className="absolute z-10 w-full mt-1 bg-white/10 backdrop-blur-lg rounded-xl border border-orange-500/20 shadow-lg max-h-60 overflow-y-auto">
               <ul className="py-1">
                 {availableTokens.map((token) => (
                   <li
                     key={token.symbol}
-                    className="px-4 py-2 hover:bg-gray-100 cursor-pointer text-gray-700 flex items-center"
+                    className="px-4 py-2.5 hover:bg-orange-500/10 cursor-pointer text-white flex items-center"
                     onClick={() => {
                       onSelectToken(token.symbol);
                       setIsDropdownOpen(false);
@@ -285,19 +342,46 @@ const TokenInput: React.FC<TokenInputProps> = ({
             </div>
           )}
         </div>
-        <input
-          type="number"
-          placeholder="0.00"
-          value={amount}
-          onChange={(e) => handleAmountChange(e.target.value)}
-          className="flex-1 px-4 py-2 bg-white bg-opacity-10 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-        />
+
+        {/* Input Group */}
+        <div className="sm:flex-1">
+          <div className="flex">
+            <input
+              type="number"
+              placeholder="0.00"
+              value={amount}
+              onChange={(e) => handleAmountChange(e.target.value)}
+              className="w-full px-4 py-2.5 bg-white/10 rounded-l-xl text-white 
+                placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 
+                border border-orange-500/20
+                [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none 
+                [&::-webkit-inner-spin-button]:appearance-none"
+            />
+            {showBalanceButtons && balance && (
+              <div className="flex border-l border-orange-500/20">
+                <button
+                  onClick={handleSetHalf}
+                  className="px-3 py-2.5 bg-white/10 hover:bg-orange-500/20 
+                    text-orange-400 text-sm font-medium transition-colors duration-200"
+                >
+                  50%
+                </button>
+                <button
+                  onClick={handleSetMax}
+                  className="px-3 py-2.5 bg-white/10 hover:bg-orange-500/20 
+                    text-orange-400 text-sm font-medium rounded-r-xl border-l 
+                    border-orange-500/20 transition-colors duration-200"
+                >
+                  MAX
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
       </div>
-      {/* {error && (
-        <div className="text-red-500 text-sm mt-1">{error}</div>
-      )} */}
+
       {tokenPrice && (
-        <div className="text-sm text-gray-300">
+        <div className="text-sm text-gray-400">
           1 {selectedToken} = ${tokenPrice.toFixed(2)} USD
         </div>
       )}
