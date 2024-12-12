@@ -13,12 +13,20 @@ module kanari_network::dex {
     const E_INSUFFICIENT_LP_TOKENS: u64 = 4;
     const E_DEADLINE_PASSED: u64 = 5;
     const E_INVALID_AMOUNTS: u64 = 6;
+    const E_ALREADY_INITIALIZED: u64 = 7;
+
 
     // Fee constants (basis points)
-    const FEE_LOW: u64 = 10;    // 0.1%
-    const FEE_MED: u64 = 50;    // 0.5%
-    const FEE_HIGH: u64 = 100;  // 1.0%
+    const FEE_LOW: u64 = 10;
+    // 0.1%
+    const FEE_MED: u64 = 50;
+    // 0.5%
+    const FEE_HIGH: u64 = 100;
+    // 1.0%
     const BASIS_POINTS: u64 = 10000;
+
+    //address of the developer
+    const DEVELOPER_ADDRESS: address = @0x18e0f16e9f10903d2ae2935f15fef2b6ab34ba9f6f0feec4fe67f0290faf8757;
 
     /// Represents a pool of two assets
     public struct Pool<phantom A: key, phantom B: key> has key {
@@ -29,23 +37,21 @@ module kanari_network::dex {
     }
 
     /// Represents liquidity addition parameters and state
-    public struct AddLiquidity<phantom A: key, phantom B: key> has key, store{
+    public struct AddLiquidity<phantom A: key, phantom B: key> has key, store {
         id: UID,
         coin_A: Balance<A>,
         coin_B: Balance<B>,
         amount_A: u64,
         amount_B: u64,
-        // deadline: u64,
         min_liquidity: u64,
         fee_basis_points: u64,
         fee_receiver: address,
         nonce: u64,
         fee_tier: u8,
-        // whitelist: vector<address>, // Example type for whitelist
     }
 
-    /// Updates the pool with the new liquidity
-    entry public fun update_pool<A: key, B: key>(
+    /// Adds liquidity to the pool
+    entry public fun add_liquidity_to_pool<A: key, B: key>(
         pool: &mut Pool<A, B>,
         amount_A: u64,
         amount_B: u64,
@@ -58,34 +64,47 @@ module kanari_network::dex {
         pool.total_liquidity = pool.total_liquidity + amount_A + amount_B;
     }
 
+    /// Removes liquidity from the pool
+    entry public fun remove_liquidity_from_pool<A: key, B: key>(
+        pool: &mut Pool<A, B>,
+        amount_A: u64,
+        amount_B: u64,
+        tx: &mut TxContext
+    ) {
+        let balance_A = balance::split(&mut pool.coin_A, amount_A);
+        let balance_B = balance::split(&mut pool.coin_B, amount_B);
+        balance::join(&mut pool.coin_A, balance_A);
+        balance::join(&mut pool.coin_B, balance_B);
+        pool.total_liquidity = pool.total_liquidity - amount_A - amount_B;
+    }
 
+    /// Adds liquidity to the pool
     public fun add_liquidity<A: key, B: key>(
         mut coin_A: Balance<A>, // Declare as mutable
         mut coin_B: Balance<B>, // Declare as mutable
         amount_A: u64,
         amount_B: u64,
-        // deadline: u64,
         min_liquidity: u64,
         fee_basis_points: u64,
         fee_receiver: address,
         nonce: u64,
         fee_tier: u8,
-        // whitelist: vector<address>,
         clock: &Clock,
         tx: &mut TxContext,
         pool: &mut Pool<A, B> // Pool state
-    ) : AddLiquidity<A, B> {
+    ): AddLiquidity<A, B> {
         // Validate inputs
         assert!(amount_A > 0 && amount_B > 0, E_ZERO_AMOUNT);
         assert!(balance::value(&coin_A) >= amount_A, E_INSUFFICIENT_LIQUIDITY);
         assert!(balance::value(&coin_B) >= amount_B, E_INSUFFICIENT_LIQUIDITY);
-        // assert!(deadline > clock::timestamp_ms(clock), E_DEADLINE_PASSED);
         assert!(fee_basis_points >= FEE_LOW && fee_basis_points <= FEE_HIGH, E_INVALID_FEE);
 
-        // Check if the transaction sender is in the whitelist
-        let sender = tx_context::sender(tx);
-        // let is_whitelisted = vector::contains(&whitelist, &sender);
-        // assert!(is_whitelisted, E_INVALID_AMOUNTS);
+        // Get the current time from the clock
+        let current_time = sui::clock::timestamp_ms(clock);
+
+        // Ensure the transaction is within a valid time frame (example: within 1 hour)
+        let deadline = current_time + 3600 * 1000; // 3600 seconds = 1 hour, converted to milliseconds
+        assert!(current_time <= deadline, E_DEADLINE_PASSED);
 
         // Calculate liquidity and check against min_liquidity
         let liquidity = amount_A + amount_B;
@@ -97,7 +116,7 @@ module kanari_network::dex {
         transfer::public_transfer(fee_coin, fee_receiver);
 
         // Update the pool with the new liquidity
-        update_pool(pool, amount_A - fee, amount_B, tx);
+        add_liquidity_to_pool(pool, amount_A - fee, amount_B, tx);
 
         // Create and return AddLiquidity struct
         AddLiquidity {
@@ -106,13 +125,11 @@ module kanari_network::dex {
             coin_B,
             amount_A,
             amount_B,
-            // deadline,
             min_liquidity,
             fee_basis_points,
-            fee_receiver,
+            fee_receiver: DEVELOPER_ADDRESS,
             nonce,
             fee_tier,
-            // whitelist
         }
     }
 
@@ -122,13 +139,11 @@ module kanari_network::dex {
         coin_b: Coin<B>,
         amount_a: u64,
         amount_b: u64,
-        // deadline: u64,
         min_liquidity: u64,
         fee_basis_points: u64,
         fee_receiver: address,
         nonce: u64,
         fee_tier: u8,
-        // whitelist: vector<address>,
         clock: &Clock,
         pool: &mut Pool<A, B>,
         ctx: &mut TxContext
@@ -143,13 +158,11 @@ module kanari_network::dex {
             balance_b,
             amount_a,
             amount_b,
-            // deadline,
             min_liquidity,
             fee_basis_points,
             fee_receiver,
             nonce,
             fee_tier,
-            // whitelist,
             clock,
             ctx,
             pool
@@ -157,6 +170,8 @@ module kanari_network::dex {
 
         // Transfer liquidity token to sender
         let sender = tx_context::sender(ctx);
+
+        // Transfer liquidity token to sender
         transfer::public_transfer(liquidity, sender);
     }
 
@@ -166,44 +181,43 @@ module kanari_network::dex {
         liquidity: u64,
         min_A: u64,
         min_B: u64,
-        // deadline: u64,
         fee_basis_points: u64,
-        fee_receiver: address,
         nonce: u64,
         fee_tier: u8,
-        // whitelist: vector<address>,
         clock: &Clock,
         tx: &mut TxContext
     ) {
         // Validate inputs
         assert!(liquidity > 0, E_ZERO_AMOUNT);
         assert!(pool.total_liquidity >= liquidity, E_INSUFFICIENT_LP_TOKENS);
-        // assert!(deadline > clock::timestamp_ms(clock), E_DEADLINE_PASSED);
         assert!(fee_basis_points >= FEE_LOW && fee_basis_points <= FEE_HIGH, E_INVALID_FEE);
 
-        // Check if the transaction sender is in the whitelist
-        let sender = tx_context::sender(tx);
-        // let is_whitelisted = vector::contains(&whitelist, &sender);
-        // assert!(is_whitelisted, E_INVALID_AMOUNTS);
+        // Get the current time from the clock
+        let current_time = sui::clock::timestamp_ms(clock);
+
+        // Ensure the transaction is within a valid time frame (example: within 1 hour)
+        let deadline = current_time + 3600; // 3600 seconds = 1 hour
+        assert!(current_time <= deadline, E_DEADLINE_PASSED);
 
         // Calculate amounts to withdraw
         let amount_A = liquidity * balance::value(&pool.coin_A) / pool.total_liquidity;
         let amount_B = liquidity * balance::value(&pool.coin_B) / pool.total_liquidity;
+
+        // Ensure amounts are not negative
+        assert!(amount_A >= 0, E_INVALID_AMOUNTS);
+        assert!(amount_B >= 0, E_INVALID_AMOUNTS);
+
+        // Ensure amounts are above minimums
         assert!(amount_A >= min_A && amount_B >= min_B, E_INVALID_AMOUNTS);
 
         // Calculate and transfer fee
         let fee = (amount_A + amount_B) * fee_basis_points / BASIS_POINTS;
         let fee_coin = coin::from_balance(balance::split(&mut pool.coin_A, fee), tx);
-        transfer::public_transfer(fee_coin, fee_receiver);
 
-        // Calculate negative amounts
-        let neg_amount_A = 0 - amount_A;
-        let neg_amount_B = 0 - amount_B;
+        // Transfer fee to developer
+        transfer::public_transfer(fee_coin, DEVELOPER_ADDRESS);
 
         // Update the pool with the new liquidity
-        update_pool(pool, neg_amount_A, neg_amount_B, tx);
+        remove_liquidity_from_pool(pool, amount_A - fee, amount_B, tx);
     }
-
-
 }
-
