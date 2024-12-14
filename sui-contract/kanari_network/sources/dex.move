@@ -17,14 +17,11 @@ module kanari_network::dex {
     const E_INVALID_AMOUNTS: u64 = 6;
     const E_ALREADY_INITIALIZED: u64 = 7;
     const E_REENTRANCY: u64 = 8;
-
+    
     // Fee constants (basis points)
-    const FEE_LOW: u64 = 10;
-    // 0.1%
-    const FEE_MED: u64 = 50;
-    // 0.5%
-    const FEE_HIGH: u64 = 100;
-    // 1.0%
+    const FEE_LOW: u64 = 5;    // 0.05%
+    const FEE_MED: u64 = 25;   // 0.25%
+    const FEE_HIGH: u64 = 75;  // 0.75%
     const BASIS_POINTS: u64 = 10000;
 
     //address of the developer
@@ -71,7 +68,7 @@ module kanari_network::dex {
         pool: &mut Pool<A, B>,
         amount_A: u64,
         amount_B: u64,
-        tx: &mut TxContext
+        ctx: &mut TxContext
     ) {
         let balance_A = balance::split(&mut pool.coin_A, amount_A);
         let balance_B = balance::split(&mut pool.coin_B, amount_B);
@@ -221,46 +218,68 @@ module kanari_network::dex {
         remove_liquidity_from_pool(pool, amount_A - fee, amount_B, tx);
     }
 
-
-
-    public fun swap_A_for_B<A: key, B: key>(
-        pool: &mut Pool<A, B>,
+    public struct SwapEvent has copy, drop {
         amount_A: u64,
-        min_B: u64,
-        fee_basis_points: u64,
-        clock: &Clock,
-        tx: &mut TxContext
-    ) {
-        // Validate inputs
-        assert!(amount_A > 0, E_ZERO_AMOUNT);
-        assert!(fee_basis_points >= FEE_LOW && fee_basis_points <= FEE_HIGH, E_INVALID_FEE);
-
-        // Get the current time from the clock
-        let current_time = sui::clock::timestamp_ms(clock);
-
-        // Ensure the transaction is within a valid time frame (example: within 1 hour)
-        let deadline = current_time + 3600; // 3600 seconds = 1 hour
-        assert!(current_time <= deadline, E_DEADLINE_PASSED);
-
-        // Calculate amount of B to receive
-        let amount_B = amount_A * balance::value(&pool.coin_B) / balance::value(&pool.coin_A);
-
-        // Calculate and transfer fee
-        let fee = amount_B * fee_basis_points / BASIS_POINTS;
-        let fee_coin = coin::from_balance(balance::split(&mut pool.coin_B, fee), tx);
-
-        // Transfer fee to developer
-        transfer::public_transfer(fee_coin, DEVELOPER_ADDRESS);
-
-        // Update the pool with the new balances
-        let balance_A = balance::split(&mut pool.coin_A, amount_A);
-        let balance_B = balance::split(&mut pool.coin_B, amount_B);
-        balance::join(&mut pool.coin_A, balance_A);
-        balance::join(&mut pool.coin_B, balance_B);
-
-        // Ensure minimum amount of B is received
-        assert!(amount_B >= min_B, E_INSUFFICIENT_LIQUIDITY);
-
+        amount_B: u64,
+        fee: u64,
+        sender: address,
+        timestamp: u64,
     }
+
+    public fun swap<A: key, B: key>(
+            pool: &mut Pool<A, B>,
+            amount_A: u64,
+            min_B: u64,
+            fee_basis_points: u64,
+            clock: &Clock,
+            tx: &mut TxContext
+        ) {
+            // Validate inputs
+            assert!(amount_A > 0, E_ZERO_AMOUNT);
+            assert!(fee_basis_points >= FEE_LOW && fee_basis_points <= FEE_HIGH, E_INVALID_FEE);
+    
+            // Get the current time from the clock
+            let current_time = sui::clock::timestamp_ms(clock);
+    
+            // Ensure the transaction is within a valid time frame (example: within 1 hour)
+            let deadline = current_time + 3600; // 3600 seconds = 1 hour
+            assert!(current_time <= deadline, E_DEADLINE_PASSED);
+    
+            // Calculate amount of B to receive using constant product formula
+            let reserve_A = balance::value(&pool.coin_A);
+            let reserve_B = balance::value(&pool.coin_B);
+            let amount_A_with_fee = amount_A * (BASIS_POINTS - fee_basis_points) / BASIS_POINTS;
+            let amount_B = (amount_A_with_fee * reserve_B) / (reserve_A + amount_A_with_fee);
+    
+            // Ensure minimum amount of B is received
+            assert!(amount_B >= min_B, E_INSUFFICIENT_LIQUIDITY);
+    
+            // Calculate and transfer fee
+            let fee = amount_A * fee_basis_points / BASIS_POINTS;
+            let fee_coin = coin::from_balance(balance::split(&mut pool.coin_A, fee), tx);
+    
+            // Transfer fee to developer
+            transfer::public_transfer(fee_coin, DEVELOPER_ADDRESS);
+    
+            // Update the pool with the new balances
+            let balance_A = balance::split(&mut pool.coin_A, amount_A);
+            let balance_B = balance::split(&mut pool.coin_B, amount_B);
+            balance::join(&mut pool.coin_A, balance_A);
+            balance::join(&mut pool.coin_B, balance_B);
+    
+            // Transfer the output amount of B to the sender
+            let output_coin = coin::from_balance(balance::split(&mut pool.coin_B, amount_B), tx);
+            transfer::public_transfer(output_coin, tx_context::sender(tx));
+
+
+            // Emit a SwapEvent
+            event::emit(SwapEvent {
+                amount_A,
+                amount_B,
+                fee,
+                sender: tx_context::sender(tx),
+                timestamp: current_time,
+            });
+        }
 
 }

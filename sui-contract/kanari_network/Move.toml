@@ -1,6 +1,6 @@
 [package]
 name = "kanari_network"
-version = "0.0.1"
+version = "0.0.2"
 license = "Academic Free License v3.0"
 authors = ["James Atomc (co-founder@kanari.network)"]
 published-at = "0xedb4864f8021cb6191028e0389312f058104bca6b68667789177db5f98ebae19"
