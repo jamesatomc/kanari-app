@@ -1,10 +1,12 @@
 module kanari_network::dex {
     use sui::coin::{Self, Coin};
     use sui::balance::{Self, Balance};
-    use sui::object::{Self, UID};
+    use sui::object::{UID};
     use sui::transfer;
+    use sui::event;
     use sui::tx_context::{Self, TxContext};
-    use sui::clock::{Self, Clock};
+    use sui::clock::{Clock};
+    use sui::math;
 
     // Error codes
     const E_INSUFFICIENT_LIQUIDITY: u64 = 1;
@@ -14,7 +16,7 @@ module kanari_network::dex {
     const E_DEADLINE_PASSED: u64 = 5;
     const E_INVALID_AMOUNTS: u64 = 6;
     const E_ALREADY_INITIALIZED: u64 = 7;
-
+    const E_REENTRANCY: u64 = 8;
 
     // Fee constants (basis points)
     const FEE_LOW: u64 = 10;
@@ -26,7 +28,7 @@ module kanari_network::dex {
     const BASIS_POINTS: u64 = 10000;
 
     //address of the developer
-    const DEVELOPER_ADDRESS: address = @0x18e0f16e9f10903d2ae2935f15fef2b6ab34ba9f6f0feec4fe67f0290faf8757;
+    const DEVELOPER_ADDRESS: address = @kanari_network;
 
     /// Represents a pool of two assets
     public struct Pool<phantom A: key, phantom B: key> has key {
@@ -79,7 +81,7 @@ module kanari_network::dex {
     }
 
     /// Adds liquidity to the pool
-    public fun add_liquidity<A: key, B: key>(
+    public fun add_liquidity<A: key, B: key> (
         mut coin_A: Balance<A>, // Declare as mutable
         mut coin_B: Balance<B>, // Declare as mutable
         amount_A: u64,
@@ -182,8 +184,6 @@ module kanari_network::dex {
         min_A: u64,
         min_B: u64,
         fee_basis_points: u64,
-        nonce: u64,
-        fee_tier: u8,
         clock: &Clock,
         tx: &mut TxContext
     ) {
@@ -220,4 +220,47 @@ module kanari_network::dex {
         // Update the pool with the new liquidity
         remove_liquidity_from_pool(pool, amount_A - fee, amount_B, tx);
     }
+
+
+
+    public fun swap_A_for_B<A: key, B: key>(
+        pool: &mut Pool<A, B>,
+        amount_A: u64,
+        min_B: u64,
+        fee_basis_points: u64,
+        clock: &Clock,
+        tx: &mut TxContext
+    ) {
+        // Validate inputs
+        assert!(amount_A > 0, E_ZERO_AMOUNT);
+        assert!(fee_basis_points >= FEE_LOW && fee_basis_points <= FEE_HIGH, E_INVALID_FEE);
+
+        // Get the current time from the clock
+        let current_time = sui::clock::timestamp_ms(clock);
+
+        // Ensure the transaction is within a valid time frame (example: within 1 hour)
+        let deadline = current_time + 3600; // 3600 seconds = 1 hour
+        assert!(current_time <= deadline, E_DEADLINE_PASSED);
+
+        // Calculate amount of B to receive
+        let amount_B = amount_A * balance::value(&pool.coin_B) / balance::value(&pool.coin_A);
+
+        // Calculate and transfer fee
+        let fee = amount_B * fee_basis_points / BASIS_POINTS;
+        let fee_coin = coin::from_balance(balance::split(&mut pool.coin_B, fee), tx);
+
+        // Transfer fee to developer
+        transfer::public_transfer(fee_coin, DEVELOPER_ADDRESS);
+
+        // Update the pool with the new balances
+        let balance_A = balance::split(&mut pool.coin_A, amount_A);
+        let balance_B = balance::split(&mut pool.coin_B, amount_B);
+        balance::join(&mut pool.coin_A, balance_A);
+        balance::join(&mut pool.coin_B, balance_B);
+
+        // Ensure minimum amount of B is received
+        assert!(amount_B >= min_B, E_INSUFFICIENT_LIQUIDITY);
+
+    }
+
 }
