@@ -68,7 +68,8 @@ module kanari_network::ido {
         assert!(tx_context::sender(ctx) == config.admin, E_NOT_ADMIN);
         config.is_live = !config.is_live;
     }
-
+    
+    // Withdraw proceeds
     public entry fun withdraw_proceeds(
         config: &mut IDOConfig,
         ctx: &mut TxContext  // Changed to &mut TxContext
