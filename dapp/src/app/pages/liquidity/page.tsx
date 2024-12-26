@@ -7,6 +7,7 @@ import { ArrowDownUp, Loader } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
 
+
 export default function Liquidity() {
   const [activeTab, setActiveTab] = useState<'add' | 'remove'>('add');
   const [tokenA, setTokenA] = useState<Token>(availableTokens[0]);
@@ -244,14 +245,14 @@ export default function Liquidity() {
 
 
 // Path: dapp/src/app/components/TokenInput.tsx
-interface Token {
+export interface Token {
   symbol: string;
   name: string;
   image: string;
   contract: string;
 }
 
-const availableTokens: Token[] = [
+export const availableTokens: Token[] = [
   {
     name: 'Sui',
     symbol: 'SUI',
@@ -266,7 +267,7 @@ const availableTokens: Token[] = [
   },
 ];
 
-interface TokenInputProps {
+export interface TokenInputProps {
   label: string;
   selectedToken: Token;
   onSelectToken: (token: Token) => void;
