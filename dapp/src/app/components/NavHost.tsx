@@ -205,7 +205,9 @@ export default function NavHost() {
                 <Route path="/liquidity" element={<Liquidity />} />
                 <Route path="/ido" element={<IDO />} />
             </Routes>
-            <Footer />
+            <Footer darkMode={false} setDarkMode={function (darkMode: boolean): void {
+                    throw new Error("Function not implemented.");
+                } } />
         </div>
       </BrowserRouter>
     );

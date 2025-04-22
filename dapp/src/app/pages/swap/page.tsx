@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { ArrowDownUp, Loader } from 'lucide-react';
+import { ArrowDownUp, Loader, Settings } from 'lucide-react';
 import { ConnectButton, useWallet } from "@suiet/wallet-kit";
 import { Transaction } from "@mysten/sui/transactions";
 import axios from 'axios';
@@ -15,6 +15,8 @@ export default function Swap() {
   const [isSwapping, setIsSwapping] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [tokenPrices, setTokenPrices] = useState<{ [key: string]: number }>({});
+  const [feePercentage, setFeePercentage] = useState(0.3); // Default fee of 0.3%
+  const [showFeeConfig, setShowFeeConfig] = useState(false); // Track fee config visibility
   const [balances, setBalances] = useState<{ [key: string]: string }>({
     SUI: '1000.00',  // Mock balance
     USDC: '500.00'   // Mock balance
@@ -60,7 +62,11 @@ export default function Swap() {
     const fromPrice = tokenPrices[from];
     const toPrice = tokenPrices[to];
     if (fromPrice && toPrice) {
-      const calculatedAmountTo = (parseFloat(amount) * fromPrice) / toPrice;
+      // Calculate raw amount
+      const rawAmount = (parseFloat(amount) * fromPrice) / toPrice;
+      // Apply fee deduction
+      const feeAmount = rawAmount * (feePercentage / 100);
+      const calculatedAmountTo = rawAmount - feeAmount;
       setAmountTo(calculatedAmountTo.toFixed(6));
     }
   };
@@ -88,6 +94,7 @@ export default function Swap() {
         tx.pure.string(tokenTo),
         tx.pure.string(amountFrom),
         tx.pure.string(amountTo),
+        tx.pure.string(feePercentage.toString()), // Pass fee to smart contract
       ],
     });
 
@@ -119,6 +126,66 @@ export default function Swap() {
           <div className="w-full">
             <div className="cyber-container backdrop-blur-sm border border-[var(--cyber-border)] bg-[var(--cyber-card-bg)]/80 p-4 sm:p-6 rounded-md shadow-lg">
               <div className="space-y-6">
+                {/* Fee Configuration Toggle */}
+                <div className="flex justify-end">
+                  <button
+                    onClick={() => setShowFeeConfig(!showFeeConfig)}
+                    className="cyber-btn-sm p-2 sm:p-2.5 bg-[var(--cyber-card-bg)] border border-[var(--cyber-border)] rounded-full 
+                      shadow-md transition-all duration-300 hover:shadow-[0_0_10px_var(--cyber-primary)] 
+                      transform hover:scale-110 active:scale-95"
+                  >
+                    <Settings className="h-4 w-4 sm:h-5 sm:w-5 text-[var(--cyber-primary)]" />
+                  </button>
+                </div>
+
+                {/* Fee Configuration */}
+                {showFeeConfig && (
+                  <div className="w-full bg-[var(--cyber-card-bg)]/50 p-3 rounded-md border border-[var(--cyber-border)]/40">
+                    <div className="flex justify-between items-center mb-2">
+                      <span className="text-sm text-[var(--cyber-muted)]">Fee Percentage</span>
+                      <span className="text-sm font-mono">{feePercentage}%</span>
+                    </div>
+                    <div className="flex space-x-2">
+                      {[0.3, 0.5, 1.0].map((fee) => (
+                        <button
+                          key={fee}
+                          onClick={() => {
+                            setFeePercentage(fee);
+                            if (amountFrom) {
+                              calculateAmountTo(tokenFrom, tokenTo, amountFrom);
+                            }
+                          }}
+                          className={`flex-1 py-1 px-2 text-xs rounded-sm ${
+                            feePercentage === fee 
+                              ? 'bg-[var(--cyber-primary)] text-white' 
+                              : 'bg-[var(--cyber-card-bg)] text-[var(--cyber-muted)] hover:bg-[var(--cyber-primary)]/20'
+                          } transition-colors duration-200`}
+                        >
+                          {fee}%
+                        </button>
+                      ))}
+                      <input
+                        type="number"
+                        min="0.1"
+                        max="5"
+                        step="0.1"
+                        value={feePercentage}
+                        onChange={(e) => {
+                          const newFee = parseFloat(e.target.value);
+                          if (!isNaN(newFee) && newFee >= 0.1 && newFee <= 5) {
+                            setFeePercentage(newFee);
+                            if (amountFrom) {
+                              calculateAmountTo(tokenFrom, tokenTo, amountFrom);
+                            }
+                          }
+                        }}
+                        className="flex-1 bg-[var(--cyber-card-bg)] border border-[var(--cyber-border)]/40 rounded-sm px-2 py-1 text-xs text-right"
+                        placeholder="Custom"
+                      />
+                    </div>
+                  </div>
+                )}
+
                 {/* Token From Input */}
                 <TokenInput
                   label="From"
