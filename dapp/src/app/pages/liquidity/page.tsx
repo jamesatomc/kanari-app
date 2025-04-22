@@ -112,122 +112,157 @@ export default function Liquidity() {
   };
 
   return (
-    <div>
-      <main className="max-w-2xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
-        <h1 className="cyber-heading text-4xl md:text-6xl font-bold mb-12 text-center glitch-effect" data-text="Liquidity Pool">
-          Liquidity <span className="text-transparent bg-clip-text bg-gradient-to-r from-[var(--cyber-primary)] to-[var(--cyber-secondary)]">Pool</span>
-        </h1>
+    <div className="min-h-[calc(100vh-80px)] flex flex-col">
+      <main className="flex-1 flex flex-col justify-center">
+        <div className="w-full max-w-md mx-auto py-6 sm:py-12 px-4 sm:px-0">
+          <h1 className="cyber-heading text-3xl md:text-5xl font-bold mb-8 text-center relative">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[var(--cyber-primary)] to-[var(--cyber-secondary)]">
+              Liquidity Pool
+            </span>
+            <div className="absolute -inset-1 bg-gradient-to-r from-[var(--cyber-primary)]/20 to-[var(--cyber-secondary)]/20 blur-sm -z-10"></div>
+          </h1>
 
-        <div className="flex justify-center mb-8">
-          <div className="bg-[var(--cyber-card-bg)]/50 rounded-none p-1">
-            <div className="flex space-x-1">
-              <button
-                className={`px-6 py-2 rounded-none transition-all ${activeTab === 'add'
-                  ? 'bg-[var(--cyber-primary)] text-white'
-                  : 'text-[var(--cyber-muted)] hover:text-[var(--cyber-foreground)]'
-                  }`}
-                onClick={() => setActiveTab('add')}
-              >
-                Add Liquidity
-              </button>
-              <button
-                className={`px-6 py-2 rounded-none transition-all ${activeTab === 'remove'
-                  ? 'bg-[var(--cyber-primary)] text-white'
-                  : 'text-[var(--cyber-muted)] hover:text-[var(--cyber-foreground)]'
-                  }`}
-                onClick={() => setActiveTab('remove')}
-              >
-                Remove Liquidity
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <div className="flex justify-center items-center">
-          <div className="w-full max-w-md cyber-container p-6 md:p-8">
-            <div className="space-y-8 flex flex-col items-center">
-              <TokenInput
-                label="Token A"
-                selectedToken={tokenA}
-                onSelectToken={setTokenA}
-                amount={amountA}
-                onAmountChange={setAmountA}
-                tokenPrice={tokenPrices[tokenA.symbol]}
-                error={error}
-                setError={setError}
-              />
-
-              <div className="flex justify-center -my-4 relative z-10">
+          {/* Tab Selector */}
+          <div className="flex justify-center mb-6">
+            <div className="bg-[var(--cyber-card-bg)]/60 backdrop-blur-sm border border-[var(--cyber-border)]/70 rounded-md p-1 shadow-md w-full max-w-xs">
+              <div className="flex">
                 <button
-                  className="cyber-btn p-3 transition duration-300 transform hover:scale-105"
-                  onClick={() => {
-                    setTokenA(tokenB);
-                    setTokenB(tokenA);
-                    setAmountA(amountB);
-                    setAmountB(amountA);
-                  }}
+                  className={`flex-1 px-4 py-2 text-sm sm:text-base font-medium rounded-md transition-all duration-200 ${
+                    activeTab === 'add'
+                      ? 'bg-[var(--cyber-primary)] text-white shadow-[0_0_8px_var(--cyber-primary)]'
+                      : 'text-[var(--cyber-muted)] hover:text-[var(--cyber-foreground)] hover:bg-[var(--cyber-card-bg)]'
+                  }`}
+                  onClick={() => setActiveTab('add')}
                 >
-                  <ArrowDownUp className="h-6 w-6" />
+                  Add Liquidity
+                </button>
+                <button
+                  className={`flex-1 px-4 py-2 text-sm sm:text-base font-medium rounded-md transition-all duration-200 ${
+                    activeTab === 'remove'
+                      ? 'bg-[var(--cyber-primary)] text-white shadow-[0_0_8px_var(--cyber-primary)]'
+                      : 'text-[var(--cyber-muted)] hover:text-[var(--cyber-foreground)] hover:bg-[var(--cyber-card-bg)]'
+                  }`}
+                  onClick={() => setActiveTab('remove')}
+                >
+                  Remove Liquidity
                 </button>
               </div>
+            </div>
+          </div>
 
-              <TokenInput
-                label="Token B"
-                selectedToken={tokenB}
-                onSelectToken={setTokenB}
-                amount={amountB}
-                onAmountChange={setAmountB}
-                tokenPrice={tokenPrices[tokenB.symbol]}
-                error={error}
-                setError={setError}
-              />
+          <div className="w-full">
+            <div className="cyber-container backdrop-blur-sm border border-[var(--cyber-border)] bg-[var(--cyber-card-bg)]/80 p-4 sm:p-6 rounded-md shadow-lg">
+              <div className="space-y-6">
+                {/* Token A Input */}
+                <TokenInput
+                  label="Token A"
+                  selectedToken={tokenA}
+                  onSelectToken={setTokenA}
+                  amount={amountA}
+                  onAmountChange={setAmountA}
+                  tokenPrice={tokenPrices[tokenA.symbol]}
+                  error={error}
+                  setError={setError}
+                />
 
-              {activeTab === 'add' && (
-                <div className="w-full bg-[var(--cyber-card-bg)] rounded-none p-4 space-y-2">
-                  <div className="flex justify-between text-sm text-[var(--cyber-muted)]">
-                    <span>Pool Share:</span>
-                    <span>0.00%</span>
-                  </div>
-                </div>
-              )}
-
-              {activeTab === 'remove' && (
-                <div className="w-full bg-[var(--cyber-card-bg)] rounded-none p-4 space-y-2">
-                  <div className="flex justify-between text-sm text-[var(--cyber-muted)]">
-                    <span>Your Pool Tokens:</span>
-                    <span>0.00</span>
-                  </div>
-                </div>
-              )}
-
-              <div className="w-full flex justify-center pt-4">
-                {wallet.connected ? (
+                {/* Swap Direction Button */}
+                <div className="flex justify-center -my-2 relative z-10">
                   <button
-                    onClick={handleButtonClick}
-                    disabled={isProcessing || !amountA || !amountB}
-                    className={`cyber-btn px-8 py-4 text-lg font-semibold flex items-center 
-        justify-center w-full md:w-auto ${(isProcessing || !amountA || !amountB) ? "opacity-50 cursor-not-allowed" : ""
-                      }`}
+                    className="cyber-btn-sm p-2 bg-[var(--cyber-card-bg)] border border-[var(--cyber-border)] rounded-full 
+                      shadow-md transition-all duration-300 hover:shadow-[0_0_10px_var(--cyber-primary)] 
+                      transform hover:scale-110 active:scale-95"
+                    onClick={() => {
+                      setTokenA(tokenB);
+                      setTokenB(tokenA);
+                      setAmountA(amountB);
+                      setAmountB(amountA);
+                    }}
                   >
-                    {isProcessing ? (
-                      <>
-                        <Loader className="animate-spin -ml-1 mr-3 h-5 w-5" />
-                        Processing...
-                      </>
-                    ) : (
-                      activeTab === 'add' ? "Add Liquidity" : "Remove Liquidity"
-                    )}
+                    <ArrowDownUp className="h-4 w-4 sm:h-5 sm:w-5 transition-transform hover:rotate-180 text-[var(--cyber-primary)]" />
                   </button>
-                ) : (
-                  <ConnectButton className="cyber-btn px-8 py-4 text-lg font-semibold w-full md:w-auto" />
+                </div>
+
+                {/* Token B Input */}
+                <TokenInput
+                  label="Token B"
+                  selectedToken={tokenB}
+                  onSelectToken={setTokenB}
+                  amount={amountB}
+                  onAmountChange={setAmountB}
+                  tokenPrice={tokenPrices[tokenB.symbol]}
+                  error={error}
+                  setError={setError}
+                />
+
+                {/* Pool Information */}
+                {activeTab === 'add' && (
+                  <div className="w-full bg-[var(--cyber-card-bg)]/60 backdrop-blur-sm border border-[var(--cyber-border)]/40 rounded-md p-4 space-y-2">
+                    <div className="flex justify-between text-sm text-[var(--cyber-muted)]">
+                      <span>Pool Share:</span>
+                      <span className="font-medium text-[var(--cyber-foreground)]">0.00%</span>
+                    </div>
+                    <div className="flex justify-between text-sm text-[var(--cyber-muted)]">
+                      <span>Exchange Rate:</span>
+                      <span className="font-medium text-[var(--cyber-foreground)]">
+                        {amountA && amountB && parseFloat(amountA) > 0 
+                          ? `1 ${tokenA.symbol} = ${(parseFloat(amountB) / parseFloat(amountA)).toFixed(6)} ${tokenB.symbol}`
+                          : '—'}
+                      </span>
+                    </div>
+                  </div>
+                )}
+
+                {activeTab === 'remove' && (
+                  <div className="w-full bg-[var(--cyber-card-bg)]/60 backdrop-blur-sm border border-[var(--cyber-border)]/40 rounded-md p-4 space-y-2">
+                    <div className="flex justify-between text-sm text-[var(--cyber-muted)]">
+                      <span>Your Pool Tokens:</span>
+                      <span className="font-medium text-[var(--cyber-foreground)]">0.00</span>
+                    </div>
+                    <div className="flex justify-between text-sm text-[var(--cyber-muted)]">
+                      <span>Pool Share:</span>
+                      <span className="font-medium text-[var(--cyber-foreground)]">0.00%</span>
+                    </div>
+                  </div>
+                )}
+
+                {/* Action Button */}
+                <div className="w-full pt-4">
+                  {wallet.connected ? (
+                    <button
+                      onClick={handleButtonClick}
+                      disabled={isProcessing || !amountA || !amountB}
+                      className={`cyber-btn px-4 py-3 sm:px-8 sm:py-4 text-base sm:text-lg font-medium flex items-center 
+                        justify-center w-full transition-all duration-300 ${
+                        (isProcessing || !amountA || !amountB) 
+                          ? "opacity-50 cursor-not-allowed" 
+                          : "hover:shadow-[0_0_10px_var(--cyber-primary)]"
+                      }`}
+                    >
+                      {isProcessing ? (
+                        <>
+                          <Loader className="animate-spin -ml-1 mr-2 h-4 w-4 sm:h-5 sm:w-5" />
+                          <span>PROCESSING...</span>
+                        </>
+                      ) : (
+                        activeTab === 'add' ? "ADD LIQUIDITY" : "REMOVE LIQUIDITY"
+                      )}
+                    </button>
+                  ) : (
+                    <ConnectButton 
+                      className="cyber-btn px-4 py-3 sm:px-8 sm:py-4 text-base sm:text-lg font-medium w-full
+                        hover:shadow-[0_0_10px_var(--cyber-primary)] transition-all duration-300" 
+                    />
+                  )}
+                </div>
+
+                {/* Error Message */}
+                {error && (
+                  <div className="w-full bg-[var(--cyber-primary)]/10 border border-[var(--cyber-primary)]/20 
+                    text-[var(--cyber-primary)] p-3 rounded-sm mt-2 text-center text-sm animate-pulse">
+                    {error}
+                  </div>
                 )}
               </div>
-
-              {error && (
-                <div className="w-full bg-[var(--cyber-error-bg)] border border-[var(--cyber-error-border)] text-[var(--cyber-error)] p-4 rounded-none mt-4 text-center">
-                  {error}
-                </div>
-              )}
             </div>
           </div>
         </div>
@@ -272,7 +307,7 @@ export interface TokenInputProps {
   showBalanceButtons?: boolean;
 }
 
-// TokenInput.tsx
+// TokenInput component - updated for better mobile experience
 export const TokenInput: React.FC<TokenInputProps> = ({
   label,
   selectedToken,
@@ -322,48 +357,55 @@ export const TokenInput: React.FC<TokenInputProps> = ({
   };
 
   return (
-    <div className="space-y-2">
+    <div className="space-y-1.5">
       <div className="flex justify-between items-center">
-        <label className="block text-sm font-medium text-[var(--cyber-muted)]">{label}</label>
+        <label className="block text-sm font-medium text-[var(--cyber-foreground)]">{label}</label>
         {balance && (
-          <span className="text-xs text-[var(--cyber-muted)]">
-            Balance: {parseFloat(balance).toFixed(6)} {selectedToken.symbol}
+          <span className="text-xs text-[var(--cyber-muted)] flex items-center">
+            <span className="mr-1">Balance:</span> 
+            <span className="font-medium">{parseFloat(balance).toFixed(6)} {selectedToken.symbol}</span>
           </span>
         )}
       </div>
-
-      <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2">
+      
+      <div className="flex flex-col sm:flex-row gap-2 sm:gap-0">
+        {/* Token Selector */}
         <div className="relative sm:w-1/3">
           <button
-            className="w-full flex justify-between items-center px-4 py-2.5 
-                cyber-btn"
+            className="w-full flex justify-between items-center px-3 py-2.5 
+              bg-[var(--cyber-card-bg)] border border-[var(--cyber-border)] rounded-sm text-[var(--cyber-foreground)]
+              hover:bg-[var(--cyber-card-bg)]/80 transition-all duration-200 text-sm sm:text-base"
             onClick={() => setIsDropdownOpen(!isDropdownOpen)}
           >
             {selectedToken ? (
               <div className="flex items-center">
-                <img src={selectedToken.image} alt={selectedToken.name} className="h-6 w-6 mr-2" />
+                <img src={selectedToken.image} alt={selectedToken.name} className="h-5 w-5 sm:h-6 sm:w-6 mr-2" />
                 <span>{selectedToken.symbol}</span>
               </div>
             ) : (
               <span>Select Token</span>
             )}
-            <ChevronDown className="h-4 w-4 ml-2" />
+            <ChevronDown className="h-3 w-3 sm:h-4 sm:w-4 ml-1 text-[var(--cyber-primary)]" />
           </button>
-
+          
           {isDropdownOpen && (
-            <div ref={dropdownRef} className="absolute z-10 w-full mt-1 cyber-dropdown">
+            <div ref={dropdownRef} className="absolute z-20 w-full sm:w-56 mt-1 bg-[var(--cyber-card-bg)] backdrop-blur-lg rounded-sm border border-[var(--cyber-border)] shadow-xl max-h-52 overflow-y-auto">
               <ul className="py-1">
                 {availableTokens.map((token) => (
                   <li
                     key={token.contract}
-                    className="px-4 py-2.5 hover:bg-[var(--cyber-primary)]/10 cursor-pointer text-[var(--cyber-foreground)] flex items-center"
+                    className="px-3 py-2.5 hover:bg-[var(--cyber-primary)]/10 active:bg-[var(--cyber-primary)]/20 
+                      cursor-pointer text-[var(--cyber-foreground)] flex items-center text-sm sm:text-base"
                     onClick={() => {
                       onSelectToken(token);
                       setIsDropdownOpen(false);
                     }}
                   >
-                    <img src={token.image} alt={token.name} className="h-6 w-6 mr-2" />
-                    {token.symbol} - {token.name}
+                    <img src={token.image} alt={token.name} className="h-5 w-5 sm:h-6 sm:w-6 mr-2" />
+                    <div className="flex flex-col">
+                      <span className="font-medium">{token.symbol}</span>
+                      <span className="text-xs text-[var(--cyber-muted)]">{token.name}</span>
+                    </div>
                   </li>
                 ))}
               </ul>
@@ -376,22 +418,30 @@ export const TokenInput: React.FC<TokenInputProps> = ({
           <div className="flex">
             <input
               type="number"
+              inputMode="decimal"
               placeholder="0.00"
               value={amount}
               onChange={(e) => handleAmountChange(e.target.value)}
-              className="w-full px-4 py-2.5 cyber-input"
+              className="w-full px-3 py-2.5 bg-[var(--cyber-card-bg)] rounded-sm text-[var(--cyber-foreground)] 
+                placeholder-[var(--cyber-muted)] focus:outline-none focus:ring-1 focus:ring-[var(--cyber-primary)] 
+                border border-[var(--cyber-border)] text-base
+                [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none 
+                [&::-webkit-inner-spin-button]:appearance-none"
             />
             {showBalanceButtons && balance && (
               <div className="flex border-l border-[var(--cyber-border)]">
                 <button
                   onClick={handleSetHalf}
-                  className="px-3 py-2.5 cyber-btn"
+                  className="px-2 sm:px-3 py-2.5 bg-[var(--cyber-card-bg)] hover:bg-[var(--cyber-primary)]/20 
+                    text-[var(--cyber-primary)] text-xs sm:text-sm font-medium transition-colors duration-200"
                 >
                   50%
                 </button>
                 <button
                   onClick={handleSetMax}
-                  className="px-3 py-2.5 cyber-btn rounded-none border-l border-[var(--cyber-border)]"
+                  className="px-2 sm:px-3 py-2.5 bg-[var(--cyber-card-bg)] hover:bg-[var(--cyber-primary)]/20 
+                    text-[var(--cyber-primary)] text-xs sm:text-sm font-medium rounded-sm border-l 
+                    border-[var(--cyber-border)] transition-colors duration-200"
                 >
                   MAX
                 </button>
@@ -402,7 +452,7 @@ export const TokenInput: React.FC<TokenInputProps> = ({
       </div>
 
       {tokenPrice && (
-        <div className="text-sm text-[var(--cyber-muted)]">
+        <div className="text-xs text-[var(--cyber-muted)]">
           1 {selectedToken.symbol} = ${tokenPrice.toFixed(2)} USD
         </div>
       )}
