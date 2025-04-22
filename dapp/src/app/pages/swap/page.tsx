@@ -7,7 +7,6 @@ import { Transaction } from "@mysten/sui/transactions";
 import axios from 'axios';
 import TokenInput from './TokenInput';
 
-
 export default function Swap() {
   const [tokenFrom, setTokenFrom] = useState('SUI');
   const [tokenTo, setTokenTo] = useState('USDC');
@@ -107,18 +106,20 @@ export default function Swap() {
   }
 
   return (
-    <div>
-      <main className="">
-        <div className="max-w-2xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
-          <h1 className="cyber-heading text-4xl md:text-6xl font-bold mb-12 text-center glitch-effect" data-text="Token Swap">
-            Token <span className="text-transparent bg-clip-text bg-gradient-to-r from-[var(--cyber-primary)] to-[var(--cyber-secondary)]">Swap</span>
+    <div className="min-h-[calc(100vh-80px)] flex flex-col">
+      <main className="flex-1 flex flex-col justify-center">
+        <div className="w-full max-w-md mx-auto py-6 sm:py-12 px-4 sm:px-0">
+          <h1 className="cyber-heading text-3xl md:text-5xl font-bold mb-8 text-center relative">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[var(--cyber-primary)] to-[var(--cyber-secondary)]">
+              Kanari Swap
+            </span>
+            <div className="absolute -inset-1 bg-gradient-to-r from-[var(--cyber-primary)]/20 to-[var(--cyber-secondary)]/20 blur-sm -z-10"></div>
           </h1>
 
-          <div className="flex justify-center items-center">
-            <div className="w-full max-w-md cyber-container p-6 md:p-8">
-              <div className="space-y-6 flex flex-col items-center w-full">
-
-              
+          <div className="w-full">
+            <div className="cyber-container backdrop-blur-sm border border-[var(--cyber-border)] bg-[var(--cyber-card-bg)]/80 p-4 sm:p-6 rounded-md shadow-lg">
+              <div className="space-y-6">
+                {/* Token From Input */}
                 <TokenInput
                   label="From"
                   selectedToken={tokenFrom}
@@ -132,9 +133,11 @@ export default function Swap() {
                   showBalanceButtons={true}
                 />
               
-                <div className="flex justify-center -my-3 relative z-10">
+                {/* Swap Direction Button */}
+                <div className="flex justify-center -my-2 sm:-my-3 relative z-10">
                   <button
-                    className="cyber-btn p-2.5 transition-all duration-300 
+                    className="cyber-btn-sm p-2 sm:p-2.5 bg-[var(--cyber-card-bg)] border border-[var(--cyber-border)] rounded-full 
+                      shadow-md transition-all duration-300 hover:shadow-[0_0_10px_var(--cyber-primary)] 
                       transform hover:scale-110 active:scale-95"
                     onClick={() => {
                       setTokenFrom(tokenTo);
@@ -143,10 +146,11 @@ export default function Swap() {
                       setAmountTo(amountFrom);
                     }}
                   >
-                    <ArrowDownUp className="h-5 w-5 transition-transform hover:rotate-180" />
+                    <ArrowDownUp className="h-4 w-4 sm:h-5 sm:w-5 transition-transform hover:rotate-180 text-[var(--cyber-primary)]" />
                   </button>
                 </div>
               
+                {/* Token To Input */}
                 <TokenInput
                   label="To"
                   selectedToken={tokenTo}
@@ -160,31 +164,43 @@ export default function Swap() {
                   showBalanceButtons={false}
                 />
 
-                <div className="w-full flex justify-center pt-4">
+                {/* Rate Display */}
+                {tokenPrices[tokenFrom] && tokenPrices[tokenTo] && (
+                  <div className="text-xs text-center text-[var(--cyber-muted)] bg-[var(--cyber-card-bg)]/50 p-2 rounded-sm border border-[var(--cyber-border)]/40">
+                    Rate: 1 {tokenFrom} = {(tokenPrices[tokenFrom] / tokenPrices[tokenTo]).toFixed(6)} {tokenTo}
+                  </div>
+                )}
+
+                {/* Action Button */}
+                <div className="w-full pt-4">
                   {wallet.connected ? (
                     <button
-                      className={`cyber-btn px-8 py-4 rounded-none text-lg font-semibold flex items-center justify-center w-full md:w-auto ${isSwapping ? "opacity-50 cursor-not-allowed" : ""}`}
+                      className={`cyber-btn px-4 py-3 sm:px-8 sm:py-4 text-base sm:text-lg font-medium flex items-center justify-center w-full
+                        transition-all duration-300 ${isSwapping ? "opacity-50 cursor-not-allowed" : "hover:shadow-[0_0_10px_var(--cyber-primary)]"}`}
                       onClick={swap}
                       disabled={isSwapping}
                     >
                       {isSwapping ? (
                         <>
-                          <Loader className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" />
-                          SWAPPING...
+                          <Loader className="animate-spin -ml-1 mr-2 h-4 w-4 sm:h-5 sm:w-5" />
+                          <span>PROCESSING...</span>
                         </>
                       ) : (
-                        "SWAP TOKENS"
+                        "SWAP NOW"
                       )}
                     </button>
                   ) : (
                     <ConnectButton
-                      className="cyber-btn px-8 py-4 rounded-none text-lg font-semibold w-full md:w-auto"
+                      className="cyber-btn px-4 py-3 sm:px-8 sm:py-4 text-base sm:text-lg font-medium w-full
+                        hover:shadow-[0_0_10px_var(--cyber-primary)] transition-all duration-300"
                     />
                   )}
                 </div>
 
+                {/* Error Message */}
                 {error && (
-                  <div className="w-full bg-[var(--cyber-primary)]/10 border border-[var(--cyber-primary)]/20 text-[var(--cyber-primary)] p-4 rounded-none mt-4 text-center">
+                  <div className="w-full bg-[var(--cyber-primary)]/10 border border-[var(--cyber-primary)]/20 
+                    text-[var(--cyber-primary)] p-3 rounded-sm mt-2 text-center text-sm">
                     {error}
                   </div>
                 )}
