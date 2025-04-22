@@ -16,9 +16,12 @@ export default function Swap() {
   const [isSwapping, setIsSwapping] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [tokenPrices, setTokenPrices] = useState<{ [key: string]: number }>({});
+  const [balances, setBalances] = useState<{ [key: string]: string }>({
+    SUI: '1000.00',  // Mock balance
+    USDC: '500.00'   // Mock balance
+  });
 
   const wallet = useWallet();
-
 
   useEffect(() => {
     fetchTokenPrices();
@@ -31,6 +34,16 @@ export default function Swap() {
       calculateAmountTo(tokenFrom, tokenTo, amountFrom);
     }
   }, [tokenFrom, tokenTo, amountFrom, tokenPrices]);
+
+  useEffect(() => {
+    if (error) {
+      const timer = setTimeout(() => {
+        setError(null);
+      }, 1000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [error]);
 
   const fetchTokenPrices = async () => {
     try {
@@ -93,35 +106,16 @@ export default function Swap() {
     }
   }
 
-
-  // At the top of your Swap component, add balances state
-  const [balances, setBalances] = useState<{ [key: string]: string }>({
-    SUI: '1000.00',  // Mock balance
-    USDC: '500.00'   // Mock balance
-  });
-
-  useEffect(() => {
-    if (error) {
-      const timer = setTimeout(() => {
-        setError(null);
-      }, 1000);
-
-      return () => clearTimeout(timer);
-    }
-  }, [error]);
-
   return (
     <div>
-
-
       <main className="">
         <div className="max-w-2xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
-          <h1 className="text-4xl md:text-6xl font-bold mb-12 text-center">
-            Token <span className="bg-gradient-to-r from-orange-500 to-orange-600 bg-clip-text text-transparent">Swap</span>
+          <h1 className="cyber-heading text-4xl md:text-6xl font-bold mb-12 text-center glitch-effect" data-text="Token Swap">
+            Token <span className="text-transparent bg-clip-text bg-gradient-to-r from-[var(--cyber-primary)] to-[var(--cyber-secondary)]">Swap</span>
           </h1>
 
           <div className="flex justify-center items-center">
-            <div className="w-full max-w-md bg-white/10 backdrop-blur-lg rounded-3xl p-6 md:p-8 shadow-2xl border border-orange-200/20 dark:border-white/10">
+            <div className="w-full max-w-md cyber-container p-6 md:p-8">
               <div className="space-y-6 flex flex-col items-center w-full">
 
               
@@ -140,12 +134,8 @@ export default function Swap() {
               
                 <div className="flex justify-center -my-3 relative z-10">
                   <button
-                    className="bg-gradient-to-r from-orange-500 to-orange-600 
-                      hover:from-orange-600 hover:to-orange-700 text-white 
-                      rounded-full p-2.5 transition-all duration-300 
-                      shadow-lg hover:shadow-orange-500/30 
-                      hover:scale-110 active:scale-95
-                      border border-orange-500/20"
+                    className="cyber-btn p-2.5 transition-all duration-300 
+                      transform hover:scale-110 active:scale-95"
                     onClick={() => {
                       setTokenFrom(tokenTo);
                       setTokenTo(tokenFrom);
@@ -173,28 +163,28 @@ export default function Swap() {
                 <div className="w-full flex justify-center pt-4">
                   {wallet.connected ? (
                     <button
-                      className={`bg-gradient-to-r from-orange-500 to-orange-600 text-white hover:from-orange-600 hover:to-orange-700 transition duration-300 px-8 py-4 rounded-full text-lg font-semibold shadow-lg flex items-center justify-center w-full md:w-auto ${isSwapping ? "opacity-50 cursor-not-allowed" : ""} hover:shadow-orange-500/30`}
+                      className={`cyber-btn px-8 py-4 rounded-none text-lg font-semibold flex items-center justify-center w-full md:w-auto ${isSwapping ? "opacity-50 cursor-not-allowed" : ""}`}
                       onClick={swap}
                       disabled={isSwapping}
                     >
                       {isSwapping ? (
                         <>
                           <Loader className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" />
-                          Swapping...
+                          SWAPPING...
                         </>
                       ) : (
-                        "Swap Tokens"
+                        "SWAP TOKENS"
                       )}
                     </button>
                   ) : (
                     <ConnectButton
-                      className="bg-gradient-to-r from-orange-500 to-orange-600 text-white hover:from-orange-600 hover:to-orange-700 transition duration-300 px-8 py-4 rounded-full text-lg font-semibold shadow-lg w-full md:w-auto hover:shadow-orange-500/30"
+                      className="cyber-btn px-8 py-4 rounded-none text-lg font-semibold w-full md:w-auto"
                     />
                   )}
                 </div>
 
                 {error && (
-                  <div className="w-full bg-red-500/10 border border-red-500/20 text-red-500 p-4 rounded-xl mt-4 text-center">
+                  <div className="w-full bg-[var(--cyber-primary)]/10 border border-[var(--cyber-primary)]/20 text-[var(--cyber-primary)] p-4 rounded-none mt-4 text-center">
                     {error}
                   </div>
                 )}
@@ -203,7 +193,6 @@ export default function Swap() {
           </div>
         </div>
       </main>
-
     </div>
   );
 }

@@ -82,92 +82,90 @@ export default function IDO() {
   return (
     <main className="">
       <div className="max-w-2xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
-        <h1 className="text-4xl md:text-6xl font-bold mb-12 text-center">
-          Token <span className="bg-gradient-to-r from-orange-500 to-orange-600 bg-clip-text text-transparent">Sale</span>
+        <h1 className="cyber-heading text-4xl md:text-6xl font-bold mb-12 text-center glitch-effect" data-text="Token Sale">
+          Token <span className="text-transparent bg-clip-text bg-gradient-to-r from-[var(--cyber-primary)] to-[var(--cyber-secondary)]">Sale</span>
         </h1>
         
-        
-          <div className="flex justify-center items-center">
-            <div className="w-full max-w-md bg-white/10 backdrop-blur-lg rounded-3xl p-6 md:p-8 shadow-2xl border border-orange-200/20 dark:border-white/10">
-              <div className="space-y-6 sm:space-y-8">
-                {/* Token Info */}
-                <div className="flex items-center justify-center space-x-4">
-                  <img src={idoInfo.tokenImage} alt={idoInfo.tokenName} className="w-12 h-12 rounded-full" />
-                  <div className="text-center">
-                    <h2 className="text-xl font-semibold text-white">{idoInfo.tokenName}</h2>
-                    <p className="text-gray-300">{idoInfo.tokenSymbol}</p>
-                  </div>
+        <div className="flex justify-center items-center">
+          <div className="w-full max-w-md cyber-container p-6 md:p-8">
+            <div className="space-y-6 sm:space-y-8">
+              {/* Token Info */}
+              <div className="flex items-center justify-center space-x-4">
+                <img src={idoInfo.tokenImage} alt={idoInfo.tokenName} className="w-12 h-12 rounded-none cyber-image" />
+                <div className="text-center">
+                  <h2 className="text-xl font-semibold text-[var(--cyber-foreground)]">{idoInfo.tokenName}</h2>
+                  <p className="text-[var(--cyber-muted)]">{idoInfo.tokenSymbol}</p>
                 </div>
-        
-                {/* Timer */}
-                <div className="bg-white/5 rounded-xl p-4 mx-auto max-w-[240px]">
-                  <div className="flex items-center justify-center space-x-2 text-orange-500">
-                    <Clock className="h-5 w-5" />
-                    <span className="font-mono">{formatTime(timeLeft)}</span>
-                  </div>
-                </div>
-        
-                {/* Progress */}
-                <div className="space-y-2 max-w-sm mx-auto">
-                  <div className="flex justify-between text-sm text-gray-300">
-                    <span>Progress</span>
-                    <span>{progress.toFixed(2)}%</span>
-                  </div>
-                  <div className="w-full bg-white/5 rounded-full h-2">
-                    <div
-                      className="bg-gradient-to-r from-orange-500 to-orange-600 h-2 rounded-full"
-                      style={{ width: `${progress}%` }}
-                    />
-                  </div>
-                  <div className="flex justify-between text-xs text-gray-400">
-                    <span>{idoInfo.soldAmount.toLocaleString()} {idoInfo.tokenSymbol}</span>
-                    <span>{idoInfo.totalSupply.toLocaleString()} {idoInfo.tokenSymbol}</span>
-                  </div>
-                </div>
-        
-                {/* Purchase Form */}
-                <div className="space-y-4 max-w-sm mx-auto">
-                  <input
-                    type="number"
-                    placeholder={`Amount (${idoInfo.minBuy}-${idoInfo.maxBuy})`}
-                    value={amount}
-                    onChange={(e) => setAmount(e.target.value)}
-                    className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-base text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500"
-                  />
-                  
-                  <div className="w-full flex justify-center pt-4">
-                    {wallet.connected ? (
-                      <button
-                        className={`bg-gradient-to-r from-orange-500 to-orange-600 text-white hover:from-orange-600 hover:to-orange-700 transition duration-300 px-8 py-4 rounded-full text-lg font-semibold shadow-lg flex items-center justify-center w-full md:w-auto ${isProcessing ? "opacity-50 cursor-not-allowed" : ""} hover:shadow-orange-500/30`}
-                        onClick={handleBuy}
-                        disabled={isProcessing}
-                      >
-                        {isProcessing ? (
-                          <>
-                            <Loader className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" />
-                            Processing...
-                          </>
-                        ) : (
-                          `Buy Tokens`
-                        )}
-                      </button>
-                    ) : (
-                      <ConnectButton
-                        className="bg-gradient-to-r from-orange-500 to-orange-600 text-white hover:from-orange-600 hover:to-orange-700 transition duration-300 px-8 py-4 rounded-full text-lg font-semibold shadow-lg w-full md:w-auto hover:shadow-orange-500/30"
-                      />
-                    )}
-                  </div>
-                </div>
-        
-                {error && (
-                  <div className="w-full bg-red-500/10 border border-red-500/20 text-red-500 p-4 rounded-xl mt-4 text-center">
-                    {error}
-                  </div>
-                )}
               </div>
+      
+              {/* Timer */}
+              <div className="bg-[var(--cyber-card-bg)]/50 rounded-none p-4 mx-auto max-w-[240px] border border-[var(--cyber-border)]">
+                <div className="flex items-center justify-center space-x-2 text-[var(--cyber-secondary)]">
+                  <Clock className="h-5 w-5" />
+                  <span className="font-mono">{formatTime(timeLeft)}</span>
+                </div>
+              </div>
+      
+              {/* Progress */}
+              <div className="space-y-2 max-w-sm mx-auto">
+                <div className="flex justify-between text-sm text-[var(--cyber-muted)]">
+                  <span>Progress</span>
+                  <span>{progress.toFixed(2)}%</span>
+                </div>
+                <div className="w-full bg-[var(--cyber-card-bg)]/50 rounded-none h-2 border border-[var(--cyber-border)]">
+                  <div
+                    className="bg-gradient-to-r from-[var(--cyber-primary)] to-[var(--cyber-secondary)] h-2 rounded-none"
+                    style={{ width: `${progress}%` }}
+                  />
+                </div>
+                <div className="flex justify-between text-xs text-[var(--cyber-muted)]">
+                  <span>{idoInfo.soldAmount.toLocaleString()} {idoInfo.tokenSymbol}</span>
+                  <span>{idoInfo.totalSupply.toLocaleString()} {idoInfo.tokenSymbol}</span>
+                </div>
+              </div>
+      
+              {/* Purchase Form */}
+              <div className="space-y-4 max-w-sm mx-auto">
+                <input
+                  type="number"
+                  placeholder={`Amount (${idoInfo.minBuy}-${idoInfo.maxBuy})`}
+                  value={amount}
+                  onChange={(e) => setAmount(e.target.value)}
+                  className="w-full px-4 py-3 bg-[var(--cyber-card-bg)] border border-[var(--cyber-border)] rounded-none text-base text-[var(--cyber-foreground)] placeholder-[var(--cyber-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--cyber-primary)]"
+                />
+                
+                <div className="w-full flex justify-center pt-4">
+                  {wallet.connected ? (
+                    <button
+                      className={`cyber-btn px-8 py-4 rounded-none text-lg font-semibold flex items-center justify-center w-full md:w-auto ${isProcessing ? "opacity-50 cursor-not-allowed" : ""}`}
+                      onClick={handleBuy}
+                      disabled={isProcessing}
+                    >
+                      {isProcessing ? (
+                        <>
+                          <Loader className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" />
+                          PROCESSING...
+                        </>
+                      ) : (
+                        `BUY TOKENS`
+                      )}
+                    </button>
+                  ) : (
+                    <ConnectButton
+                      className="cyber-btn px-8 py-4 rounded-none text-lg font-semibold w-full md:w-auto"
+                    />
+                  )}
+                </div>
+              </div>
+      
+              {error && (
+                <div className="w-full bg-[var(--cyber-primary)]/10 border border-[var(--cyber-primary)]/20 text-[var(--cyber-primary)] p-4 rounded-none mt-4 text-center">
+                  {error}
+                </div>
+              )}
             </div>
           </div>
-
+        </div>
       </div>
     </main>
   );

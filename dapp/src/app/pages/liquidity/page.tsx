@@ -6,8 +6,6 @@ import { ConnectButton, useWallet } from "@suiet/wallet-kit";
 import { ArrowDownUp, Loader } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
-
-
 export default function Liquidity() {
   const [activeTab, setActiveTab] = useState<'add' | 'remove'>('add');
   const [tokenA, setTokenA] = useState<Token>(availableTokens[0]);
@@ -116,28 +114,26 @@ export default function Liquidity() {
   return (
     <div>
       <main className="max-w-2xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
-        <h1 className="text-4xl md:text-6xl font-bold mb-12 text-center">
-          <h1 className="text-4xl md:text-6xl font-bold mb-12 text-center">
-            Liquidity <span className="bg-gradient-to-r from-orange-500 to-orange-600 bg-clip-text text-transparent">Pool</span>
-          </h1>
+        <h1 className="cyber-heading text-4xl md:text-6xl font-bold mb-12 text-center glitch-effect" data-text="Liquidity Pool">
+          Liquidity <span className="text-transparent bg-clip-text bg-gradient-to-r from-[var(--cyber-primary)] to-[var(--cyber-secondary)]">Pool</span>
         </h1>
 
         <div className="flex justify-center mb-8">
-          <div className="bg-white/10 rounded-full p-1">
+          <div className="bg-[var(--cyber-card-bg)]/50 rounded-none p-1">
             <div className="flex space-x-1">
               <button
-                className={`px-6 py-2 rounded-full transition-all ${activeTab === 'add'
-                  ? 'bg-orange-500 text-white'
-                  : 'text-gray-400 hover:text-white'
+                className={`px-6 py-2 rounded-none transition-all ${activeTab === 'add'
+                  ? 'bg-[var(--cyber-primary)] text-white'
+                  : 'text-[var(--cyber-muted)] hover:text-[var(--cyber-foreground)]'
                   }`}
                 onClick={() => setActiveTab('add')}
               >
                 Add Liquidity
               </button>
               <button
-                className={`px-6 py-2 rounded-full transition-all ${activeTab === 'remove'
-                  ? 'bg-orange-500 text-white'
-                  : 'text-gray-400 hover:text-white'
+                className={`px-6 py-2 rounded-none transition-all ${activeTab === 'remove'
+                  ? 'bg-[var(--cyber-primary)] text-white'
+                  : 'text-[var(--cyber-muted)] hover:text-[var(--cyber-foreground)]'
                   }`}
                 onClick={() => setActiveTab('remove')}
               >
@@ -148,7 +144,7 @@ export default function Liquidity() {
         </div>
 
         <div className="flex justify-center items-center">
-          <div className="w-full max-w-md bg-white/10 backdrop-blur-lg rounded-3xl p-6 md:p-8 shadow-2xl border border-orange-200/20 dark:border-white/10">
+          <div className="w-full max-w-md cyber-container p-6 md:p-8">
             <div className="space-y-8 flex flex-col items-center">
               <TokenInput
                 label="Token A"
@@ -156,14 +152,14 @@ export default function Liquidity() {
                 onSelectToken={setTokenA}
                 amount={amountA}
                 onAmountChange={setAmountA}
-                tokenPrice={tokenPrices[tokenA.symbol]} // Change from tokenA to tokenA.symbol
+                tokenPrice={tokenPrices[tokenA.symbol]}
                 error={error}
                 setError={setError}
               />
 
               <div className="flex justify-center -my-4 relative z-10">
                 <button
-                  className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white rounded-full p-3 transition duration-300 shadow-lg hover:shadow-orange-500/30 transform hover:scale-105"
+                  className="cyber-btn p-3 transition duration-300 transform hover:scale-105"
                   onClick={() => {
                     setTokenA(tokenB);
                     setTokenB(tokenA);
@@ -181,14 +177,14 @@ export default function Liquidity() {
                 onSelectToken={setTokenB}
                 amount={amountB}
                 onAmountChange={setAmountB}
-                tokenPrice={tokenPrices[tokenB.symbol]} // Change from tokenB to tokenB.symbol
+                tokenPrice={tokenPrices[tokenB.symbol]}
                 error={error}
                 setError={setError}
               />
 
               {activeTab === 'add' && (
-                <div className="w-full bg-white/5 rounded-xl p-4 space-y-2">
-                  <div className="flex justify-between text-sm text-gray-300">
+                <div className="w-full bg-[var(--cyber-card-bg)] rounded-none p-4 space-y-2">
+                  <div className="flex justify-between text-sm text-[var(--cyber-muted)]">
                     <span>Pool Share:</span>
                     <span>0.00%</span>
                   </div>
@@ -196,8 +192,8 @@ export default function Liquidity() {
               )}
 
               {activeTab === 'remove' && (
-                <div className="w-full bg-white/5 rounded-xl p-4 space-y-2">
-                  <div className="flex justify-between text-sm text-gray-300">
+                <div className="w-full bg-[var(--cyber-card-bg)] rounded-none p-4 space-y-2">
+                  <div className="flex justify-between text-sm text-[var(--cyber-muted)]">
                     <span>Your Pool Tokens:</span>
                     <span>0.00</span>
                   </div>
@@ -209,14 +205,13 @@ export default function Liquidity() {
                   <button
                     onClick={handleButtonClick}
                     disabled={isProcessing || !amountA || !amountB}
-                    className={`bg-gradient-to-r from-orange-500 to-orange-600 text-white hover:from-orange-600 hover:to-orange-700 
-        transition duration-300 px-8 py-4 rounded-full text-lg font-semibold shadow-lg flex items-center 
+                    className={`cyber-btn px-8 py-4 text-lg font-semibold flex items-center 
         justify-center w-full md:w-auto ${(isProcessing || !amountA || !amountB) ? "opacity-50 cursor-not-allowed" : ""
-                      } hover:shadow-orange-500/30`}
+                      }`}
                   >
                     {isProcessing ? (
                       <>
-                        <Loader className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" />
+                        <Loader className="animate-spin -ml-1 mr-3 h-5 w-5" />
                         Processing...
                       </>
                     ) : (
@@ -224,14 +219,12 @@ export default function Liquidity() {
                     )}
                   </button>
                 ) : (
-                  <ConnectButton className="bg-gradient-to-r from-orange-500 to-orange-600 text-white hover:from-orange-600 
-      hover:to-orange-700 transition duration-300 px-8 py-4 rounded-full text-lg font-semibold shadow-lg w-full 
-      md:w-auto hover:shadow-orange-500/30" />
+                  <ConnectButton className="cyber-btn px-8 py-4 text-lg font-semibold w-full md:w-auto" />
                 )}
               </div>
 
               {error && (
-                <div className="w-full bg-red-500/10 border border-red-500/20 text-red-500 p-4 rounded-xl mt-4 text-center">
+                <div className="w-full bg-[var(--cyber-error-bg)] border border-[var(--cyber-error-border)] text-[var(--cyber-error)] p-4 rounded-none mt-4 text-center">
                   {error}
                 </div>
               )}
@@ -242,7 +235,6 @@ export default function Liquidity() {
     </div>
   );
 }
-
 
 // Path: dapp/src/app/components/TokenInput.tsx
 export interface Token {
@@ -332,9 +324,9 @@ export const TokenInput: React.FC<TokenInputProps> = ({
   return (
     <div className="space-y-2">
       <div className="flex justify-between items-center">
-        <label className="block text-sm font-medium text-gray-200">{label}</label>
+        <label className="block text-sm font-medium text-[var(--cyber-muted)]">{label}</label>
         {balance && (
-          <span className="text-xs text-gray-400">
+          <span className="text-xs text-[var(--cyber-muted)]">
             Balance: {parseFloat(balance).toFixed(6)} {selectedToken.symbol}
           </span>
         )}
@@ -344,8 +336,7 @@ export const TokenInput: React.FC<TokenInputProps> = ({
         <div className="relative sm:w-1/3">
           <button
             className="w-full flex justify-between items-center px-4 py-2.5 
-                bg-white/10 border border-orange-500/20 rounded-xl text-white
-                hover:bg-white/20 transition-all duration-200"
+                cyber-btn"
             onClick={() => setIsDropdownOpen(!isDropdownOpen)}
           >
             {selectedToken ? (
@@ -360,12 +351,12 @@ export const TokenInput: React.FC<TokenInputProps> = ({
           </button>
 
           {isDropdownOpen && (
-            <div ref={dropdownRef} className="absolute z-10 w-full mt-1 bg-white/10 backdrop-blur-lg rounded-xl border border-orange-500/20 shadow-lg max-h-60 overflow-y-auto">
+            <div ref={dropdownRef} className="absolute z-10 w-full mt-1 cyber-dropdown">
               <ul className="py-1">
                 {availableTokens.map((token) => (
                   <li
                     key={token.contract}
-                    className="px-4 py-2.5 hover:bg-orange-500/10 cursor-pointer text-white flex items-center"
+                    className="px-4 py-2.5 hover:bg-[var(--cyber-primary)]/10 cursor-pointer text-[var(--cyber-foreground)] flex items-center"
                     onClick={() => {
                       onSelectToken(token);
                       setIsDropdownOpen(false);
@@ -388,26 +379,19 @@ export const TokenInput: React.FC<TokenInputProps> = ({
               placeholder="0.00"
               value={amount}
               onChange={(e) => handleAmountChange(e.target.value)}
-              className="w-full px-4 py-2.5 bg-white/10 rounded-l-xl text-white 
-                  placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 
-                  border border-orange-500/20
-                  [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none 
-                  [&::-webkit-inner-spin-button]:appearance-none"
+              className="w-full px-4 py-2.5 cyber-input"
             />
             {showBalanceButtons && balance && (
-              <div className="flex border-l border-orange-500/20">
+              <div className="flex border-l border-[var(--cyber-border)]">
                 <button
                   onClick={handleSetHalf}
-                  className="px-3 py-2.5 bg-white/10 hover:bg-orange-500/20 
-                      text-orange-400 text-sm font-medium transition-colors duration-200"
+                  className="px-3 py-2.5 cyber-btn"
                 >
                   50%
                 </button>
                 <button
                   onClick={handleSetMax}
-                  className="px-3 py-2.5 bg-white/10 hover:bg-orange-500/20 
-                      text-orange-400 text-sm font-medium rounded-r-xl border-l 
-                      border-orange-500/20 transition-colors duration-200"
+                  className="px-3 py-2.5 cyber-btn rounded-none border-l border-[var(--cyber-border)]"
                 >
                   MAX
                 </button>
@@ -418,7 +402,7 @@ export const TokenInput: React.FC<TokenInputProps> = ({
       </div>
 
       {tokenPrice && (
-        <div className="text-sm text-gray-400">
+        <div className="text-sm text-[var(--cyber-muted)]">
           1 {selectedToken.symbol} = ${tokenPrice.toFixed(2)} USD
         </div>
       )}

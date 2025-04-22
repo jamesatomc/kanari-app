@@ -2,14 +2,42 @@
 @tailwind components;
 @tailwind utilities;
 
+@import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&family=Share+Tech+Mono&display=swap');
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
+
+  /* Light mode cyberpunk colors */
+  --cyber-background: #f0f2f5;
+  --cyber-foreground: #1a1a2e;
+  --cyber-primary: #ff2a6d;
+  --cyber-secondary: #05d9e8;
+  --cyber-accent: #f9c80e;
+  --cyber-muted: #7a7a8c;
+  --cyber-border: rgba(255, 42, 109, 0.3);
+  --cyber-card-bg: rgba(255, 255, 255, 0.8);
+  --cyber-glow-primary: 0 0 10px rgba(255, 42, 109, 0.7);
+  --cyber-glow-secondary: 0 0 15px rgba(5, 217, 232, 0.7);
 }
 
 .dark-mode {
   --background: #0a0a0a;
   --foreground: #ededed;
+}
+
+.dark {
+  /* Dark mode cyberpunk colors */
+  --cyber-background: #0d0221;
+  --cyber-foreground: #e8e8e8;
+  --cyber-primary: #ff2a6d;
+  --cyber-secondary: #05d9e8;
+  --cyber-accent: #f9c80e;
+  --cyber-muted: #7a7a8c;
+  --cyber-border: rgba(5, 217, 232, 0.4);
+  --cyber-card-bg: rgba(26, 26, 46, 0.8);
+  --cyber-glow-primary: 0 0 15px rgba(255, 42, 109, 0.7);
+  --cyber-glow-secondary: 0 0 20px rgba(5, 217, 232, 0.7);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -22,11 +50,174 @@
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Rajdhani', sans-serif;
+  background-color: var(--cyber-background);
+  color: var(--cyber-foreground);
+  background-image: 
+    linear-gradient(0deg, transparent 24%, rgba(5, 217, 232, 0.05) 25%, rgba(5, 217, 232, 0.05) 26%, transparent 27%, transparent 74%, rgba(5, 217, 232, 0.05) 75%, rgba(5, 217, 232, 0.05) 76%, transparent 77%, transparent),
+    linear-gradient(90deg, transparent 24%, rgba(5, 217, 232, 0.05) 25%, rgba(5, 217, 232, 0.05) 26%, transparent 27%, transparent 74%, rgba(5, 217, 232, 0.05) 75%, rgba(5, 217, 232, 0.05) 76%, transparent 77%, transparent);
+  background-size: 50px 50px;
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 /* Prevent flash of wrong theme */
 .no-transition {
   transition: none !important;
+}
+
+.cyber-container {
+  background: var(--cyber-card-bg);
+  border: 1px solid var(--cyber-border);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1), var(--cyber-glow-secondary);
+  backdrop-filter: blur(10px);
+  border-radius: 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.cyber-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(90deg, var(--cyber-secondary), var(--cyber-primary), var(--cyber-accent));
+  z-index: 1;
+}
+
+.cyber-container::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 3px;
+  height: 100%;
+  background: linear-gradient(180deg, var(--cyber-secondary), var(--cyber-primary));
+  z-index: 1;
+}
+
+.cyber-heading {
+  font-family: 'Share Tech Mono', monospace;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  position: relative;
+  display: inline-block;
+}
+
+.cyber-heading::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: var(--cyber-primary);
+  box-shadow: var(--cyber-glow-primary);
+}
+
+.cyber-btn {
+  background: linear-gradient(90deg, var(--cyber-primary), var(--cyber-secondary)) !important;
+  border: none !important;
+  color: white !important;
+  font-family: 'Share Tech Mono', monospace !important;
+  text-transform: uppercase !important;
+  letter-spacing: 1px !important;
+  position: relative !important;
+  overflow: hidden !important;
+  clip-path: polygon(0 0, 100% 0, 95% 100%, 5% 100%) !important;
+  transition: all 0.3s ease !important;
+  box-shadow: var(--cyber-glow-primary) !important;
+}
+
+.cyber-btn:hover {
+  transform: translateY(-3px) !important;
+  box-shadow: var(--cyber-glow-secondary) !important;
+}
+
+.cyber-btn:before {
+  content: '' !important;
+  position: absolute !important;
+  top: 0 !important;
+  left: -100% !important;
+  width: 100% !important;
+  height: 100% !important;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent) !important;
+  transition: all 0.6s ease !important;
+}
+
+.cyber-btn:hover:before {
+  left: 100% !important;
+}
+
+.cyber-image {
+  border: 2px solid var(--cyber-border) !important;
+  position: relative !important;
+  overflow: hidden !important;
+  transition: all 0.3s ease !important;
+  box-shadow: var(--cyber-glow-secondary) !important;
+  clip-path: polygon(0 5%, 5% 0, 95% 0, 100% 5%, 100% 95%, 95% 100%, 5% 100%, 0 95%) !important;
+}
+
+.cyber-image:hover {
+  transform: translateY(-5px) scale(1.02) !important;
+  box-shadow: var(--cyber-glow-primary) !important;
+}
+
+.cyber-text {
+  line-height: 1.6;
+  position: relative;
+  display: inline-block;
+}
+
+.cyber-text span {
+  color: var(--cyber-primary);
+  text-shadow: var(--cyber-glow-primary);
+}
+
+@keyframes glitch {
+  0% {
+    clip-path: inset(40% 0 61% 0);
+  }
+  20% {
+    clip-path: inset(92% 0 1% 0);
+  }
+  40% {
+    clip-path: inset(43% 0 1% 0);
+  }
+  60% {
+    clip-path: inset(25% 0 58% 0);
+  }
+  80% {
+    clip-path: inset(54% 0 7% 0);
+  }
+  100% {
+    clip-path: inset(58% 0 43% 0);
+  }
+}
+
+.glitch-effect {
+  position: relative;
+}
+
+.glitch-effect::before,
+.glitch-effect::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.glitch-effect::before {
+  left: 2px;
+  text-shadow: -2px 0 var(--cyber-primary);
+  animation: glitch 0.5s infinite linear alternate-reverse;
+}
+
+.glitch-effect::after {
+  left: -2px;
+  text-shadow: 2px 0 var(--cyber-secondary);
+  animation: glitch 0.5s infinite linear alternate;
 }

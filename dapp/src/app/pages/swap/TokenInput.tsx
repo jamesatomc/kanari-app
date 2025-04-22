@@ -26,7 +26,6 @@ import { ChevronDown } from 'lucide-react';
     { name: 'USDCoin', symbol: 'USDC', image: 'https://s2.coinmarketcap.com/static/img/coins/64x64/3408.png', contract: '0xdba34672e30cb065b1f93e3ab55318768fd6fef66c15942c9f7cb846e2f900e7::usdc::USDC' },
   ];
   
-  // TokenInput.tsx
   export const TokenInput: React.FC<TokenInputProps> = ({
     label,
     selectedToken,
@@ -81,9 +80,9 @@ import { ChevronDown } from 'lucide-react';
     return (
       <div className="space-y-2">
         <div className="flex justify-between items-center">
-          <label className="block text-sm font-medium text-gray-200">{label}</label>
+          <label className="block text-sm font-medium cyber-text">{label}</label>
           {balance && (
-            <span className="text-xs text-gray-400">
+            <span className="text-xs text-[var(--cyber-muted)]">
               Balance: {parseFloat(balance).toFixed(6)} {selectedToken}
             </span>
           )}
@@ -94,8 +93,8 @@ import { ChevronDown } from 'lucide-react';
           <div className="relative sm:w-1/3">
             <button
               className="w-full flex justify-between items-center px-4 py-2.5 
-                bg-white/10 border border-orange-500/20 rounded-xl text-white
-                hover:bg-white/20 transition-all duration-200"
+                bg-[var(--cyber-card-bg)] border border-[var(--cyber-border)] rounded-none text-[var(--cyber-foreground)]
+                hover:bg-[var(--cyber-card-bg)]/80 transition-all duration-200 cyber-btn"
               onClick={() => setIsDropdownOpen(!isDropdownOpen)}
             >
               {selectedTokenData ? (
@@ -109,14 +108,13 @@ import { ChevronDown } from 'lucide-react';
               <ChevronDown className="h-4 w-4 ml-2" />
             </button>
             
-            {/* Dropdown remains the same */}
             {isDropdownOpen && (
-              <div ref={dropdownRef} className="absolute z-10 w-full mt-1 bg-white/10 backdrop-blur-lg rounded-xl border border-orange-500/20 shadow-lg max-h-60 overflow-y-auto">
+              <div ref={dropdownRef} className="absolute z-10 w-full mt-1 bg-[var(--cyber-card-bg)] backdrop-blur-lg rounded-none border border-[var(--cyber-border)] shadow-lg max-h-60 overflow-y-auto">
                 <ul className="py-1">
                   {availableTokens.map((token) => (
                     <li
                       key={token.symbol}
-                      className="px-4 py-2.5 hover:bg-orange-500/10 cursor-pointer text-white flex items-center"
+                      className="px-4 py-2.5 hover:bg-[var(--cyber-primary)]/10 cursor-pointer text-[var(--cyber-foreground)] flex items-center"
                       onClick={() => {
                         onSelectToken(token.symbol);
                         setIsDropdownOpen(false);
@@ -139,26 +137,26 @@ import { ChevronDown } from 'lucide-react';
                 placeholder="0.00"
                 value={amount}
                 onChange={(e) => handleAmountChange(e.target.value)}
-                className="w-full px-4 py-2.5 bg-white/10 rounded-l-xl text-white 
-                  placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 
-                  border border-orange-500/20
+                className="w-full px-4 py-2.5 bg-[var(--cyber-card-bg)] rounded-none text-[var(--cyber-foreground)] 
+                  placeholder-[var(--cyber-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--cyber-primary)] 
+                  border border-[var(--cyber-border)]
                   [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none 
                   [&::-webkit-inner-spin-button]:appearance-none"
               />
               {showBalanceButtons && balance && (
-                <div className="flex border-l border-orange-500/20">
+                <div className="flex border-l border-[var(--cyber-border)]">
                   <button
                     onClick={handleSetHalf}
-                    className="px-3 py-2.5 bg-white/10 hover:bg-orange-500/20 
-                      text-orange-400 text-sm font-medium transition-colors duration-200"
+                    className="px-3 py-2.5 bg-[var(--cyber-card-bg)] hover:bg-[var(--cyber-primary)]/20 
+                      text-[var(--cyber-primary)] text-sm font-medium transition-colors duration-200"
                   >
                     50%
                   </button>
                   <button
                     onClick={handleSetMax}
-                    className="px-3 py-2.5 bg-white/10 hover:bg-orange-500/20 
-                      text-orange-400 text-sm font-medium rounded-r-xl border-l 
-                      border-orange-500/20 transition-colors duration-200"
+                    className="px-3 py-2.5 bg-[var(--cyber-card-bg)] hover:bg-[var(--cyber-primary)]/20 
+                      text-[var(--cyber-primary)] text-sm font-medium rounded-none border-l 
+                      border-[var(--cyber-border)] transition-colors duration-200"
                   >
                     MAX
                   </button>
@@ -169,7 +167,7 @@ import { ChevronDown } from 'lucide-react';
         </div>
   
         {tokenPrice && (
-          <div className="text-sm text-gray-400">
+          <div className="text-sm text-[var(--cyber-muted)]">
             1 {selectedToken} = ${tokenPrice.toFixed(2)} USD
           </div>
         )}
