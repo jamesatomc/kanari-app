@@ -145,12 +145,6 @@ export default function Swap() {
       
       <main className="flex-1 flex flex-col justify-center">
         <div className="w-full max-w-md mx-auto py-6 sm:py-12 px-4 sm:px-0">
-          <h1 className="cyber-heading text-3xl md:text-5xl font-bold mb-8 text-center relative">
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[var(--cyber-primary)] to-[var(--cyber-secondary)] relative">
-              Kanari Swap
-            </span>
-            <div className="absolute -inset-1 bg-gradient-to-r from-[var(--cyber-primary)]/20 to-[var(--cyber-secondary)]/20 blur-sm -z-10"></div>
-          </h1>
 
           <div className="w-full">
             <div className="cyber-container backdrop-blur-sm border-2 border-[var(--cyber-border)] bg-[var(--cyber-card-bg)]/90 p-4 sm:p-6 rounded-[var(--kawaii-border-radius)] shadow-lg">
