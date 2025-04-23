@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { ArrowDownUp, Loader, Settings } from 'lucide-react';
+import { ArrowDownUp, Loader, Settings, Star } from 'lucide-react';
 import { ConnectButton, useWallet } from "@suiet/wallet-kit";
 import { Transaction } from "@mysten/sui/transactions";
 import axios from 'axios';
@@ -21,12 +21,26 @@ export default function Swap() {
     SUI: '1000.00',  // Mock balance
     USDC: '500.00'   // Mock balance
   });
+  const [sakuraPetals, setSakuraPetals] = useState<Array<{id: number, left: number, delay: number, duration: number}>>([]);
 
   const wallet = useWallet();
 
   useEffect(() => {
     fetchTokenPrices();
     const interval = setInterval(fetchTokenPrices, 60000); // Update prices every minute
+    
+    // Create sakura petals
+    const petals = [];
+    for (let i = 0; i < 15; i++) {
+      petals.push({
+        id: i,
+        left: Math.random() * 100,
+        delay: Math.random() * 10,
+        duration: 5 + Math.random() * 10
+      });
+    }
+    setSakuraPetals(petals);
+    
     return () => clearInterval(interval);
   }, []);
 
@@ -103,7 +117,7 @@ export default function Swap() {
         transaction: tx,
       });
       console.log('successfully!', resData);
-      alert('Swap successful');
+      alert('Swap successful!');
     } catch (e) {
       console.error('failed', e);
       setError('Transaction failed. Please try again.');
@@ -114,25 +128,40 @@ export default function Swap() {
 
   return (
     <div className="min-h-[calc(100vh-80px)] flex flex-col">
+      {/* Sakura petals animation */}
+      <div className="sakura-container">
+        {sakuraPetals.map((petal) => (
+          <div 
+            key={petal.id}
+            className="sakura"
+            style={{
+              left: `${petal.left}%`,
+              animationDelay: `${petal.delay}s`,
+              animationDuration: `${petal.duration}s`,
+            }}
+          />
+        ))}
+      </div>
+      
       <main className="flex-1 flex flex-col justify-center">
         <div className="w-full max-w-md mx-auto py-6 sm:py-12 px-4 sm:px-0">
           <h1 className="cyber-heading text-3xl md:text-5xl font-bold mb-8 text-center relative">
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[var(--cyber-primary)] to-[var(--cyber-secondary)]">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[var(--cyber-primary)] to-[var(--cyber-secondary)] relative">
               Kanari Swap
             </span>
             <div className="absolute -inset-1 bg-gradient-to-r from-[var(--cyber-primary)]/20 to-[var(--cyber-secondary)]/20 blur-sm -z-10"></div>
           </h1>
 
           <div className="w-full">
-            <div className="cyber-container backdrop-blur-sm border border-[var(--cyber-border)] bg-[var(--cyber-card-bg)]/80 p-4 sm:p-6 rounded-md shadow-lg">
+            <div className="cyber-container backdrop-blur-sm border-2 border-[var(--cyber-border)] bg-[var(--cyber-card-bg)]/90 p-4 sm:p-6 rounded-[var(--kawaii-border-radius)] shadow-lg">
               <div className="space-y-6">
                 {/* Fee Configuration Toggle */}
                 <div className="flex justify-end">
                   <button
                     onClick={() => setShowFeeConfig(!showFeeConfig)}
-                    className="cyber-btn-sm p-2 sm:p-2.5 bg-[var(--cyber-card-bg)] border border-[var(--cyber-border)] rounded-full 
-                      shadow-md transition-all duration-300 hover:shadow-[0_0_10px_var(--cyber-primary)] 
-                      transform hover:scale-110 active:scale-95"
+                    className="cyber-btn-sm p-2 sm:p-2.5 bg-[var(--cyber-card-bg)] border-2 border-[var(--cyber-border)] rounded-full 
+                      shadow-md transition-all duration-300 hover:shadow-[var(--cyber-glow-primary)] kawaii-tooltip"
+                    data-tooltip="Fee Settings"
                   >
                     <Settings className="h-4 w-4 sm:h-5 sm:w-5 text-[var(--cyber-primary)]" />
                   </button>
@@ -140,10 +169,10 @@ export default function Swap() {
 
                 {/* Fee Configuration */}
                 {showFeeConfig && (
-                  <div className="w-full bg-[var(--cyber-card-bg)]/50 p-3 rounded-md border border-[var(--cyber-border)]/40">
-                    <div className="flex justify-between items-center mb-2">
-                      <span className="text-sm text-[var(--cyber-muted)]">Fee Percentage</span>
-                      <span className="text-sm font-mono">{feePercentage}%</span>
+                  <div className="w-full bg-[var(--cyber-card-bg)]/70 p-4 rounded-2xl border-2 border-[var(--cyber-border)]/40">
+                    <div className="flex justify-between items-center mb-3">
+                      <span className="text-sm font-bold text-[var(--cyber-primary)]">Fee Settings</span>
+                      <span className="kawaii-badge">{feePercentage}%</span>
                     </div>
                     <div className="flex space-x-2">
                       {[0.3, 0.5, 1.0].map((fee) => (
@@ -155,11 +184,11 @@ export default function Swap() {
                               calculateAmountTo(tokenFrom, tokenTo, amountFrom);
                             }
                           }}
-                          className={`flex-1 py-1 px-2 text-xs rounded-sm ${
+                          className={`flex-1 py-1.5 px-2 text-xs rounded-full font-bold ${
                             feePercentage === fee 
-                              ? 'bg-[var(--cyber-primary)] text-white' 
+                              ? 'bg-[var(--cyber-primary)] text-white shadow-[0_0_8px_var(--cyber-primary)]' 
                               : 'bg-[var(--cyber-card-bg)] text-[var(--cyber-muted)] hover:bg-[var(--cyber-primary)]/20'
-                          } transition-colors duration-200`}
+                          } transition-all duration-200 border border-[var(--cyber-border)]/40`}
                         >
                           {fee}%
                         </button>
@@ -179,7 +208,7 @@ export default function Swap() {
                             }
                           }
                         }}
-                        className="flex-1 bg-[var(--cyber-card-bg)] border border-[var(--cyber-border)]/40 rounded-sm px-2 py-1 text-xs text-right"
+                        className="flex-1 bg-[var(--cyber-card-bg)] border border-[var(--cyber-border)]/40 rounded-full px-3 py-1.5 text-xs text-right kawaii-input"
                         placeholder="Custom"
                       />
                     </div>
@@ -203,9 +232,9 @@ export default function Swap() {
                 {/* Swap Direction Button */}
                 <div className="flex justify-center -my-2 sm:-my-3 relative z-10">
                   <button
-                    className="cyber-btn-sm p-2 sm:p-2.5 bg-[var(--cyber-card-bg)] border border-[var(--cyber-border)] rounded-full 
-                      shadow-md transition-all duration-300 hover:shadow-[0_0_10px_var(--cyber-primary)] 
-                      transform hover:scale-110 active:scale-95"
+                    className="p-3 sm:p-3.5 bg-[var(--cyber-card-bg)] border-2 border-[var(--cyber-border)] rounded-full 
+                      shadow-md transition-all duration-300 hover:shadow-[var(--cyber-glow-primary)] 
+                      transform hover:scale-110 hover:rotate-180 active:scale-95"
                     onClick={() => {
                       setTokenFrom(tokenTo);
                       setTokenTo(tokenFrom);
@@ -213,7 +242,7 @@ export default function Swap() {
                       setAmountTo(amountFrom);
                     }}
                   >
-                    <ArrowDownUp className="h-4 w-4 sm:h-5 sm:w-5 transition-transform hover:rotate-180 text-[var(--cyber-primary)]" />
+                    <ArrowDownUp className="h-4 w-4 sm:h-5 sm:w-5 text-[var(--cyber-primary)]" />
                   </button>
                 </div>
               
@@ -233,8 +262,10 @@ export default function Swap() {
 
                 {/* Rate Display */}
                 {tokenPrices[tokenFrom] && tokenPrices[tokenTo] && (
-                  <div className="text-xs text-center text-[var(--cyber-muted)] bg-[var(--cyber-card-bg)]/50 p-2 rounded-sm border border-[var(--cyber-border)]/40">
-                    Rate: 1 {tokenFrom} = {(tokenPrices[tokenFrom] / tokenPrices[tokenTo]).toFixed(6)} {tokenTo}
+                  <div className="text-xs text-center font-medium bg-[var(--cyber-card-bg)]/60 p-3 rounded-full border border-[var(--cyber-border)]/40 flex items-center justify-center space-x-2">
+                    <Star className="h-3 w-3 text-[var(--cyber-accent)] fill-[var(--cyber-accent)]" />
+                    <span>Rate: 1 {tokenFrom} = {(tokenPrices[tokenFrom] / tokenPrices[tokenTo]).toFixed(6)} {tokenTo}</span>
+                    <Star className="h-3 w-3 text-[var(--cyber-accent)] fill-[var(--cyber-accent)]" />
                   </div>
                 )}
 
@@ -242,23 +273,27 @@ export default function Swap() {
                 <div className="w-full pt-4">
                   {wallet.connected ? (
                     <button
-                      className={`cyber-btn px-4 py-3 sm:px-8 sm:py-4 text-base sm:text-lg font-medium flex items-center justify-center w-full
+                      className={`cyber-btn px-4 py-3 sm:px-8 sm:py-4 text-base sm:text-lg font-bold flex items-center justify-center w-full
                         transition-all duration-300 ${isSwapping ? "opacity-50 cursor-not-allowed" : "hover:shadow-[0_0_10px_var(--cyber-primary)]"}`}
                       onClick={swap}
                       disabled={isSwapping}
                     >
                       {isSwapping ? (
                         <>
-                          <Loader className="animate-spin -ml-1 mr-2 h-4 w-4 sm:h-5 sm:w-5" />
-                          <span>PROCESSING...</span>
+                          <div className="anime-loader mr-3">
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                          </div>
+                          <span>Processing...</span>
                         </>
                       ) : (
-                        "SWAP NOW"
+                        "Swap Now"
                       )}
                     </button>
                   ) : (
                     <ConnectButton
-                      className="cyber-btn px-4 py-3 sm:px-8 sm:py-4 text-base sm:text-lg font-medium w-full
+                      className="cyber-btn px-4 py-3 sm:px-8 sm:py-4 text-base sm:text-lg font-bold w-full
                         hover:shadow-[0_0_10px_var(--cyber-primary)] transition-all duration-300"
                     />
                   )}
@@ -266,8 +301,8 @@ export default function Swap() {
 
                 {/* Error Message */}
                 {error && (
-                  <div className="w-full bg-[var(--cyber-primary)]/10 border border-[var(--cyber-primary)]/20 
-                    text-[var(--cyber-primary)] p-3 rounded-sm mt-2 text-center text-sm">
+                  <div className="w-full bg-[var(--cyber-primary)]/10 border-2 border-[var(--cyber-primary)]/20 
+                    text-[var(--cyber-primary)] p-3 rounded-full mt-2 text-center text-sm">
                     {error}
                   </div>
                 )}

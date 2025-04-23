@@ -183,8 +183,7 @@ const Footer: React.FC<FooterProps> = ({ darkMode, setDarkMode }) => {
                 Kanari Network™
               </Link>
               <span className="relative inline-flex items-center">
-                <span className="mx-1">·</span> community 
-                <span className="ml-1 text-xs opacity-70">コミュニティ</span>
+                <span className="mx-1">·</span> community
               </span>
             </span>
 

@@ -2,42 +2,46 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&family=Share+Tech+Mono&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&family=Share+Tech+Mono&family=M+PLUS+Rounded+1c:wght@300;400;500;700&display=swap');
 
 :root {
   --background: #ffffff;
   --foreground: #171717;
 
-  /* Light mode cyberpunk colors */
-  --cyber-background: #f0f2f5;
-  --cyber-foreground: #1a1a2e;
-  --cyber-primary: #ff2a6d;
-  --cyber-secondary: #05d9e8;
-  --cyber-accent: #f9c80e;
-  --cyber-muted: #7a7a8c;
-  --cyber-border: rgba(255, 42, 109, 0.3);
-  --cyber-card-bg: rgba(255, 255, 255, 0.8);
-  --cyber-glow-primary: 0 0 10px rgba(255, 42, 109, 0.7);
-  --cyber-glow-secondary: 0 0 15px rgba(5, 217, 232, 0.7);
-}
-
-.dark-mode {
-  --background: #0a0a0a;
-  --foreground: #ededed;
+  /* Anime-inspired light mode colors */
+  --cyber-background: #f7f9fc;
+  --cyber-foreground: #2e3a59;
+  --cyber-primary: #ff6b97; /* Softer pink */
+  --cyber-secondary: #6eb6ff; /* Softer blue */
+  --cyber-accent: #ffc857; /* Warm yellow */
+  --cyber-muted: #9aa3bc;
+  --cyber-border: rgba(255, 107, 151, 0.3);
+  --cyber-card-bg: rgba(255, 255, 255, 0.85);
+  --cyber-glow-primary: 0 0 10px rgba(255, 107, 151, 0.5);
+  --cyber-glow-secondary: 0 0 15px rgba(110, 182, 255, 0.5);
+  
+  /* Kawaii style variables */
+  --kawaii-shadow: 0 6px 0 #e0e0e0;
+  --kawaii-border-radius: 20px;
+  --kawaii-pattern: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ff6b97' fill-opacity='0.05' fill-rule='evenodd'%3E%3Cpath d='M0 20C0 8.954 8.954 0 20 0s20 8.954 20 20-8.954 20-20 20S0 31.046 0 20zm20 16c8.837 0 16-7.163 16-16S28.837 4 20 4 4 11.163 4 20s7.163 16 16 16z'/%3E%3C/g%3E%3C/svg%3E");
 }
 
 .dark {
-  /* Dark mode cyberpunk colors */
-  --cyber-background: #0d0221;
-  --cyber-foreground: #e8e8e8;
-  --cyber-primary: #ff2a6d;
-  --cyber-secondary: #05d9e8;
-  --cyber-accent: #f9c80e;
-  --cyber-muted: #7a7a8c;
-  --cyber-border: rgba(5, 217, 232, 0.4);
-  --cyber-card-bg: rgba(26, 26, 46, 0.8);
-  --cyber-glow-primary: 0 0 15px rgba(255, 42, 109, 0.7);
-  --cyber-glow-secondary: 0 0 20px rgba(5, 217, 232, 0.7);
+  /* Anime-inspired dark mode colors */
+  --cyber-background: #2f365f;
+  --cyber-foreground: #f5f5fa;
+  --cyber-primary: #ff8fa3; /* Lighter pink for dark mode */
+  --cyber-secondary: #85c6ff; /* Lighter blue for dark mode */
+  --cyber-accent: #ffd280; /* Lighter yellow for dark mode */
+  --cyber-muted: #b0b8d1;
+  --cyber-border: rgba(255, 143, 163, 0.4);
+  --cyber-card-bg: rgba(37, 41, 82, 0.85);
+  --cyber-glow-primary: 0 0 15px rgba(255, 143, 163, 0.6);
+  --cyber-glow-secondary: 0 0 20px rgba(133, 198, 255, 0.6);
+  --kawaii-shadow: 0 6px 0 #1f2142;
+  
+  /* Dark mode kawaii pattern */
+  --kawaii-pattern: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ff8fa3' fill-opacity='0.08' fill-rule='evenodd'%3E%3Cpath d='M0 20C0 8.954 8.954 0 20 0s20 8.954 20 20-8.954 20-20 20S0 31.046 0 20zm20 16c8.837 0 16-7.163 16-16S28.837 4 20 4 4 11.163 4 20s7.163 16 16 16z'/%3E%3C/g%3E%3C/svg%3E");
 }
 
 @media (prefers-color-scheme: dark) {
@@ -50,13 +54,10 @@
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: 'Rajdhani', sans-serif;
+  font-family: 'M PLUS Rounded 1c', 'Rajdhani', sans-serif;
   background-color: var(--cyber-background);
   color: var(--cyber-foreground);
-  background-image: 
-    linear-gradient(0deg, transparent 24%, rgba(5, 217, 232, 0.05) 25%, rgba(5, 217, 232, 0.05) 26%, transparent 27%, transparent 74%, rgba(5, 217, 232, 0.05) 75%, rgba(5, 217, 232, 0.05) 76%, transparent 77%, transparent),
-    linear-gradient(90deg, transparent 24%, rgba(5, 217, 232, 0.05) 25%, rgba(5, 217, 232, 0.05) 26%, transparent 27%, transparent 74%, rgba(5, 217, 232, 0.05) 75%, rgba(5, 217, 232, 0.05) 76%, transparent 77%, transparent);
-  background-size: 50px 50px;
+  background-image: var(--kawaii-pattern);
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
@@ -67,10 +68,10 @@ body {
 
 .cyber-container {
   background: var(--cyber-card-bg);
-  border: 1px solid var(--cyber-border);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1), var(--cyber-glow-secondary);
+  border: 2px solid var(--cyber-border);
+  box-shadow: var(--kawaii-shadow), var(--cyber-glow-secondary);
   backdrop-filter: blur(10px);
-  border-radius: 0;
+  border-radius: var(--kawaii-border-radius);
   position: relative;
   overflow: hidden;
 }
@@ -78,28 +79,17 @@ body {
 .cyber-container::before {
   content: '';
   position: absolute;
-  top: 0;
+  top: -2px;
   left: 0;
   width: 100%;
-  height: 3px;
+  height: 5px;
   background: linear-gradient(90deg, var(--cyber-secondary), var(--cyber-primary), var(--cyber-accent));
   z-index: 1;
 }
 
-.cyber-container::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 3px;
-  height: 100%;
-  background: linear-gradient(180deg, var(--cyber-secondary), var(--cyber-primary));
-  z-index: 1;
-}
-
 .cyber-heading {
-  font-family: 'Share Tech Mono', monospace;
-  text-transform: uppercase;
+  font-family: 'M PLUS Rounded 1c', monospace;
+  font-weight: 700;
   letter-spacing: 1px;
   position: relative;
   display: inline-block;
@@ -111,63 +101,91 @@ body {
   bottom: -5px;
   left: 0;
   width: 100%;
-  height: 2px;
+  height: 3px;
   background: var(--cyber-primary);
   box-shadow: var(--cyber-glow-primary);
+  border-radius: 10px;
 }
 
 .cyber-btn {
   background: linear-gradient(90deg, var(--cyber-primary), var(--cyber-secondary)) !important;
   border: none !important;
   color: white !important;
-  font-family: 'Share Tech Mono', monospace !important;
-  text-transform: uppercase !important;
+  font-family: 'M PLUS Rounded 1c', sans-serif !important;
+  font-weight: 700 !important;
   letter-spacing: 1px !important;
   position: relative !important;
   overflow: hidden !important;
-  clip-path: polygon(0 0, 100% 0, 95% 100%, 5% 100%) !important;
+  border-radius: 999px !important;
+  padding: 12px 24px !important;
   transition: all 0.3s ease !important;
-  box-shadow: var(--cyber-glow-primary) !important;
+  box-shadow: var(--kawaii-shadow), var(--cyber-glow-primary) !important;
+  transform-style: preserve-3d !important;
 }
 
 .cyber-btn:hover {
-  transform: translateY(-3px) !important;
-  box-shadow: var(--cyber-glow-secondary) !important;
+  transform: translateY(-3px) scale(1.03) !important;
+  box-shadow: 0 10px 0 #e0e0e0, var(--cyber-glow-secondary) !important;
 }
 
-.cyber-btn:before {
-  content: '' !important;
-  position: absolute !important;
-  top: 0 !important;
-  left: -100% !important;
-  width: 100% !important;
-  height: 100% !important;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent) !important;
-  transition: all 0.6s ease !important;
+.cyber-btn:active {
+  transform: translateY(3px) !important;
+  box-shadow: 0 2px 0 #e0e0e0, var(--cyber-glow-primary) !important;
 }
 
-.cyber-btn:hover:before {
-  left: 100% !important;
+.cyber-btn-sm {
+  border-radius: 999px !important;
+  box-shadow: 0 4px 0 #e0e0e0 !important;
+}
+
+.cyber-btn-sm:hover {
+  transform: translateY(-2px) scale(1.05) !important;
+}
+
+.cyber-btn-sm:active {
+  transform: translateY(2px) !important;
+  box-shadow: 0 1px 0 #e0e0e0 !important;
+}
+
+.dark .cyber-btn {
+  box-shadow: 0 6px 0 #1f2142, var(--cyber-glow-primary) !important;
+}
+
+.dark .cyber-btn:hover {
+  box-shadow: 0 10px 0 #1f2142, var(--cyber-glow-secondary) !important;
+}
+
+.dark .cyber-btn:active {
+  box-shadow: 0 2px 0 #1f2142, var(--cyber-glow-primary) !important;
 }
 
 .cyber-image {
-  border: 2px solid var(--cyber-border) !important;
+  border: 3px solid var(--cyber-border) !important;
+  border-radius: var(--kawaii-border-radius) !important;
   position: relative !important;
   overflow: hidden !important;
   transition: all 0.3s ease !important;
-  box-shadow: var(--cyber-glow-secondary) !important;
-  clip-path: polygon(0 5%, 5% 0, 95% 0, 100% 5%, 100% 95%, 95% 100%, 5% 100%, 0 95%) !important;
+  box-shadow: var(--kawaii-shadow), var(--cyber-glow-secondary) !important;
 }
 
 .cyber-image:hover {
-  transform: translateY(-5px) scale(1.02) !important;
-  box-shadow: var(--cyber-glow-primary) !important;
+  transform: translateY(-5px) scale(1.03) !important;
+  box-shadow: 0 10px 0 #e0e0e0, var(--cyber-glow-primary) !important;
+}
+
+.dark .cyber-image {
+  box-shadow: 0 6px 0 #1f2142, var(--cyber-glow-secondary) !important;
+}
+
+.dark .cyber-image:hover {
+  box-shadow: 0 10px 0 #1f2142, var(--cyber-glow-primary) !important;
 }
 
 .cyber-text {
   line-height: 1.6;
   position: relative;
   display: inline-block;
+  font-family: 'M PLUS Rounded 1c', sans-serif;
 }
 
 .cyber-text span {
@@ -175,25 +193,133 @@ body {
   text-shadow: var(--cyber-glow-primary);
 }
 
+/* Kawaii-style input field */
+.kawaii-input {
+  border-radius: 999px !important;
+  font-family: 'M PLUS Rounded 1c', sans-serif !important;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+  transition: all 0.25s ease !important;
+}
+
+.kawaii-input:focus {
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1), 0 0 0 3px rgba(255, 107, 151, 0.25) !important;
+}
+
+/* Anime-style loading animation */
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.anime-loader {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+}
+
+.anime-loader div {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--cyber-primary);
+  animation: bounce 0.8s infinite;
+}
+
+.anime-loader div:nth-child(2) {
+  animation-delay: 0.2s;
+  background: var(--cyber-secondary);
+}
+
+.anime-loader div:nth-child(3) {
+  animation-delay: 0.4s;
+  background: var(--cyber-accent);
+}
+
+/* Kawaii tooltip */
+.kawaii-tooltip {
+  position: relative;
+  display: inline-block;
+}
+
+.kawaii-tooltip::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  left: 50%;
+  bottom: 125%;
+  transform: translateX(-50%);
+  background: var(--cyber-card-bg);
+  color: var(--cyber-foreground);
+  padding: 6px 12px;
+  border-radius: 12px;
+  border: 2px solid var(--cyber-border);
+  white-space: nowrap;
+  font-size: 0.9em;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.3s ease;
+  box-shadow: var(--cyber-glow-primary);
+}
+
+.kawaii-tooltip:hover::after {
+  opacity: 1;
+  bottom: 135%;
+}
+
+/* Kawaii badge */
+.kawaii-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  padding: 4px 12px;
+  font-size: 0.8em;
+  font-weight: 600;
+  background: linear-gradient(45deg, var(--cyber-primary), var(--cyber-secondary));
+  color: white;
+  box-shadow: var(--cyber-glow-primary);
+}
+
+/* Sakura petals animation */
+@keyframes fall {
+  0% { top: -10%; transform: rotate(0deg); }
+  100% { top: 100%; transform: rotate(360deg); }
+}
+
+@keyframes sway {
+  0%, 100% { margin-left: 0; }
+  50% { margin-left: 50px; }
+}
+
+.sakura-container {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.sakura {
+  position: absolute;
+  background: rgba(255, 183, 197, 0.3);
+  border-radius: 50% 0 50% 0;
+  width: 15px;
+  height: 15px;
+  opacity: 0.6;
+  animation: fall linear, sway ease-in-out alternate infinite;
+}
+
+.dark .sakura {
+  background: rgba(255, 183, 197, 0.2);
+}
+
+/* Glitch effect */
 @keyframes glitch {
-  0% {
-    clip-path: inset(40% 0 61% 0);
-  }
-  20% {
-    clip-path: inset(92% 0 1% 0);
-  }
-  40% {
-    clip-path: inset(43% 0 1% 0);
-  }
-  60% {
-    clip-path: inset(25% 0 58% 0);
-  }
-  80% {
-    clip-path: inset(54% 0 7% 0);
-  }
-  100% {
-    clip-path: inset(58% 0 43% 0);
-  }
+  0%, 100% { clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); }
+  20% { clip-path: polygon(15% 0, 100% 0, 85% 100%, 0 100%); }
+  40% { clip-path: polygon(0 15%, 100% 0, 100% 85%, 0 100%); }
+  60% { clip-path: polygon(0 0, 85% 0, 100% 100%, 15% 100%); }
+  80% { clip-path: polygon(0 0, 100% 15%, 100% 100%, 0 85%); }
 }
 
 .glitch-effect {
