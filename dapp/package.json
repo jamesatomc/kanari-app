@@ -9,13 +9,13 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@mysten/sui": "1.16.0",
+    "@mysten/sui": "1.28.0",
     "@mysten/wallet-kit": "^0.8.6",
-    "@mysten/wallet-standard": "0.13.16",
+    "@mysten/wallet-standard": "0.14.5",
     "@suiet/wallet-kit": "0.3.3",
-    "axios": "1.7.9",
-    "install": "^0.13.0",
-    "isbot": "5.1.17",
+    "axios": "1.8.4",
+    "install": "0.13.0",
+    "isbot": "5.1.26",
     "lucide-react": "0.503.0",
     "next": "15.0.4",
     "react": "^19.0.0",
