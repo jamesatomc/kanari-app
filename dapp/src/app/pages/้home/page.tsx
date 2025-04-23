@@ -38,21 +38,21 @@ export default function HeroSection() {
     return (
         <div className="py-8">
             <main className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
-                <div className="cyber-container p-8">
+                <div className="cyber-container p-8 ai-scan-lines">
                 <div className="flex flex-col md:flex-row justify-center items-center space-y-8 md:space-y-0 md:space-x-16">
                     <div className="md:w-1/2">
                     <img
                         src="https://magenta-able-pheasant-388.mypinata.cloud/ipfs/QmQhKs9WeVy5MxbChEQJrX37Unb6dktZXrYZuy6uVofQwC/Logo.png"
                         alt="Kanari Sell Exclusive NFT"
-                        className="cyber-image shadow-2xl transform transition duration-500 hover:scale-105"
+                        className="cyber-image ai-glow shadow-2xl transform transition duration-500 hover:scale-105"
                     />
                     </div>
         
                     <div className="md:w-1/2 text-center md:text-left">
-                    <h1 className="cyber-heading glitch-effect text-4xl md:text-6xl font-bold mb-6 leading-tight" data-text="Mint Your Exclusive NFT">
+                    <h1 className="cyber-heading glitch-effect text-4xl md:text-6xl font-bold mb-6 leading-tight ai-glow" data-text="Mint Your Exclusive NFT">
                         Mint Your <span className="text-transparent bg-clip-text bg-gradient-to-r from-[var(--cyber-primary)] to-[var(--cyber-secondary)]">Exclusive</span> NFT
                     </h1>
-                    <p className="cyber-text text-xl mb-8 leading-relaxed">
+                    <p className="cyber-text text-xl mb-8 leading-relaxed ai-typing">
                         Join the <span>Kanari Sell</span> community by minting your unique NFT. Connect your wallet and become part of something extraordinary.
                     </p>
         
@@ -60,7 +60,7 @@ export default function HeroSection() {
                         <button
                         onClick={handleSignAndExecuteTx}
                         disabled={isMinting}
-                        className={`cyber-btn px-8 py-4 rounded-none text-lg font-semibold flex items-center justify-center w-full md:w-auto ${isMinting ? "opacity-50 cursor-not-allowed" : ""}`}
+                        className={`cyber-btn ai-glow px-8 py-4 rounded-none text-lg font-semibold flex items-center justify-center w-full md:w-auto ${isMinting ? "opacity-50 cursor-not-allowed" : ""}`}
                         >
                         {isMinting ? (
                             <>
@@ -73,7 +73,7 @@ export default function HeroSection() {
                         </button>
                     ) : (
                         <ConnectButton
-                        className="cyber-btn px-8 py-4 rounded-none text-lg font-semibold w-full md:w-auto"
+                        className="cyber-btn ai-glow px-8 py-4 rounded-none text-lg font-semibold w-full md:w-auto"
                         />
                     )}
                     </div>

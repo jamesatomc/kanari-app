@@ -27,21 +27,21 @@
 }
 
 .dark {
-  /* Anime-inspired dark mode colors */
-  --cyber-background: #2f365f;
-  --cyber-foreground: #f5f5fa;
-  --cyber-primary: #ff8fa3; /* Lighter pink for dark mode */
-  --cyber-secondary: #85c6ff; /* Lighter blue for dark mode */
-  --cyber-accent: #ffd280; /* Lighter yellow for dark mode */
-  --cyber-muted: #b0b8d1;
-  --cyber-border: rgba(255, 143, 163, 0.4);
-  --cyber-card-bg: rgba(37, 41, 82, 0.85);
-  --cyber-glow-primary: 0 0 15px rgba(255, 143, 163, 0.6);
-  --cyber-glow-secondary: 0 0 20px rgba(133, 198, 255, 0.6);
-  --kawaii-shadow: 0 6px 0 #1f2142;
+  /* AI-inspired dark mode colors */
+  --cyber-background: #0a0c1b; /* Darker background */
+  --cyber-foreground: #e8ecfd; /* Lighter text */
+  --cyber-primary: #7c4dff; /* Vibrant purple */
+  --cyber-secondary: #00b0ff; /* Bright blue */
+  --cyber-accent: #00e5ff; /* Cyan accent */
+  --cyber-muted: #a2a8c7;
+  --cyber-border: rgba(124, 77, 255, 0.4);
+  --cyber-card-bg: rgba(18, 23, 38, 0.85);
+  --cyber-glow-primary: 0 0 15px rgba(124, 77, 255, 0.6);
+  --cyber-glow-secondary: 0 0 20px rgba(0, 176, 255, 0.6);
+  --kawaii-shadow: 0 6px 0 #1d1d35;
   
-  /* Dark mode kawaii pattern */
-  --kawaii-pattern: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ff8fa3' fill-opacity='0.08' fill-rule='evenodd'%3E%3Cpath d='M0 20C0 8.954 8.954 0 20 0s20 8.954 20 20-8.954 20-20 20S0 31.046 0 20zm20 16c8.837 0 16-7.163 16-16S28.837 4 20 4 4 11.163 4 20s7.163 16 16 16z'/%3E%3C/g%3E%3C/svg%3E");
+  /* Dark mode AI pattern */
+  --kawaii-pattern: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%237c4dff' fill-opacity='0.08' fill-rule='evenodd'%3E%3Cpath d='M0 20C0 8.954 8.954 0 20 0s20 8.954 20 20-8.954 20-20 20S0 31.046 0 20zm20 16c8.837 0 16-7.163 16-16S28.837 4 20 4 4 11.163 4 20s7.163 16 16 16z'/%3E%3C/g%3E%3C/svg%3E");
 }
 
 @media (prefers-color-scheme: dark) {
@@ -148,15 +148,15 @@ body {
 }
 
 .dark .cyber-btn {
-  box-shadow: 0 6px 0 #1f2142, var(--cyber-glow-primary) !important;
+  box-shadow: 0 6px 0 #1d1d35, var(--cyber-glow-primary) !important;
 }
 
 .dark .cyber-btn:hover {
-  box-shadow: 0 10px 0 #1f2142, var(--cyber-glow-secondary) !important;
+  box-shadow: 0 10px 0 #1d1d35, var(--cyber-glow-secondary) !important;
 }
 
 .dark .cyber-btn:active {
-  box-shadow: 0 2px 0 #1f2142, var(--cyber-glow-primary) !important;
+  box-shadow: 0 2px 0 #1d1d35, var(--cyber-glow-primary) !important;
 }
 
 .cyber-image {
@@ -174,11 +174,11 @@ body {
 }
 
 .dark .cyber-image {
-  box-shadow: 0 6px 0 #1f2142, var(--cyber-glow-secondary) !important;
+  box-shadow: 0 6px 0 #1d1d35, var(--cyber-glow-secondary) !important;
 }
 
 .dark .cyber-image:hover {
-  box-shadow: 0 10px 0 #1f2142, var(--cyber-glow-primary) !important;
+  box-shadow: 0 10px 0 #1d1d35, var(--cyber-glow-primary) !important;
 }
 
 .cyber-text {
@@ -346,4 +346,74 @@ body {
   left: -2px;
   text-shadow: 2px 0 var(--cyber-secondary);
   animation: glitch 0.5s infinite linear alternate;
+}
+
+/* AI-specific glowing effects */
+.ai-glow {
+  position: relative;
+}
+
+.ai-glow::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  background: linear-gradient(45deg, var(--cyber-primary), var(--cyber-secondary), var(--cyber-accent), var(--cyber-primary));
+  background-size: 400% 400%;
+  z-index: -1;
+  filter: blur(8px);
+  animation: ai-gradient 10s ease infinite;
+  border-radius: inherit;
+  opacity: 0.4;
+}
+
+@keyframes ai-gradient {
+  0% { background-position: 0% 50% }
+  50% { background-position: 100% 50% }
+  100% { background-position: 0% 50% }
+}
+
+/* AI typing effect */
+@keyframes typing-cursor {
+  0%, 100% { border-color: transparent }
+  50% { border-color: var(--cyber-primary) }
+}
+
+.ai-typing::after {
+  content: '|';
+  display: inline-block;
+  margin-left: 0.1em;
+  color: var(--cyber-primary);
+  animation: typing-cursor 0.8s infinite;
+}
+
+/* Matrix-like scan line effect */
+.ai-scan-lines {
+  position: relative;
+  overflow: hidden;
+}
+
+.ai-scan-lines::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(var(--cyber-secondary-rgb), 0.03) 0px,
+    rgba(var(--cyber-secondary-rgb), 0.03) 1px,
+    transparent 1px,
+    transparent 2px
+  );
+  pointer-events: none;
+}
+
+/* AI-style data grid background */
+.ai-data-grid {
+  position: relative;
+  background-image: 
+    linear-gradient(rgba(124, 77, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(124, 77, 255, 0.05) 1px, transparent 1px);
+  background-size: 20px 20px;
 }

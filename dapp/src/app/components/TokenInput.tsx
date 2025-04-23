@@ -103,7 +103,7 @@ export const TokenInput: React.FC<TokenInputProps> = ({
           <button
             className="w-full flex justify-between items-center px-3 py-2.5 
               bg-[var(--cyber-card-bg)] border border-[var(--cyber-border)] rounded-sm text-[var(--cyber-foreground)]
-              hover:bg-[var(--cyber-card-bg)]/80 transition-all duration-200 text-sm sm:text-base"
+              hover:bg-[var(--cyber-card-bg)]/80 transition-all duration-200 text-sm sm:text-base ai-scan-lines"
             onClick={() => setIsDropdownOpen(!isDropdownOpen)}
           >
             {selectedToken ? (
@@ -118,7 +118,7 @@ export const TokenInput: React.FC<TokenInputProps> = ({
           </button>
           
           {isDropdownOpen && (
-            <div ref={dropdownRef} className="absolute z-20 w-full sm:w-56 mt-1 bg-[var(--cyber-card-bg)] backdrop-blur-lg rounded-sm border border-[var(--cyber-border)] shadow-xl max-h-52 overflow-y-auto">
+            <div ref={dropdownRef} className="absolute z-20 w-full sm:w-56 mt-1 bg-[var(--cyber-card-bg)] backdrop-blur-lg rounded-sm border border-[var(--cyber-border)] shadow-xl max-h-52 overflow-y-auto ai-scan-lines">
               <ul className="py-1">
                 {availableTokens.map((token) => (
                   <li
@@ -153,7 +153,7 @@ export const TokenInput: React.FC<TokenInputProps> = ({
               onChange={(e) => handleAmountChange(e.target.value)}
               className="w-full px-3 py-2.5 bg-[var(--cyber-card-bg)] rounded-sm text-[var(--cyber-foreground)] 
                 placeholder-[var(--cyber-muted)] focus:outline-none focus:ring-1 focus:ring-[var(--cyber-primary)] 
-                border border-[var(--cyber-border)] text-base
+                border border-[var(--cyber-border)] text-base ai-scan-lines
                 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none 
                 [&::-webkit-inner-spin-button]:appearance-none"
             />

@@ -20,15 +20,19 @@ const BrowserRouter = dynamic(
 export default function NavHost() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isDarkMode, setIsDarkMode] = useState(() => {
-        // Check for saved theme preference or default to system preference
+        // Set dark mode as default
         if (typeof window !== 'undefined') {
             const savedMode = localStorage.getItem('darkMode');
-            return savedMode ? savedMode === 'true' : 
-                   window.matchMedia('(prefers-color-scheme: dark)').matches;
+            return savedMode !== null ? savedMode === 'true' : true; // Default to true
         }
-        return false;
+        return true; // Default to dark mode
     });
     const [sakuraPetals, setSakuraPetals] = useState<Array<{id: number, left: number, delay: number, duration: number}>>([]);
+
+    // Force dark mode on initial load
+    useEffect(() => {
+        document.body.classList.add('dark');
+    }, []);
 
     // Update localStorage when theme changes
     useEffect(() => {
@@ -61,7 +65,7 @@ export default function NavHost() {
       <BrowserRouter>
         <div className={`px-4 pt-4 min-h-screen transition-colors duration-300 ${
           isDarkMode 
-            ? "bg-[var(--cyber-background)]" 
+            ? "bg-[var(--cyber-background)] ai-data-grid" 
             : "bg-gradient-to-b from-[#f7f9fc] via-[#f0f2f5] to-[#e8e9f0]"
         }`}>
             {/* Sakura petals animation */}

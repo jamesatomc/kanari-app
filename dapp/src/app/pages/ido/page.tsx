@@ -84,7 +84,7 @@ export default function IDO() {
     <div className="min-h-[calc(100vh-80px)] flex flex-col">
       <main className="flex-1 flex flex-col justify-center">
         <div className="w-full max-w-md mx-auto py-6 sm:py-12 px-4 sm:px-0">
-          <h1 className="cyber-heading text-3xl md:text-5xl font-bold mb-8 text-center relative">
+          <h1 className="cyber-heading text-3xl md:text-5xl font-bold mb-8 text-center relative ai-glow">
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-[var(--cyber-primary)] to-[var(--cyber-secondary)]">
               Token Sale
             </span>
@@ -92,7 +92,7 @@ export default function IDO() {
           </h1>
           
           <div className="w-full">
-            <div className="cyber-container backdrop-blur-sm border border-[var(--cyber-border)] bg-[var(--cyber-card-bg)]/80 p-4 sm:p-6 rounded-md shadow-lg">
+            <div className="cyber-container backdrop-blur-sm border border-[var(--cyber-border)] bg-[var(--cyber-card-bg)]/80 p-4 sm:p-6 rounded-md shadow-lg ai-scan-lines">
               <div className="space-y-5 sm:space-y-7">
                 {/* Token Info */}
                 <div className="flex items-center justify-center space-x-4 p-2">
@@ -183,7 +183,7 @@ export default function IDO() {
                   <div className="w-full pt-3">
                     {wallet.connected ? (
                       <button
-                        className={`cyber-btn px-4 py-3 sm:px-8 sm:py-4 text-base sm:text-lg font-medium flex items-center 
+                        className={`cyber-btn ai-glow px-4 py-3 sm:px-8 sm:py-4 text-base sm:text-lg font-medium flex items-center 
                           justify-center w-full transition-all duration-300 ${
                           (isProcessing || !amount || Date.now() > idoInfo.endTime) 
                             ? "opacity-50 cursor-not-allowed" 
@@ -205,7 +205,7 @@ export default function IDO() {
                       </button>
                     ) : (
                       <ConnectButton
-                        className="cyber-btn px-4 py-3 sm:px-8 sm:py-4 text-base sm:text-lg font-medium w-full
+                        className="cyber-btn ai-glow px-4 py-3 sm:px-8 sm:py-4 text-base sm:text-lg font-medium w-full
                           hover:shadow-[0_0_10px_var(--cyber-primary)] transition-all duration-300"
                       />
                     )}
