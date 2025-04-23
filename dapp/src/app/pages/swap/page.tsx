@@ -5,7 +5,7 @@ import { ArrowDownUp, Loader, Settings, Star } from 'lucide-react';
 import { ConnectButton, useWallet } from "@suiet/wallet-kit";
 import { Transaction } from "@mysten/sui/transactions";
 import axios from 'axios';
-import TokenInput from './TokenInput';
+import SwapTokenInput from './SwapTokenInput';
 
 export default function Swap() {
   const [tokenFrom, setTokenFrom] = useState('SUI');
@@ -216,7 +216,7 @@ export default function Swap() {
                 )}
 
                 {/* Token From Input */}
-                <TokenInput
+                <SwapTokenInput
                   label="From"
                   selectedToken={tokenFrom}
                   onSelectToken={setTokenFrom}
@@ -247,7 +247,7 @@ export default function Swap() {
                 </div>
               
                 {/* Token To Input */}
-                <TokenInput
+                <SwapTokenInput
                   label="To"
                   selectedToken={tokenTo}
                   onSelectToken={setTokenTo}
